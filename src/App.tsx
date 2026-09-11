@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type {
   StackRecommendation,
   TechCategory,
@@ -44,10 +44,20 @@ const defaultSpec: UserProjectSpec = {
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'wizard' | 'canvas'>('canvas');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [spec, setSpec] = useState<UserProjectSpec>(defaultSpec);
   const [recommendation, setRecommendation] = useState<StackRecommendation>(() =>
     recommendStack(defaultSpec)
   );
+
+  // Sincronizar tema con el atributo del DOM
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   // Modales y Drawers
   const [selectedTechForDrawer, setSelectedTechForDrawer] = useState<Technology | null>(null);
@@ -93,12 +103,14 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container" data-theme={theme}>
       <Header
         currentView={currentView}
         onViewChange={setCurrentView}
         recommendation={recommendation}
         onOpenExport={() => setIsExportOpen(true)}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
       />
 
       <main className="main-content">
