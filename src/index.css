@@ -2786,3 +2786,21 @@ input[type="range"] {
   }
 }
 
+/* Lazy loading placeholder */
+.lazy-fallback-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--yellow-vivid);
+  letter-spacing: 0.08em;
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-rule);
+  border-radius: var(--radius-sm);
+  margin: 2rem auto;
+  max-width: 1000px;
+}
+

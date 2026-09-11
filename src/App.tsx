@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import type {
   StackRecommendation,
   TechCategory,
@@ -16,20 +16,34 @@ import { Header, type AppView } from './components/layout/Header';
 import { LandingHero } from './components/home/LandingHero';
 import { SpecWizard } from './components/wizard/SpecWizard';
 import { ArchitectureCanvas } from './components/canvas/ArchitectureCanvas';
-import { StackComparator } from './components/compare/StackComparator';
-import { StacksCatalog } from './components/explore/StacksCatalog';
-import { BenchmarkMatrix } from './components/benchmarks/BenchmarkMatrix';
 import { TradeoffDrawer } from './components/canvas/TradeoffDrawer';
 import { ReplaceModal } from './components/canvas/ReplaceModal';
-import { ExportModal } from './components/export/ExportModal';
-import { CostSimulatorModal } from './components/cost/CostSimulatorModal';
-import { DriftAuditModal } from './components/linter/DriftAuditModal';
 import { useI18n } from './i18n/I18nContext';
 import {
   copyShareableUrlToClipboard,
   decodeBlueprint,
   encodeBlueprint,
 } from './utils/urlState';
+
+// Vistas secundarias y modales con code-splitting (Dynamic Imports)
+const StackComparator = React.lazy(() =>
+  import('./components/compare/StackComparator').then((m) => ({ default: m.StackComparator }))
+);
+const StacksCatalog = React.lazy(() =>
+  import('./components/explore/StacksCatalog').then((m) => ({ default: m.StacksCatalog }))
+);
+const BenchmarkMatrix = React.lazy(() =>
+  import('./components/benchmarks/BenchmarkMatrix').then((m) => ({ default: m.BenchmarkMatrix }))
+);
+const ExportModal = React.lazy(() =>
+  import('./components/export/ExportModal').then((m) => ({ default: m.ExportModal }))
+);
+const CostSimulatorModal = React.lazy(() =>
+  import('./components/cost/CostSimulatorModal').then((m) => ({ default: m.CostSimulatorModal }))
+);
+const DriftAuditModal = React.lazy(() =>
+  import('./components/linter/DriftAuditModal').then((m) => ({ default: m.DriftAuditModal }))
+);
 
 // Especificación inicial por defecto: SaaS MVP optimizado para 1 dev
 const defaultSpec: UserProjectSpec = {
@@ -101,15 +115,26 @@ export const App: React.FC = () => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  // Sincronizar textos deterministas de la recomendación al cambiar de idioma
+  // Restaurar posicion de scroll al inicio al cambiar entre vistas
   useEffect(() => {
-    setRecommendation((prev) => {
-      const refreshed = recommendStack(spec, lang);
-      return {
-        ...refreshed,
-        slots: prev.slots, // Mantener las selecciones y sustituciones activas del usuario
-      };
-    });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [currentView]);
+
+  // Sincronizar textos deterministas de la recomendación al cambiar de idioma
+  const prevLangRef = useRef(lang);
+  useEffect(() => {
+    if (prevLangRef.current !== lang) {
+      prevLangRef.current = lang;
+      setRecommendation((prev) => {
+        const refreshed = recommendStack(spec, lang);
+        return {
+          ...refreshed,
+          slots: prev.slots, // Mantener las selecciones y sustituciones activas del usuario
+        };
+      });
+    }
   }, [lang, spec]);
 
   const handleToggleTheme = () => {
@@ -130,7 +155,7 @@ export const App: React.FC = () => {
     setCurrentView('canvas');
   };
 
-  // Cargar Blueprint desde Compare o Explore
+  // Cargar slots personalizados desde la galería de blueprints o arquetipos
   const handleLoadCustomSlots = (newSlots: Record<TechCategory, string | null>) => {
     const activeIds = Object.values(newSlots).filter((id): id is string => Boolean(id));
     const individualScores = activeIds.map((id) => calculateTechFit(TECH_BY_ID[id], spec, newSlots));
@@ -156,21 +181,19 @@ export const App: React.FC = () => {
     setCurrentView('canvas');
   };
 
-  // Sustitución en caliente [Replace]
-  const handleSelectAlternative = (category: TechCategory, newTechId: string) => {
+  // Reemplazo en caliente de un componente en una categoría
+  const handleSelectAlternative = (category: TechCategory, newTechId: string | null) => {
     const updatedSlots = {
       ...recommendation.slots,
       [category]: newTechId,
     };
 
-    // Recalcular Fit Score general
     const activeIds = Object.values(updatedSlots).filter((id): id is string => Boolean(id));
     const individualScores = activeIds.map((id) => calculateTechFit(TECH_BY_ID[id], spec, updatedSlots));
     const avgScore = Math.round(
       individualScores.reduce((acc, score) => acc + score, 0) / (individualScores.length || 1)
     );
 
-    // Recalcular fricciones
     const rawFrictions = detectStackFrictions(activeIds);
     const frictions = rawFrictions.map((f) => ({
       ...f,
@@ -179,7 +202,6 @@ export const App: React.FC = () => {
     const frictionPenalty = frictions.length * 4;
     const finalFitScore = Math.max(20, Math.min(98, avgScore - frictionPenalty));
 
-    // Actualizar recomendación en caliente
     setRecommendation((prev) => ({
       ...prev,
       slots: updatedSlots,
@@ -190,15 +212,20 @@ export const App: React.FC = () => {
     setReplacingCategory(null);
   };
 
+  // Copiar URL compartible
   const handleShareBlueprint = async () => {
-    try {
-      await copyShareableUrlToClipboard(spec, recommendation.slots);
+    const success = await copyShareableUrlToClipboard(spec, recommendation.slots);
+    if (success) {
       setIsShareCopied(true);
       setTimeout(() => setIsShareCopied(false), 2500);
-    } catch {
-      // Fallback
     }
   };
+
+  const lazyFallback = (
+    <div className="lazy-fallback-spinner">
+      <span>[ CARGANDO MODULO // PLEASE WAIT... ]</span>
+    </div>
+  );
 
   return (
     <div className="app-container" data-theme={theme}>
@@ -239,17 +266,19 @@ export const App: React.FC = () => {
           />
         )}
 
-        {currentView === 'compare' && (
-          <StackComparator onLoadStack={handleLoadCustomSlots} />
-        )}
+        <Suspense fallback={lazyFallback}>
+          {currentView === 'compare' && (
+            <StackComparator onLoadStack={handleLoadCustomSlots} />
+          )}
 
-        {currentView === 'explore' && (
-          <StacksCatalog onLoadBlueprint={handleLoadCustomSlots} />
-        )}
+          {currentView === 'explore' && (
+            <StacksCatalog onLoadBlueprint={handleLoadCustomSlots} />
+          )}
 
-        {currentView === 'benchmarks' && (
-          <BenchmarkMatrix onInspectTech={(tech) => setSelectedTechForDrawer(tech)} />
-        )}
+          {currentView === 'benchmarks' && (
+            <BenchmarkMatrix onInspectTech={(tech) => setSelectedTechForDrawer(tech)} />
+          )}
+        </Suspense>
       </main>
 
       {/* Drawer de Trade-offs */}
@@ -271,29 +300,32 @@ export const App: React.FC = () => {
         />
       )}
 
-      {/* Modal de Exportación */}
-      {isExportOpen && (
-        <ExportModal
-          recommendation={recommendation}
-          onClose={() => setIsExportOpen(false)}
-        />
-      )}
+      {/* Modales con carga bajo demanda */}
+      <Suspense fallback={null}>
+        {/* Modal de Exportación */}
+        {isExportOpen && (
+          <ExportModal
+            recommendation={recommendation}
+            onClose={() => setIsExportOpen(false)}
+          />
+        )}
 
-      {/* Modal de Simulación de Costes & Egress */}
-      {isCostSimOpen && (
-        <CostSimulatorModal
-          slots={recommendation.slots}
-          onClose={() => setIsCostSimOpen(false)}
-        />
-      )}
+        {/* Modal de Simulación de Costes & Egress */}
+        {isCostSimOpen && (
+          <CostSimulatorModal
+            slots={recommendation.slots}
+            onClose={() => setIsCostSimOpen(false)}
+          />
+        )}
 
-      {/* Modal de Auditoría de Drift */}
-      {isDriftModalOpen && (
-        <DriftAuditModal
-          recommendation={recommendation}
-          onClose={() => setIsDriftModalOpen(false)}
-        />
-      )}
+        {/* Modal de Auditoría de Drift */}
+        {isDriftModalOpen && (
+          <DriftAuditModal
+            recommendation={recommendation}
+            onClose={() => setIsDriftModalOpen(false)}
+          />
+        )}
+      </Suspense>
     </div>
   );
 };
