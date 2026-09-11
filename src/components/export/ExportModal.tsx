@@ -115,7 +115,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
               <button
                 type="button"
                 className="btn-download-file"
-                onClick={() => handleDownload('stackforge.json', jsonCode, 'application/json')}
+                onClick={() => handleDownload('trussstack.json', jsonCode, 'application/json')}
               >
                 {t.btnDownloadJson}
               </button>

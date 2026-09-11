@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="brand-section">
         <div className="brand-badge">▲</div>
         <div className="brand-title">
-          <span className="brand-name">STACKFORGE</span>
+          <span className="brand-name">TRUSSSTACK</span>
           <span className="brand-tagline">{t.brandTagline}</span>
         </div>
       </div>
