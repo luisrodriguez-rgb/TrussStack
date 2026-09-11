@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "test": "tsx src/engine/__tests__/engine.test.ts && tsx src/engine/__tests__/costSimulator.test.ts && tsx src/engine/__tests__/urlState.test.ts",
+    "test": "tsx src/engine/__tests__/engine.test.ts && tsx src/engine/__tests__/costSimulator.test.ts && tsx src/engine/__tests__/urlState.test.ts && tsx src/engine/__tests__/adrGenerator.test.ts",
     "preview": "vite preview"
   },
   "dependencies": {

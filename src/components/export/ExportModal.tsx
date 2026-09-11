@@ -6,8 +6,11 @@ import { generateExcalidrawScene } from '../../exporters/excalidrawExporter';
 import {
   generateDockerCompose,
   generateEnvExample,
-  generateReadmeAdr,
 } from '../../exporters/scaffoldExporter';
+import {
+  generateAdrs,
+  generateConsolidatedAdrDoc,
+} from '../../engine/adrGenerator';
 import { useI18n } from '../../i18n/I18nContext';
 
 interface ExportModalProps {
@@ -21,13 +24,19 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
     'mermaid' | 'json' | 'excalidraw' | 'docker' | 'env' | 'adr'
   >('mermaid');
   const [copied, setCopied] = useState(false);
+  const [selectedAdrId, setSelectedAdrId] = useState<string>('all');
 
   const mermaidCode = generateMermaidDiagram(recommendation);
   const jsonCode = generateJsonExport(recommendation);
   const excalidrawCode = generateExcalidrawScene(recommendation);
   const dockerCode = generateDockerCompose(recommendation);
   const envCode = generateEnvExample(recommendation);
-  const adrCode = generateReadmeAdr(recommendation, lang);
+  
+  const adrList = generateAdrs(recommendation, lang);
+  const adrCode =
+    selectedAdrId === 'all'
+      ? generateConsolidatedAdrDoc(adrList, lang)
+      : adrList.find((a) => a.id === selectedAdrId)?.rawMarkdown || '';
 
   const getCurrentCode = () => {
     switch (activeTab) {
@@ -130,6 +139,56 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
             </button>
           </div>
 
+          {/* Selector de ADR cuando activeTab === 'adr' */}
+          {activeTab === 'adr' && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.8rem',
+                margin: '0.6rem 0',
+                padding: '0.5rem 0.8rem',
+                backgroundColor: 'var(--surface-sunken)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '2px',
+                flexWrap: 'wrap',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: '0.72rem',
+                  color: 'var(--text-dim)',
+                  fontFamily: 'var(--font-mono)',
+                }}
+              >
+                {t.adrSelectorLabel}
+              </span>
+              <select
+                value={selectedAdrId}
+                onChange={(e) => setSelectedAdrId(e.target.value)}
+                style={{
+                  backgroundColor: 'var(--surface-card)',
+                  color: 'var(--yellow-vivid)',
+                  border: '1px solid var(--yellow-border)',
+                  padding: '0.35rem 0.6rem',
+                  fontSize: '0.75rem',
+                  fontFamily: 'var(--font-mono)',
+                  borderRadius: '2px',
+                  cursor: 'pointer',
+                  flex: 1,
+                  minWidth: '240px',
+                }}
+              >
+                <option value="all">{t.adrConsolidatedOption}</option>
+                {adrList.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    [{a.id}] {a.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           {/* Code Viewer */}
           <div className="code-viewer-container">
             <div className="code-viewer-header">
@@ -144,7 +203,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                   ? 'DOCKER COMPOSE CONFIGURATION'
                   : activeTab === 'env'
                   ? 'ENVIRONMENT VARIABLES TEMPLATE'
-                  : 'ARCHITECTURE DECISION RECORD (MADR STANDARDS)'}
+                  : selectedAdrId === 'all'
+                  ? 'CONSOLIDATED ARCHITECTURAL DECISION LOG (MADR 3.0)'
+                  : `MADR 3.0 RECORD // ${selectedAdrId}`}
               </span>
               <button type="button" className="btn-copy-code" onClick={handleCopy}>
                 {copied ? t.btnCopiedCode : t.btnCopyCode}
@@ -213,9 +274,21 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
               <button
                 type="button"
                 className="btn-download-file"
-                onClick={() => handleDownload('README.md', adrCode, 'text/markdown')}
+                onClick={() =>
+                  handleDownload(
+                    selectedAdrId === 'all' ? 'ARCHITECTURE_DECISIONS.md' : `${selectedAdrId}.md`,
+                    adrCode,
+                    'text/markdown'
+                  )
+                }
               >
-                {t.btnDownloadAdr}
+                {selectedAdrId === 'all'
+                  ? lang === 'es'
+                    ? '[ DESCARGAR ARCHITECTURE_DECISIONS.MD ]'
+                    : '[ DOWNLOAD ARCHITECTURE_DECISIONS.MD ]'
+                  : lang === 'es'
+                  ? `[ DESCARGAR ${selectedAdrId}.MD ]`
+                  : `[ DOWNLOAD ${selectedAdrId}.MD ]`}
               </button>
             )}
           </div>
