@@ -8,6 +8,7 @@ import type {
 } from './types';
 import { TECH_BY_ID, TECHNOLOGIES } from './catalog';
 import { getLocalizedTech, getLocalizedFrictionMessage } from './catalogI18n';
+import { getSystemProfile } from './systems';
 import type { Language } from '../i18n/translations';
 
 // Calcula la afinidad individual (0-100) de una tecnología contra las preferencias del usuario
@@ -59,38 +60,38 @@ export function calculateTechFit(
       simplicityScore * priorities.operationalSimplicity) /
     totalWeight;
 
-  // Ajustes de idoneidad según Tipo de Proyecto
+  // Ajustes de idoneidad según Perfil Declarativo del Tipo de Proyecto
+  const systemProfile = getSystemProfile(spec.projectType);
+  if (systemProfile.fitModifiers.boostTechIds.includes(tech.id)) {
+    rawScore += 14;
+  }
+  if (systemProfile.fitModifiers.penalizeTechIds?.includes(tech.id)) {
+    rawScore -= 18;
+  }
+
+  // Bonificaciones específicas de precisión
   switch (spec.projectType) {
     case 'content_blog':
-      if (tech.id === 'astro') rawScore += 18;
-      if (tech.id === 'cloudflare-pages') rawScore += 14;
-      if (tech.id === 'turso') rawScore += 8;
-      if (tech.id === 'nextjs') rawScore -= 5;
+      if (tech.id === 'astro') rawScore += 8;
+      if (tech.id === 'cloudflare-pages') rawScore += 6;
+      if (tech.id === 'turso') rawScore += 4;
       break;
     case 'saas':
-      if (tech.id === 'nextjs') rawScore += 14;
-      if (tech.id === 'supabase-db') rawScore += 12;
-      if (tech.id === 'stripe' || tech.id === 'lemonsqueezy') rawScore += 10;
-      if (tech.id === 'resend') rawScore += 10;
-      if (tech.id === 'sentry') rawScore += 8;
+      if (tech.id === 'nextjs') rawScore += 4;
+      if (tech.id === 'supabase-db') rawScore += 4;
       break;
-    case 'ecommerce':
-      if (tech.id === 'nextjs') rawScore += 12;
-      if (tech.id === 'postgres' || tech.id === 'supabase-db') rawScore += 10;
-      if (tech.id === 'stripe') rawScore += 14;
+    case 'ai_agent':
+      if (tech.id === 'pgvector' || tech.id === 'qdrant' || tech.id === 'fastapi') rawScore += 8;
+      break;
+    case 'mobile_app':
+      if (tech.id === 'react-native-expo' || tech.id === 'flutter') rawScore += 16;
+      break;
+    case 'data_pipeline':
+      if (tech.id === 'clickhouse' || tech.id === 'kafka') rawScore += 18;
+      if (tech.id === 'duckdb') rawScore += 10;
       break;
     case 'realtime_app':
-      if (tech.id === 'supabase-db') rawScore += 14; // Realtime channels nativos
-      if (tech.id === 'redis') rawScore += 14;
-      if (tech.id === 'go-gin' || tech.id === 'hono') rawScore += 10;
-      break;
-    case 'api_backend':
-      if (tech.id === 'fastapi' || tech.id === 'go-gin' || tech.id === 'hono') rawScore += 15;
-      if (tech.id === 'postgres') rawScore += 10;
-      break;
-    case 'dashboard':
-      if (tech.id === 'react-vite') rawScore += 12;
-      if (tech.id === 'nextjs') rawScore += 10;
+      if (tech.id === 'supabase-db' || tech.id === 'redis') rawScore += 6;
       break;
   }
 
@@ -189,10 +190,14 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
     const candidates = TECHNOLOGIES.filter((t) => t.category === category);
     let best = candidates[0];
     let highestScore = -Infinity;
+    const profile = getSystemProfile(spec.projectType);
 
     for (const cand of candidates) {
       const score = calculateTechFit(cand, spec, slots);
-      if (score > highestScore) {
+      const isCandBoosted = profile.fitModifiers.boostTechIds.includes(cand.id);
+      const isBestBoosted = profile.fitModifiers.boostTechIds.includes(best.id);
+
+      if (score > highestScore || (score === highestScore && isCandBoosted && !isBestBoosted)) {
         highestScore = score;
         best = cand;
       }
@@ -212,16 +217,30 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
   const bestDb = pickBest('database');
   slots.database = bestDb.id;
 
-  // 4. Backend (Si es Next.js o SvelteKit, el backend puede ser serverless integrado; si es Vite o API pura, backend dedicado)
-  if (spec.projectType === 'api_backend' || bestFrontend.id === 'react-vite') {
+  // 4. Backend (Dedicado para APIs, IA, Streaming, IoT, Juegos o cuando el frontend es SPA pura)
+  const needsDedicatedBackend =
+    spec.projectType === 'api_backend' ||
+    spec.projectType === 'ai_agent' ||
+    spec.projectType === 'data_pipeline' ||
+    spec.projectType === 'iot_embedded' ||
+    spec.projectType === 'game_backend' ||
+    bestFrontend.id === 'react-vite';
+
+  if (needsDedicatedBackend) {
     slots.backend = pickBest('backend').id;
   } else {
     // Para Next.js / SvelteKit / Nuxt, la API serverless viene integrada de serie
     slots.backend = null;
   }
 
-  // 5. Auth (si el usuario lo requiere o es SaaS/Dashboard)
-  if (spec.constraints.needsAuth || spec.projectType === 'saas' || spec.projectType === 'dashboard') {
+  // 5. Auth (si el usuario lo requiere o es SaaS, Dashboard, Marketplace o App Móvil)
+  if (
+    spec.constraints.needsAuth ||
+    spec.projectType === 'saas' ||
+    spec.projectType === 'dashboard' ||
+    spec.projectType === 'marketplace' ||
+    spec.projectType === 'mobile_app'
+  ) {
     // Si la DB ya es Supabase, prefiere Supabase Auth para máxima sinergia
     if (slots.database === 'supabase-db') {
       slots.auth = 'supabase-auth';
@@ -230,8 +249,8 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
     }
   }
 
-  // 6. Storage (si el usuario sube archivos)
-  if (spec.constraints.needsStorage) {
+  // 6. Storage (si el usuario sube archivos, marketplace o agentes de IA)
+  if (spec.constraints.needsStorage || spec.projectType === 'marketplace' || spec.projectType === 'ai_agent') {
     if (slots.database === 'supabase-db') {
       slots.storage = 'supabase-storage';
     } else {
@@ -239,13 +258,22 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
     }
   }
 
-  // 7. Payments (si requiere cobrar o es SaaS / E-commerce)
-  if (spec.constraints.needsPayments || spec.projectType === 'ecommerce') {
+  // 7. Payments (si requiere cobrar o es SaaS / E-commerce / Marketplace)
+  if (
+    spec.constraints.needsPayments ||
+    spec.projectType === 'ecommerce' ||
+    spec.projectType === 'saas' ||
+    spec.projectType === 'marketplace'
+  ) {
     slots.payments = pickBest('payments').id;
   }
 
-  // 8. Email (SaaS o apps con Auth requieren confirmaciones)
-  if (spec.constraints.needsAuth || spec.projectType === 'saas') {
+  // 8. Email (SaaS, Marketplace o apps con Auth requieren confirmaciones)
+  if (
+    spec.constraints.needsAuth ||
+    spec.projectType === 'saas' ||
+    spec.projectType === 'marketplace'
+  ) {
     slots.email = pickBest('email').id;
   }
 
@@ -260,10 +288,30 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
   }
 
   // 11. Queues & Background Workers
-  if (spec.constraints.needsBackgroundJobs) {
+  if (
+    spec.constraints.needsBackgroundJobs ||
+    spec.projectType === 'ai_agent' ||
+    spec.projectType === 'data_pipeline'
+  ) {
     const queueCandidates = TECHNOLOGIES.filter((t) => t.category === 'queues');
     if (queueCandidates.length > 0) {
       slots.queues = pickBest('queues').id;
+    }
+  }
+
+  // 12. AI & Vector Engine
+  if (spec.projectType === 'ai_agent') {
+    const aiCandidates = TECHNOLOGIES.filter((t) => t.category === 'ai');
+    if (aiCandidates.length > 0) {
+      slots.ai = pickBest('ai').id;
+    }
+  }
+
+  // 13. Mobile Layer
+  if (spec.projectType === 'mobile_app') {
+    const mobileCandidates = TECHNOLOGIES.filter((t) => t.category === 'mobile');
+    if (mobileCandidates.length > 0) {
+      slots.mobile = pickBest('mobile').id;
     }
   }
 
@@ -303,6 +351,13 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
 
   // Generación determinista de razones ("Why?")
   const whyReasons: string[] = [];
+
+  // Rationale del perfil de sistema
+  const systemProfile = getSystemProfile(spec.projectType);
+  if (systemProfile) {
+    whyReasons.push(lang === 'es' ? systemProfile.whyRationaleEs : systemProfile.whyRationaleEn);
+  }
+
   if (spec.teamSize === 'solo') {
     whyReasons.push(
       lang === 'es'

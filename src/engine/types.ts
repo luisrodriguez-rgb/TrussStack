@@ -127,7 +127,13 @@ export type ProjectType =
   | 'dashboard'
   | 'api_backend'
   | 'content_blog'
-  | 'realtime_app';
+  | 'realtime_app'
+  | 'ai_agent'
+  | 'mobile_app'
+  | 'data_pipeline'
+  | 'iot_embedded'
+  | 'marketplace'
+  | 'game_backend';
 
 export type ProjectScale =
   | 'mvp_100'         // 1 - 100 usuarios
