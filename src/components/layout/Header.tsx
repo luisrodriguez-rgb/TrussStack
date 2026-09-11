@@ -3,9 +3,11 @@ import type { StackRecommendation } from '../../engine/types';
 import { useI18n } from '../../i18n/I18nContext';
 import { TrussLogo } from '../common/TrussLogo';
 
+export type AppView = 'wizard' | 'canvas' | 'compare' | 'explore';
+
 interface HeaderProps {
-  currentView: 'wizard' | 'canvas';
-  onViewChange: (view: 'wizard' | 'canvas') => void;
+  currentView: AppView;
+  onViewChange: (view: AppView) => void;
   recommendation: StackRecommendation | null;
   onOpenExport: () => void;
   onOpenCostSim?: () => void;
@@ -52,6 +54,20 @@ export const Header: React.FC<HeaderProps> = ({
         >
           {t.navArchitecture}
         </button>
+        <button
+          type="button"
+          className={`nav-tab-btn ${currentView === 'compare' ? 'active' : ''}`}
+          onClick={() => onViewChange('compare')}
+        >
+          {t.navCompare}
+        </button>
+        <button
+          type="button"
+          className={`nav-tab-btn ${currentView === 'explore' ? 'active' : ''}`}
+          onClick={() => onViewChange('explore')}
+        >
+          {t.navExplore}
+        </button>
       </nav>
 
       <div className="header-actions">
@@ -60,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
           type="button"
           className="btn-theme-toggle"
           onClick={toggleLang}
-          title="Cambiar idioma / Switch language"
+          title={lang === 'es' ? 'Cambiar a inglés' : 'Switch to Spanish'}
         >
           {lang === 'es' ? '[ LANG: ES ]' : '[ LANG: EN ]'}
         </button>
@@ -70,14 +86,17 @@ export const Header: React.FC<HeaderProps> = ({
           type="button"
           className="btn-theme-toggle"
           onClick={onToggleTheme}
-          title="Alternar entre modo oscuro y claro"
+          title={lang === 'es' ? 'Alternar modo oscuro / claro' : 'Toggle dark / light theme'}
         >
           {theme === 'dark' ? t.themeDark : t.themeLight}
         </button>
 
         {recommendation && (
           <>
-            <div className="kpi-chip" title="Afinidad con tus preferencias declaradas">
+            <div
+              className="kpi-chip"
+              title={lang === 'es' ? 'Afinidad con tus preferencias declaradas' : 'Fit Score based on declared preferences'}
+            >
               <span className="kpi-label">{t.kpiFitScore}</span>
               <span className={`kpi-value ${recommendation.fitScore >= 80 ? 'healthy' : 'warning'}`}>
                 {recommendation.fitScore}%
@@ -88,7 +107,7 @@ export const Header: React.FC<HeaderProps> = ({
               className="kpi-chip"
               style={{ cursor: onOpenCostSim ? 'pointer' : 'default' }}
               onClick={onOpenCostSim}
-              title="Click para abrir la calculadora de costes y auditoría de egress"
+              title={lang === 'es' ? 'Click para abrir la calculadora de costes y auditoría de egress' : 'Click to open cost calculator & egress audit'}
             >
               <span className="kpi-label">{t.kpiCost}</span>
               <span className="kpi-value healthy">
@@ -96,7 +115,10 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
 
-            <div className="kpi-chip" title="Advertencias de fricción arquitectónica">
+            <div
+              className="kpi-chip"
+              title={lang === 'es' ? 'Advertencias de fricción arquitectónica' : 'Architectural friction warnings'}
+            >
               <span className="kpi-label">{t.kpiFriction}</span>
               <span className={`kpi-value ${frictionCount === 0 ? 'healthy' : 'warning'}`}>
                 {frictionCount === 0 ? '0' : `! ${frictionCount}`}
@@ -108,7 +130,7 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 className="btn-theme-toggle"
                 onClick={onOpenCostSim}
-                title="Abrir Simulador Dinámico de Costes"
+                title={lang === 'es' ? 'Abrir Simulador Dinámico de Costes' : 'Open Dynamic Cost Simulator'}
                 style={{ color: 'var(--yellow-vivid)', borderColor: 'var(--yellow-border)' }}
               >
                 {t.btnOpenCostSim}

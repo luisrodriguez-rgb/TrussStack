@@ -11,13 +11,17 @@ import {
   recommendStack,
 } from './engine/recommender';
 import { TECH_BY_ID } from './engine/catalog';
-import { Header } from './components/layout/Header';
+import { getLocalizedFrictionMessage } from './engine/catalogI18n';
+import { Header, type AppView } from './components/layout/Header';
 import { SpecWizard } from './components/wizard/SpecWizard';
 import { ArchitectureCanvas } from './components/canvas/ArchitectureCanvas';
+import { StackComparator } from './components/compare/StackComparator';
+import { StacksCatalog } from './components/explore/StacksCatalog';
 import { TradeoffDrawer } from './components/canvas/TradeoffDrawer';
 import { ReplaceModal } from './components/canvas/ReplaceModal';
 import { ExportModal } from './components/export/ExportModal';
 import { CostSimulatorModal } from './components/cost/CostSimulatorModal';
+import { useI18n } from './i18n/I18nContext';
 
 // Especificación inicial por defecto: SaaS MVP optimizado para 1 dev
 const defaultSpec: UserProjectSpec = {
@@ -44,17 +48,29 @@ const defaultSpec: UserProjectSpec = {
 };
 
 export const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<'wizard' | 'canvas'>('canvas');
+  const { lang } = useI18n();
+  const [currentView, setCurrentView] = useState<AppView>('canvas');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [spec, setSpec] = useState<UserProjectSpec>(defaultSpec);
   const [recommendation, setRecommendation] = useState<StackRecommendation>(() =>
-    recommendStack(defaultSpec)
+    recommendStack(defaultSpec, 'es')
   );
 
   // Sincronizar tema con el atributo del DOM
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // Sincronizar textos deterministas de la recomendación al cambiar de idioma
+  useEffect(() => {
+    setRecommendation((prev) => {
+      const refreshed = recommendStack(spec, lang);
+      return {
+        ...refreshed,
+        slots: prev.slots, // Mantener las selecciones y sustituciones activas del usuario
+      };
+    });
+  }, [lang, spec]);
 
   const handleToggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
@@ -69,8 +85,34 @@ export const App: React.FC = () => {
   // Generar recomendación desde el Wizard
   const handleGenerateStack = (newSpec: UserProjectSpec) => {
     setSpec(newSpec);
-    const newRecommendation = recommendStack(newSpec);
+    const newRecommendation = recommendStack(newSpec, lang);
     setRecommendation(newRecommendation);
+    setCurrentView('canvas');
+  };
+
+  // Cargar Blueprint desde Compare o Explore
+  const handleLoadCustomSlots = (newSlots: Record<TechCategory, string | null>) => {
+    const activeIds = Object.values(newSlots).filter((id): id is string => Boolean(id));
+    const individualScores = activeIds.map((id) => calculateTechFit(TECH_BY_ID[id], spec, newSlots));
+    const avgScore = Math.round(
+      individualScores.reduce((acc, score) => acc + score, 0) / (individualScores.length || 1)
+    );
+
+    const rawFrictions = detectStackFrictions(activeIds);
+    const frictions = rawFrictions.map((f) => ({
+      ...f,
+      message: getLocalizedFrictionMessage(f.sourceId, f.targetId, f.message, lang),
+    }));
+    const frictionPenalty = frictions.length * 4;
+    const finalFitScore = Math.max(20, Math.min(98, avgScore - frictionPenalty));
+
+    setRecommendation((prev) => ({
+      ...prev,
+      slots: newSlots,
+      fitScore: finalFitScore,
+      frictionWarnings: frictions,
+    }));
+
     setCurrentView('canvas');
   };
 
@@ -89,7 +131,11 @@ export const App: React.FC = () => {
     );
 
     // Recalcular fricciones
-    const frictions = detectStackFrictions(activeIds);
+    const rawFrictions = detectStackFrictions(activeIds);
+    const frictions = rawFrictions.map((f) => ({
+      ...f,
+      message: getLocalizedFrictionMessage(f.sourceId, f.targetId, f.message, lang),
+    }));
     const frictionPenalty = frictions.length * 4;
     const finalFitScore = Math.max(20, Math.min(98, avgScore - frictionPenalty));
 
@@ -117,15 +163,25 @@ export const App: React.FC = () => {
       />
 
       <main className="main-content">
-        {currentView === 'wizard' ? (
+        {currentView === 'wizard' && (
           <SpecWizard initialSpec={spec} onSubmit={handleGenerateStack} />
-        ) : (
+        )}
+
+        {currentView === 'canvas' && (
           <ArchitectureCanvas
             recommendation={recommendation}
             onReplaceCategory={(category) => setReplacingCategory(category)}
             onInspectTech={(tech) => setSelectedTechForDrawer(tech)}
             onOpenCostSim={() => setIsCostSimOpen(true)}
           />
+        )}
+
+        {currentView === 'compare' && (
+          <StackComparator onLoadStack={handleLoadCustomSlots} />
+        )}
+
+        {currentView === 'explore' && (
+          <StacksCatalog onLoadBlueprint={handleLoadCustomSlots} />
         )}
       </main>
 
@@ -156,7 +212,7 @@ export const App: React.FC = () => {
         />
       )}
 
-      {/* Modal de Simulación de Costes & Egress (Fase 2 Roadmap) */}
+      {/* Modal de Simulación de Costes & Egress */}
       {isCostSimOpen && (
         <CostSimulatorModal
           slots={recommendation.slots}

@@ -3,6 +3,11 @@ import type { StackRecommendation } from '../../engine/types';
 import { generateMermaidDiagram } from '../../exporters/mermaidExporter';
 import { generateJsonExport } from '../../exporters/jsonExporter';
 import { generateExcalidrawScene } from '../../exporters/excalidrawExporter';
+import {
+  generateDockerCompose,
+  generateEnvExample,
+  generateReadmeAdr,
+} from '../../exporters/scaffoldExporter';
 import { useI18n } from '../../i18n/I18nContext';
 
 interface ExportModalProps {
@@ -11,13 +16,18 @@ interface ExportModalProps {
 }
 
 export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClose }) => {
-  const { t } = useI18n();
-  const [activeTab, setActiveTab] = useState<'mermaid' | 'json' | 'excalidraw'>('mermaid');
+  const { t, lang } = useI18n();
+  const [activeTab, setActiveTab] = useState<
+    'mermaid' | 'json' | 'excalidraw' | 'docker' | 'env' | 'adr'
+  >('mermaid');
   const [copied, setCopied] = useState(false);
 
   const mermaidCode = generateMermaidDiagram(recommendation);
   const jsonCode = generateJsonExport(recommendation);
   const excalidrawCode = generateExcalidrawScene(recommendation);
+  const dockerCode = generateDockerCompose(recommendation);
+  const envCode = generateEnvExample(recommendation);
+  const adrCode = generateReadmeAdr(recommendation, lang);
 
   const getCurrentCode = () => {
     switch (activeTab) {
@@ -27,6 +37,12 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
         return jsonCode;
       case 'excalidraw':
         return excalidrawCode;
+      case 'docker':
+        return dockerCode;
+      case 'env':
+        return envCode;
+      case 'adr':
+        return adrCode;
     }
   };
 
@@ -54,7 +70,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-dialog" style={{ maxWidth: '820px' }} onClick={(e) => e.stopPropagation()}>
+      <div className="modal-dialog" style={{ maxWidth: '840px' }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
             <span className="pill-tag" style={{ color: 'var(--citron)' }}>
@@ -68,7 +84,8 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
         </div>
 
         <div className="modal-content">
-          <div className="export-tabs-bar">
+          {/* Tabs Bar */}
+          <div className="export-tabs-bar" style={{ flexWrap: 'wrap', gap: '0.4rem' }}>
             <button
               type="button"
               className={`export-tab-btn ${activeTab === 'mermaid' ? 'active' : ''}`}
@@ -90,8 +107,30 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
             >
               {t.exportTabExcalidraw}
             </button>
+            <button
+              type="button"
+              className={`export-tab-btn ${activeTab === 'docker' ? 'active' : ''}`}
+              onClick={() => setActiveTab('docker')}
+            >
+              {t.exportTabDocker}
+            </button>
+            <button
+              type="button"
+              className={`export-tab-btn ${activeTab === 'env' ? 'active' : ''}`}
+              onClick={() => setActiveTab('env')}
+            >
+              {t.exportTabEnv}
+            </button>
+            <button
+              type="button"
+              className={`export-tab-btn ${activeTab === 'adr' ? 'active' : ''}`}
+              onClick={() => setActiveTab('adr')}
+            >
+              {t.exportTabAdr}
+            </button>
           </div>
 
+          {/* Code Viewer */}
           <div className="code-viewer-container">
             <div className="code-viewer-header">
               <span className="code-lang-label">
@@ -99,18 +138,25 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                   ? 'MERMAID FLOWCHART TD'
                   : activeTab === 'json'
                   ? 'CANONICAL JSON SCHEMA V1.0'
-                  : 'EXCALIDRAW VECTOR SCENE V2 (COMPATIBLE CON SKETION)'}
+                  : activeTab === 'excalidraw'
+                  ? 'EXCALIDRAW VECTOR SCENE V2 (COMPATIBLE CON SKETION)'
+                  : activeTab === 'docker'
+                  ? 'DOCKER COMPOSE CONFIGURATION'
+                  : activeTab === 'env'
+                  ? 'ENVIRONMENT VARIABLES TEMPLATE'
+                  : 'ARCHITECTURE DECISION RECORD (MADR STANDARDS)'}
               </span>
               <button type="button" className="btn-copy-code" onClick={handleCopy}>
                 {copied ? t.btnCopiedCode : t.btnCopyCode}
               </button>
             </div>
-            <pre className="code-viewer-pre">
+            <pre className="code-viewer-pre" style={{ maxHeight: '340px' }}>
               <code>{getCurrentCode()}</code>
             </pre>
           </div>
 
-          <div className="export-actions-footer">
+          {/* Actions Footer */}
+          <div className="export-actions-footer" style={{ flexWrap: 'wrap', gap: '0.6rem' }}>
             {activeTab === 'json' && (
               <button
                 type="button"
@@ -140,6 +186,36 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                 onClick={() => handleDownload('architecture.mmd', mermaidCode, 'text/plain')}
               >
                 {t.btnDownloadMmd}
+              </button>
+            )}
+
+            {activeTab === 'docker' && (
+              <button
+                type="button"
+                className="btn-download-file"
+                onClick={() => handleDownload('docker-compose.yml', dockerCode, 'text/yaml')}
+              >
+                {t.btnDownloadDocker}
+              </button>
+            )}
+
+            {activeTab === 'env' && (
+              <button
+                type="button"
+                className="btn-download-file"
+                onClick={() => handleDownload('.env.example', envCode, 'text/plain')}
+              >
+                {t.btnDownloadEnv}
+              </button>
+            )}
+
+            {activeTab === 'adr' && (
+              <button
+                type="button"
+                className="btn-download-file"
+                onClick={() => handleDownload('README.md', adrCode, 'text/markdown')}
+              >
+                {t.btnDownloadAdr}
               </button>
             )}
           </div>
