@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { StackRecommendation, TechCategory, Technology } from '../../engine/types';
 import { TECH_BY_ID } from '../../engine/catalog';
 import { TechLogo } from '../common/TechLogo';
 import { useI18n } from '../../i18n/I18nContext';
+import { FlowSimulatorBar } from './FlowSimulatorBar';
+import { ProtocolModal } from './ProtocolModal';
+import {
+  PROTOCOL_INSPECTIONS,
+  type FlowScenario,
+  type ProtocolInspection,
+} from '../../engine/flows';
 
 interface ArchitectureCanvasProps {
   recommendation: StackRecommendation;
@@ -16,6 +23,10 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
   onInspectTech,
 }) => {
   const { t } = useI18n();
+  const [activeScenario, setActiveScenario] = useState<FlowScenario | null>(null);
+  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const [activeProtocol, setActiveProtocol] = useState<ProtocolInspection | null>(null);
+
   const { slots, fitScore, overallCostEstimate, frictionWarnings, dimensionScores, whyReasons } =
     recommendation;
 
@@ -25,13 +36,34 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
     const tech = TECH_BY_ID[techId];
     if (!tech) return null;
 
+    const isInFlow = activeScenario ? activeScenario.involvedCategories.includes(category) : false;
+    const currentStep = activeScenario?.steps[currentStepIndex];
+    const isStepTarget = currentStep?.targetCategory === category;
+    const isStepSource = currentStep?.sourceCategory === category;
+    const isHighlighted = isStepTarget || isStepSource;
+    const isDimmed = activeScenario ? !isInFlow : false;
+
     return (
       <div
         key={tech.id}
-        className={`craft-card ${isHero ? 'hero-node' : ''}`}
+        className={`craft-card ${isHero ? 'hero-node' : ''} ${
+          isHighlighted ? 'active-flow-step' : isInFlow ? 'in-flow' : ''
+        } ${isDimmed ? 'dimmed-flow' : ''}`}
         onClick={() => onInspectTech(tech)}
       >
         <div>
+          {/* Active Flow Badge if participating in current step */}
+          {isStepTarget && (
+            <span className="flow-step-badge">
+              [ PASO {currentStepIndex + 1}: DESTINO ]
+            </span>
+          )}
+          {isStepSource && (
+            <span className="flow-step-badge" style={{ background: '#FFE600' }}>
+              [ PASO {currentStepIndex + 1}: ORIGEN ]
+            </span>
+          )}
+
           {/* Card Top Bar with Logo, Name and Action Icons */}
           <div className="card-header">
             <div className="card-brand-group">
@@ -187,7 +219,15 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         </div>
       )}
 
-      {/* 4. Topología en 5 Capas */}
+      {/* 4. Simulador de Flujos de Datos en Tiempo Real (Fase 1 Roadmap) */}
+      <FlowSimulatorBar
+        activeScenario={activeScenario}
+        currentStepIndex={currentStepIndex}
+        onSelectScenario={setActiveScenario}
+        onStepChange={setCurrentStepIndex}
+      />
+
+      {/* 5. Topología en 5 Capas */}
       <div className="layers-container">
         {/* CAPA 1: INGRESS & CLIENT */}
         <div className="layer-section">
@@ -198,10 +238,16 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
           <div className="layer-nodes-grid">{renderCard('frontend', 'frontend', true)}</div>
         </div>
 
-        {/* Conector */}
-        <div className="layer-connector">
+        {/* Conector 1 */}
+        <div
+          className="layer-connector interactive"
+          onClick={() => setActiveProtocol(PROTOCOL_INSPECTIONS.ingress_to_app)}
+          title="Click para inspeccionar contrato de protocolo y seguridad"
+        >
           <div className="connector-line" />
-          <span className="connector-pill">PROTOCOL: HTTPS / WEBFETCH / RPC</span>
+          <span className="connector-pill interactive">
+            PROTOCOL: HTTPS / WEBFETCH / RPC ↗
+          </span>
         </div>
 
         {/* CAPA 2: APPLICATION & API */}
@@ -255,10 +301,16 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
           </div>
         </div>
 
-        {/* Conector */}
-        <div className="layer-connector">
+        {/* Conector 2 */}
+        <div
+          className="layer-connector interactive"
+          onClick={() => setActiveProtocol(PROTOCOL_INSPECTIONS.app_to_data)}
+          title="Click para inspeccionar contrato de protocolo y seguridad"
+        >
           <div className="connector-line" />
-          <span className="connector-pill">PROTOCOL: SQL CONNECTION POOL / S3 PRESIGNED</span>
+          <span className="connector-pill interactive">
+            PROTOCOL: SQL CONNECTION POOL / S3 PRESIGNED ↗
+          </span>
         </div>
 
         {/* CAPA 3: DATA & STATE */}
@@ -273,10 +325,16 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
           </div>
         </div>
 
-        {/* Conector */}
-        <div className="layer-connector">
+        {/* Conector 3 */}
+        <div
+          className="layer-connector interactive"
+          onClick={() => setActiveProtocol(PROTOCOL_INSPECTIONS.app_to_services)}
+          title="Click para inspeccionar contrato de protocolo y seguridad"
+        >
           <div className="connector-line" />
-          <span className="connector-pill">PROTOCOL: JWT TOKENS / OAUTH / WEBHOOKS</span>
+          <span className="connector-pill interactive">
+            PROTOCOL: JWT TOKENS / OAUTH / WEBHOOKS ↗
+          </span>
         </div>
 
         {/* CAPA 4: THIRD-PARTY SERVICES */}
@@ -292,10 +350,16 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
           </div>
         </div>
 
-        {/* Conector */}
-        <div className="layer-connector">
+        {/* Conector 4 */}
+        <div
+          className="layer-connector interactive"
+          onClick={() => setActiveProtocol(PROTOCOL_INSPECTIONS.app_to_ops)}
+          title="Click para inspeccionar contrato de protocolo y seguridad"
+        >
           <div className="connector-line" />
-          <span className="connector-pill">PROTOCOL: EDGE DEPLOY / APM TELEMETRY / CI HOOKS</span>
+          <span className="connector-pill interactive">
+            PROTOCOL: EDGE DEPLOY / APM TELEMETRY / CI HOOKS ↗
+          </span>
         </div>
 
         {/* CAPA 5: INFRASTRUCTURE & OPS */}
@@ -311,6 +375,12 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Modal de Inspección de Protocolo */}
+      <ProtocolModal
+        protocol={activeProtocol}
+        onClose={() => setActiveProtocol(null)}
+      />
     </div>
   );
 };

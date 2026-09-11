@@ -165,15 +165,11 @@ code, pre, .font-mono {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  background: var(--yellow-vivid);
-  color: #000000;
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 1.25rem;
+  width: 38px;
+  height: 38px;
+  background: transparent;
   border-radius: var(--radius-xs);
-  box-shadow: 0 2px 10px rgba(255, 208, 0, 0.3);
+  overflow: hidden;
 }
 
 .brand-title {
@@ -763,6 +759,50 @@ code, pre, .font-mono {
   border: 1px solid var(--border-rule);
   border-radius: var(--radius-xs);
   padding: 0.2rem 0.8rem;
+  letter-spacing: 0.04em;
+  transition: var(--transition-fast);
+}
+
+.layer-connector.interactive {
+  cursor: pointer;
+}
+
+.layer-connector.interactive:hover .connector-pill {
+  border-color: var(--yellow-vivid);
+  color: var(--yellow-vivid);
+  background: var(--bg-card);
+  box-shadow: 0 0 12px rgba(255, 208, 0, 0.25);
+  transform: scale(1.03);
+}
+
+/* Data Flow Active Nodes & Animation */
+.craft-card.active-flow-step {
+  border-color: var(--yellow-vivid) !important;
+  box-shadow: 0 0 22px rgba(255, 208, 0, 0.4) !important;
+  transform: translateY(-2px);
+  position: relative;
+}
+
+.craft-card.in-flow {
+  border-color: var(--yellow-border);
+}
+
+.craft-card.dimmed-flow {
+  opacity: 0.3;
+  filter: grayscale(0.6);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.flow-step-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #000000;
+  background: var(--yellow-vivid);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-xs);
+  margin-bottom: 0.4rem;
+  display: inline-block;
   letter-spacing: 0.04em;
 }
 
