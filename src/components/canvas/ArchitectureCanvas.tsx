@@ -15,12 +15,14 @@ interface ArchitectureCanvasProps {
   recommendation: StackRecommendation;
   onReplaceCategory: (category: TechCategory) => void;
   onInspectTech: (tech: Technology) => void;
+  onOpenCostSim?: () => void;
 }
 
 export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
   recommendation,
   onReplaceCategory,
   onInspectTech,
+  onOpenCostSim,
 }) => {
   const { t } = useI18n();
   const [activeScenario, setActiveScenario] = useState<FlowScenario | null>(null);
@@ -169,8 +171,13 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
             <span className="metric-micro-val">1 DEV TEAM</span>
           </div>
 
-          <div className="nutrition-metric-box">
-            <span className="metric-micro-label">{t.matrixCost}</span>
+          <div
+            className="nutrition-metric-box"
+            style={{ cursor: onOpenCostSim ? 'pointer' : 'default' }}
+            onClick={onOpenCostSim}
+            title="Click para abrir la calculadora de escala y costes dinámicos"
+          >
+            <span className="metric-micro-label">{t.matrixCost} ↗</span>
             <span className="metric-micro-val citron">
               {overallCostEstimate.split(' ')[0]}
             </span>

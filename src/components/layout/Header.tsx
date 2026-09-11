@@ -8,6 +8,7 @@ interface HeaderProps {
   onViewChange: (view: 'wizard' | 'canvas') => void;
   recommendation: StackRecommendation | null;
   onOpenExport: () => void;
+  onOpenCostSim?: () => void;
   theme: 'dark' | 'light';
   onToggleTheme: () => void;
 }
@@ -17,6 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   onViewChange,
   recommendation,
   onOpenExport,
+  onOpenCostSim,
   theme,
   onToggleTheme,
 }) => {
@@ -82,10 +84,15 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
 
-            <div className="kpi-chip" title="Estimación de coste mensual">
+            <div
+              className="kpi-chip"
+              style={{ cursor: onOpenCostSim ? 'pointer' : 'default' }}
+              onClick={onOpenCostSim}
+              title="Click para abrir la calculadora de costes y auditoría de egress"
+            >
               <span className="kpi-label">{t.kpiCost}</span>
               <span className="kpi-value healthy">
-                {recommendation.overallCostEstimate.split(' ')[0]}
+                {recommendation.overallCostEstimate.split(' ')[0]} ↗
               </span>
             </div>
 
@@ -95,6 +102,18 @@ export const Header: React.FC<HeaderProps> = ({
                 {frictionCount === 0 ? '0' : `! ${frictionCount}`}
               </span>
             </div>
+
+            {onOpenCostSim && (
+              <button
+                type="button"
+                className="btn-theme-toggle"
+                onClick={onOpenCostSim}
+                title="Abrir Simulador Dinámico de Costes"
+                style={{ color: 'var(--yellow-vivid)', borderColor: 'var(--yellow-border)' }}
+              >
+                {t.btnOpenCostSim}
+              </button>
+            )}
 
             <button type="button" className="btn-export" onClick={onOpenExport}>
               {t.btnExport}

@@ -17,6 +17,7 @@ import { ArchitectureCanvas } from './components/canvas/ArchitectureCanvas';
 import { TradeoffDrawer } from './components/canvas/TradeoffDrawer';
 import { ReplaceModal } from './components/canvas/ReplaceModal';
 import { ExportModal } from './components/export/ExportModal';
+import { CostSimulatorModal } from './components/cost/CostSimulatorModal';
 
 // Especificación inicial por defecto: SaaS MVP optimizado para 1 dev
 const defaultSpec: UserProjectSpec = {
@@ -62,7 +63,8 @@ export const App: React.FC = () => {
   // Modales y Drawers
   const [selectedTechForDrawer, setSelectedTechForDrawer] = useState<Technology | null>(null);
   const [replacingCategory, setReplacingCategory] = useState<TechCategory | null>(null);
-  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
+  const [isCostSimOpen, setIsCostSimOpen] = useState<boolean>(false);
 
   // Generar recomendación desde el Wizard
   const handleGenerateStack = (newSpec: UserProjectSpec) => {
@@ -109,6 +111,7 @@ export const App: React.FC = () => {
         onViewChange={setCurrentView}
         recommendation={recommendation}
         onOpenExport={() => setIsExportOpen(true)}
+        onOpenCostSim={() => setIsCostSimOpen(true)}
         theme={theme}
         onToggleTheme={handleToggleTheme}
       />
@@ -121,6 +124,7 @@ export const App: React.FC = () => {
             recommendation={recommendation}
             onReplaceCategory={(category) => setReplacingCategory(category)}
             onInspectTech={(tech) => setSelectedTechForDrawer(tech)}
+            onOpenCostSim={() => setIsCostSimOpen(true)}
           />
         )}
       </main>
@@ -149,6 +153,14 @@ export const App: React.FC = () => {
         <ExportModal
           recommendation={recommendation}
           onClose={() => setIsExportOpen(false)}
+        />
+      )}
+
+      {/* Modal de Simulación de Costes & Egress (Fase 2 Roadmap) */}
+      {isCostSimOpen && (
+        <CostSimulatorModal
+          slots={recommendation.slots}
+          onClose={() => setIsCostSimOpen(false)}
         />
       )}
     </div>
