@@ -190,6 +190,41 @@ export interface StackSlot {
   isRequired: boolean;
 }
 
+export interface ArchitectureCausalRule {
+  id: string;
+  trigger: string;
+  triggerEn: string;
+  decision: string;
+  decisionEn: string;
+  favoredTechName: string;
+  category?: TechCategory;
+}
+
+export interface PriorityPercentage {
+  cost: number;
+  speed: number;
+  scalability: number;
+  lockin: number;
+  simplicity: number;
+}
+
+export interface ScoreBreakdown {
+  finalFitScore: number;
+  baseScore: number;
+  frictionPenalty: number;
+  frictionsCount: number;
+  prioritiesPercentage: PriorityPercentage;
+  dimensionScores: {
+    speed: number;
+    cost: number;
+    scalability: number;
+    portability: number;
+    simplicity: number;
+  };
+  formulaExplanationEs: string;
+  formulaExplanationEn: string;
+}
+
 export interface StackRecommendation {
   spec: UserProjectSpec;
   slots: Record<TechCategory, string | null>;
@@ -203,6 +238,8 @@ export interface StackRecommendation {
     portability: number;
     simplicity: number;
   };
+  scoreBreakdown: ScoreBreakdown;
+  causalRules: ArchitectureCausalRule[];
   whyReasons: string[];
   keyTradeoffs: string[];
 }

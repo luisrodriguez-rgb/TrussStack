@@ -341,6 +341,35 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
     simplicity: Math.min(99, Math.round(spec.priorities.operationalSimplicity > 3 ? 94 : 80)),
   };
 
+  // Porcentajes de las prioridades del usuario
+  const totalUserWeight =
+    spec.priorities.costMinimization +
+    spec.priorities.developmentSpeed +
+    spec.priorities.scalability +
+    spec.priorities.lowVendorLockin +
+    spec.priorities.operationalSimplicity || 1;
+
+  const prioritiesPercentage = {
+    cost: Math.round((spec.priorities.costMinimization / totalUserWeight) * 100),
+    speed: Math.round((spec.priorities.developmentSpeed / totalUserWeight) * 100),
+    scalability: Math.round((spec.priorities.scalability / totalUserWeight) * 100),
+    lockin: Math.round((spec.priorities.lowVendorLockin / totalUserWeight) * 100),
+    simplicity: Math.round((spec.priorities.operationalSimplicity / totalUserWeight) * 100),
+  };
+
+  const scoreBreakdown = {
+    finalFitScore,
+    baseScore: avgScore,
+    frictionPenalty,
+    frictionsCount: frictions.length,
+    prioritiesPercentage,
+    dimensionScores,
+    formulaExplanationEs:
+      'El Fit Score se calcula promediando la afinidad técnica de los componentes activos en 5 dimensiones ponderadas por tus prioridades, restando 4 puntos por cada fricción de integración detectada.',
+    formulaExplanationEn:
+      'The Fit Score is computed by weighting the technical affinity of all active components across 5 dimensions against your priorities, subtracting 4 points per detected architectural friction.',
+  };
+
   // Estimación de coste general
   let overallCostEstimate = lang === 'es' ? '$0/mes (100% Free Tier)' : '$0/mo (100% Free Tier)';
   if (spec.budget === 'low_50') {
@@ -349,11 +378,115 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
     overallCostEstimate = lang === 'es' ? '~$50 - $150/mes (Escala elástica)' : '~$50 - $150/mo (Elastic scale)';
   }
 
+  // Generación determinista de reglas causales ("Why this Stack?")
+  const causalRules = [];
+  const systemProfile = getSystemProfile(spec.projectType);
+
+  if (systemProfile) {
+    causalRules.push({
+      id: 'rule-system-profile',
+      trigger: `Arquetipo: ${lang === 'es' ? systemProfile.titleEs : systemProfile.titleEn}`,
+      triggerEn: `Archetype: ${systemProfile.titleEn}`,
+      decision: `Inyecta restricciones y afinidad de perfil para ${systemProfile.group}`,
+      decisionEn: `Injects constraints and profile affinity modifiers for ${systemProfile.group}`,
+      favoredTechName: lang === 'es' ? systemProfile.titleEs : systemProfile.titleEn,
+    });
+  }
+
+  if (spec.teamSize === 'solo') {
+    causalRules.push({
+      id: 'rule-team-size',
+      trigger: 'Equipo unipersonal (1 solo developer)',
+      triggerEn: 'Solo developer (1 developer team)',
+      decision: 'Favorece infraestructura gestionada / BaaS unificado para eliminar administración de servidores',
+      decisionEn: 'Favors unified BaaS and serverless to eliminate manual server ops',
+      favoredTechName: slots.database && TECH_BY_ID[slots.database] ? TECH_BY_ID[slots.database].name : 'Supabase',
+      category: 'database',
+    });
+  } else if (spec.teamSize === 'scale_team') {
+    causalRules.push({
+      id: 'rule-team-size',
+      trigger: 'Equipo grande (5+ ingenieros)',
+      triggerEn: 'Large team (5+ engineers)',
+      decision: 'Permite desacoplamiento en capas independientes y servicios fuertemente estructurados',
+      decisionEn: 'Enables modular decoupling into independent layers and structured services',
+      favoredTechName: slots.backend && TECH_BY_ID[slots.backend] ? TECH_BY_ID[slots.backend].name : 'Decoupled API',
+      category: 'backend',
+    });
+  }
+
+  if (spec.budget === 'zero_free') {
+    causalRules.push({
+      id: 'rule-budget-zero',
+      trigger: 'Presupuesto inicial de $0/mes (Free Tier)',
+      triggerEn: 'Strict $0/mo initial budget (Free Tier)',
+      decision: 'Selecciona herramientas con capa gratuita perpetua y sin costes fijos de arranque',
+      decisionEn: 'Selects tools with perpetual free tiers and zero upfront compute baseline costs',
+      favoredTechName: slots.hosting && TECH_BY_ID[slots.hosting] ? TECH_BY_ID[slots.hosting].name : 'Cloudflare / Vercel',
+      category: 'hosting',
+    });
+  }
+
+  if (spec.constraints.needsSeo) {
+    causalRules.push({
+      id: 'rule-seo',
+      trigger: 'SEO público y renderizado en servidor crítico',
+      triggerEn: 'Public SEO & Server-Side Rendering required',
+      decision: 'Descarta SPAs cliente puras (CSR) y prioriza SSR / SSG con indexación de motores de búsqueda',
+      decisionEn: 'Discards pure client SPAs (CSR) in favor of hybrid SSR / SSG for instant search engine indexing',
+      favoredTechName: slots.frontend && TECH_BY_ID[slots.frontend] ? TECH_BY_ID[slots.frontend].name : 'Next.js',
+      category: 'frontend',
+    });
+  }
+
+  if (spec.constraints.needsBackgroundJobs) {
+    causalRules.push({
+      id: 'rule-background-jobs',
+      trigger: 'Procesamiento de tareas pesadas en segundo plano',
+      triggerEn: 'Background async job processing required',
+      decision: 'Desacopla la lógica pesada del bucle principal del API mediante colas de mensajes',
+      decisionEn: 'Decouples heavy workloads from the main API event loop using message queues',
+      favoredTechName: slots.queues && TECH_BY_ID[slots.queues] ? TECH_BY_ID[slots.queues].name : 'BullMQ / Redis',
+      category: 'queues',
+    });
+  }
+
+  if (spec.constraints.needsRealtime) {
+    causalRules.push({
+      id: 'rule-realtime',
+      trigger: 'Sincronización colaborativa o eventos WebSockets en tiempo real',
+      triggerEn: 'Real-time collaborative sync or WebSockets required',
+      decision: 'Inyecta persistencia reactiva mediante canales Pub/Sub en memoria de baja latencia',
+      decisionEn: 'Injects reactive persistence via low-latency in-memory Pub/Sub channels',
+      favoredTechName: slots.database && slots.database.includes('supabase') ? 'Supabase Realtime' : 'Redis Streams',
+      category: 'database',
+    });
+  }
+
+  if (spec.priorities.developmentSpeed >= 4 && spec.priorities.lowVendorLockin <= 2) {
+    causalRules.push({
+      id: 'rule-tradeoff-velocity',
+      trigger: 'Prioridad máxima a velocidad de entrega sobre portabilidad',
+      triggerEn: 'Maximized delivery velocity prioritized over cloud portability',
+      decision: 'Acepta acoplamiento con plataformas cloud gestionadas a cambio de reducir el tiempo a mercado a la mitad',
+      decisionEn: 'Accepts coupling with managed cloud platforms in exchange for cutting time-to-market in half',
+      favoredTechName: slots.hosting && TECH_BY_ID[slots.hosting] ? TECH_BY_ID[slots.hosting].name : 'Vercel / Supabase',
+      category: 'hosting',
+    });
+  } else if (spec.priorities.lowVendorLockin >= 4) {
+    causalRules.push({
+      id: 'rule-tradeoff-lockin',
+      trigger: 'Prioridad alta a código abierto y portabilidad (Zero Lock-in)',
+      triggerEn: 'High priority on open-source and zero vendor lock-in',
+      decision: 'Prioriza estándares abiertos y tecnologías autocontenibles en Docker sin dependencias privativas',
+      decisionEn: 'Prioritizes open standards and Docker-containerizable tech without proprietary cloud lock-in',
+      favoredTechName: slots.database && TECH_BY_ID[slots.database]?.isOpenSource ? TECH_BY_ID[slots.database].name : 'PostgreSQL / Docker',
+      category: 'database',
+    });
+  }
+
   // Generación determinista de razones ("Why?")
   const whyReasons: string[] = [];
-
-  // Rationale del perfil de sistema
-  const systemProfile = getSystemProfile(spec.projectType);
   if (systemProfile) {
     whyReasons.push(lang === 'es' ? systemProfile.whyRationaleEs : systemProfile.whyRationaleEn);
   }
@@ -425,6 +558,8 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
     overallCostEstimate,
     frictionWarnings: frictions,
     dimensionScores,
+    scoreBreakdown,
+    causalRules,
     whyReasons,
     keyTradeoffs,
   };
