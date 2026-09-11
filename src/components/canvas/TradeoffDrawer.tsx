@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Technology } from '../../engine/types';
 import { TECH_BY_ID } from '../../engine/catalog';
 import { getLocalizedTech, getLocalizedFrictionMessage } from '../../engine/catalogI18n';
@@ -19,6 +19,8 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
   onReplaceClick,
 }) => {
   const { t, lang } = useI18n();
+  const [activeHostMode, setActiveHostMode] = useState<'managed' | 'selfhosted'>('selfhosted');
+  const [isDockerCopied, setIsDockerCopied] = useState<boolean>(false);
 
   if (!rawTech) return null;
   const tech = getLocalizedTech(rawTech, lang);
@@ -227,6 +229,120 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
                 })}
             </div>
           </div>
+
+          {/* Evaluador Self-Hosted vs Cloud Managed (Fase 4) */}
+          {tech.selfHostProfile && (
+            <div>
+              <h3 className="drawer-section-title" style={{ color: 'var(--yellow-vivid)' }}>
+                {t.selfHostNotice}
+              </h3>
+              <div className="selfhost-evaluator-card">
+                <div className="selfhost-header-bar">
+                  <span className="control-label">[ DEPLOYMENT EVAL ]</span>
+                  <div className="selfhost-mode-toggle">
+                    <button
+                      type="button"
+                      className={`selfhost-toggle-btn ${activeHostMode === 'managed' ? 'active' : ''}`}
+                      onClick={() => setActiveHostMode('managed')}
+                    >
+                      {t.selfHostTabManaged}
+                    </button>
+                    <button
+                      type="button"
+                      className={`selfhost-toggle-btn ${activeHostMode === 'selfhosted' ? 'active' : ''}`}
+                      onClick={() => setActiveHostMode('selfhosted')}
+                    >
+                      {t.selfHostTabSelfHosted}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="selfhost-body-content">
+                  {activeHostMode === 'selfhosted' ? (
+                    <>
+                      <div className="selfhost-specs-grid">
+                        <div className="selfhost-spec-item">
+                          <span className="selfhost-spec-key">{t.selfHostMinSpecs}</span>
+                          <span className="selfhost-spec-val">
+                            {tech.selfHostProfile.minRamMb} MB RAM // {tech.selfHostProfile.minCpuCores} vCPU
+                          </span>
+                        </div>
+                        <div className="selfhost-spec-item">
+                          <span className="selfhost-spec-key">{t.selfHostMaintenance}</span>
+                          <span className="selfhost-spec-val" style={{ color: '#FFD000' }}>
+                            ~{tech.selfHostProfile.maintenanceHoursPerMonth ?? 2} {t.selfHostHoursPerMonth}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="selfhost-docker-box">
+                        <div className="selfhost-docker-header">
+                          <span className="selfhost-docker-label">{t.selfHostDockerImage}</span>
+                          <button
+                            type="button"
+                            className="btn-copy-docker"
+                            onClick={() => {
+                              const cmd =
+                                tech.selfHostProfile?.dockerCommand ||
+                                (tech.selfHostProfile?.dockerImage
+                                  ? `docker run -d --name ${tech.id} ${tech.selfHostProfile.dockerImage}`
+                                  : '');
+                              if (cmd) {
+                                navigator.clipboard.writeText(cmd);
+                                setIsDockerCopied(true);
+                                setTimeout(() => setIsDockerCopied(false), 2000);
+                              }
+                            }}
+                          >
+                            {isDockerCopied ? t.selfHostCopied : t.selfHostCopyDocker}
+                          </button>
+                        </div>
+                        <code className="selfhost-docker-code">
+                          {tech.selfHostProfile.dockerCommand ||
+                            `docker run -d --name ${tech.id} ${tech.selfHostProfile.dockerImage}`}
+                        </code>
+                      </div>
+
+                      <div className="selfhost-comparison-box">
+                        <div className="selfhost-comp-row">
+                          <span className="selfhost-comp-label">{t.selfHostManagedCost}:</span>
+                          <span className="selfhost-comp-val">
+                            {tech.selfHostProfile.monthlyManagedCost || '$25 - $50/mo'}
+                          </span>
+                        </div>
+                        <div className="selfhost-comp-row">
+                          <span className="selfhost-comp-label">{t.selfHostVpsCost}:</span>
+                          <span className="selfhost-comp-val" style={{ color: '#10B981' }}>
+                            {tech.selfHostProfile.monthlySelfHostedCost || '$4 - $12/mo'} (Hetzner CPX31)
+                          </span>
+                        </div>
+                        {((lang === 'es' ? tech.selfHostProfile.gotchasEs : tech.selfHostProfile.gotchasEn) || []).length > 0 && (
+                          <div className="selfhost-breakeven-note">
+                            <strong>GOTCHAS:</strong>{' '}
+                            {(lang === 'es' ? tech.selfHostProfile.gotchasEs : tech.selfHostProfile.gotchasEn).join(' ')}
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="selfhost-comparison-box" style={{ background: 'transparent', border: 'none', padding: 0 }}>
+                      <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                        {lang === 'es'
+                          ? 'El modelo Cloud gestionado externaliza aprovisionamiento, parches CVE, backups automáticos multi-región y SLA 99.99% a cambio de costes basados en consumo o suscripción mensual.'
+                          : 'The managed Cloud model offloads hardware provisioning, CVE patches, multi-region backups, and 99.99% SLA availability at the expense of consumption-based billing or monthly tiers.'}
+                      </p>
+                      <div className="selfhost-comp-row" style={{ marginTop: '0.5rem' }}>
+                        <span className="selfhost-comp-label">{t.selfHostManagedCost}:</span>
+                        <span className="selfhost-comp-val" style={{ color: '#FFD000' }}>
+                          {tech.selfHostProfile.monthlyManagedCost || '$25 - $50/mo'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Footer Meta */}
           <div
