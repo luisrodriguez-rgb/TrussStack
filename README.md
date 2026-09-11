@@ -10,11 +10,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/luisrodriguez-rgb/TrussStack"><img src="https://img.shields.io/badge/VERSION-4.0%20GA-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="Version 4.0 GA" /></a>
+  <a href="https://github.com/luisrodriguez-rgb/TrussStack"><img src="https://img.shields.io/badge/VERSION-4.1%20GA-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="Version 4.1 GA" /></a>
   <a href="https://github.com/luisrodriguez-rgb/TrussStack/blob/main/LICENSE"><img src="https://img.shields.io/badge/LICENCIA-MIT-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="License MIT" /></a>
   <img src="https://img.shields.io/badge/CATALOG-179%20TECHNOLOGIES-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="179 Technologies" />
-  <img src="https://img.shields.io/badge/AI%20DEPENDENCY-ZERO%20HALLUCINATIONS-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="Zero Hallucinations" />
-  <img src="https://img.shields.io/badge/TESTS-25%20PASSING-00E699?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="25 Tests Passing" />
+  <img src="https://img.shields.io/badge/SYSTEMS-12%20ARCHETYPES-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="12 System Archetypes" />
+  <img src="https://img.shields.io/badge/BLUEPRINTS-19%20PRODUCTION-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="19 Production Blueprints" />
+  <img src="https://img.shields.io/badge/TESTS-30%20PASSING-00E699?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="30 Tests Passing" />
 </p>
 
 ---
@@ -52,13 +53,13 @@ TrussStack estructura el diseno de software en cuatro etapas metodologicas rigur
 ```
 
 ### Paso 1: Especificar ([Requisitos])
-Define parámetros críticos del proyecto: tipo de aplicación (SaaS MVP, Blog/SEO, E-commerce, API asíncrona, Local-First), escala esperada de usuarios (1k a 100k+ MAU), tamaño y seniority del equipo de desarrollo, presupuesto mensual de infraestructura ($0 strict free tier a crecimiento) y módulos prioritarios.
+Define parámetros críticos del proyecto entre **12 arquetipos de sistemas modernos** (B2B SaaS, E-Commerce, Backoffice, Microservicios API, Blog/SEO, Colaborativo Real-Time, Agentes de IA/RAG, Apps Móviles, Data Pipelines OLAP, Telemetría IoT, Marketplaces y Servidores de Videojuegos) organizados por categorías con auto-calibración de restricciones recomendadas, escala esperada (1k a 100k+ MAU), tamaño de equipo y presupuesto mensual ($0 strict free tier a crecimiento).
 
 ### Paso 2: Evaluar & Disenar ([Arquitectura Canvas])
 Explora la topología del sistema organizada en 5 capas desacopladas con 26+ componentes auditados. Inspecciona el **Fit Score global**, la compatibilidad cruzada, las fricciones detectadas y el coste mensual proyectado. Permite la **sustitución de componentes en caliente** con cálculo instantáneo del balance de compromisos (*trade-offs* en el frente de Pareto).
 
 ### Paso 3: Comparar & Benchmarks ([Comparar] & [Benchmarks])
-Contrasta arquetipos cara a cara (*Fullstack Serverless Edge* vs *Decoupled API* vs *Local-First SQLite*) mediante un radar multicriterio. Analiza métricas empíricas de benchmarks (arranques en frío en milisegundos, tamaño de bundle en kB, peticiones por segundo y consumo de memoria) y evalúa la viabilidad operativa de auto-hospedar herramientas (*Self-Hosting vs Managed Cloud*).
+Contrasta arquetipos cara a cara entre **6 arquetipos fundamentales** (*Fullstack SaaS*, *Decoupled VPS*, *Edge Static*, *AI Agent Vector*, *Async Event-Driven* y *Local-First SQLite*) mediante un radar multicriterio de 6 dimensiones. Analiza métricas empíricas de benchmarks (arranques en frío en milisegundos, tamaño de bundle en kB, peticiones por segundo y consumo de memoria) y evalúa la viabilidad operativa de auto-hospedar herramientas (*Self-Hosting vs Managed Cloud*).
 
 ### Paso 4: Auditar & Construir ([Explorar] & [Exportar])
 Descarga el bundle de producción con documentación formal MADR 3.0, configuración ejecutable de contenedores `docker-compose.yml`, archivo de variables `.env.example` y diagramas vectoriales para Mermaid y Excalidraw. Conecta el linter GitOps a tu repositorio para auditar desvíos entre la arquitectura planeada y el `package.json` en cada Pull Request.
@@ -99,24 +100,41 @@ Simulador interactivo montado sobre el canvas de arquitectura:
 - **Proyeccion de Escalado por Herramienta**: Desglose transparente de saltos de plan (Vercel Pro $20/seat, Clerk Auth $0.02/MAU pasados los 10k, Supabase Pro $25/mes, Neon Launch $19/mes).
 - **Calculo de Breakeven Serverless vs VPS**: Determina exactamente a partir de qué volumen de tráfico resulta más rentable migrar de funciones serverless a un servidor dedicado o VPS (Hetzner / Fly.io).
 
-### 4. Comparador Cara a Cara de Arquetipos
-- Vista dedicada para contrastar simultáneamente 3 filosofías de ingeniería:
-  - *Arquetipo A: Fullstack Serverless Edge* (Next.js + Supabase + Cloudflare).
-  - *Arquetipo B: Decoupled Containerized API* (React SPA + FastAPI / Go + PostgreSQL + Redis).
-  - *Arquetipo C: Local-First Reactive Edge* (Vite + Hono + Turso libSQL + Cloudflare R2).
-- Radar de evaluación técnica en 5 ejes: Experiencia de desarrollo (DX), velocidad al mercado (Time to Market), costes en escala, latencia global y riesgo de vendor lock-in.
+### 4. Comparador Cara a Cara de 6 Arquetipos de Arquitectura
+- Vista dedicada para contrastar simultáneamente 6 filosofías de ingeniería de la industria:
+  - *ARCH-01: Modern Fullstack SaaS Boilerplate* (Next.js + Supabase + Stripe + Resend + Vercel + Sentry).
+  - *ARCH-02: Decoupled API & Dedicated VPS* (React Vite + FastAPI + PostgreSQL + Redis + Hetzner VPS + BetterStack).
+  - *ARCH-03: Edge & Content-Driven Static* (Astro + Cloudflare Pages + Turso libSQL + Cloudflare R2).
+  - *ARCH-04: Autonomous AI Agent & Vector Pipeline* (FastAPI + pgvector/Qdrant + BullMQ/Celery + Hetzner VPS).
+  - *ARCH-05: Event-Driven Async Microservices & Analytics* (Go/Fiber + ClickHouse + Kafka/Redpanda + Grafana).
+  - *ARCH-06: Local-First Offline-Ready Replicated* (React Vite + Hono + Turso libSQL + Cloudflare R2).
+- Radar de evaluación técnica en 6 dimensiones: Experiencia de desarrollo (DX), velocidad al mercado (Time to Market), costes en escala, latencia global, simplicidad operativa y riesgo de vendor lock-in.
+- Matrices de atributos interactivos, trade-offs explícitos y veredictos técnicos para cada arquetipo.
 
-### 5. Galeria de Blueprints de Produccion de la Industria
-Colección de 8 arquitecturas reales inspiradas en proyectos y compañías de referencia:
-1. **Cal.com**: Next.js App Router + Prisma + PostgreSQL + Stripe + SendGrid.
-2. **Supabase Studio**: Next.js + Go Fiber + PostgreSQL / PostgREST + GoTrue Auth.
-3. **Vercel AI Chatbot**: Next.js + AI SDK + pgvector + Serverless Redis.
-4. **Ghost Headless CMS**: React SPA + Node.js Ghost Core + MySQL + Cloudflare CDN.
-5. **PostHog Analytics Engine**: ClickHouse + Kafka/BullMQ + Django backend + React.
-6. **MedusaJS Headless Commerce**: Medusa Core + PostgreSQL + Redis + Stripe.
-7. **Linear / Affine Local-First**: IndexedDB local + CRDT sync + Cloudflare Workers + Turso.
-8. **Plausible Analytics**: Elixir/Phoenix + ClickHouse + PostgreSQL + Vanilla JS (1 kB script).
-*Carga instantánea de cualquier blueprint en el canvas interactivo con 1 clic.*
+### 5. Galeria de 19 Blueprints de Produccion de la Industria & Proyectos Reales
+Colección exhaustiva de 19 arquitecturas de software listas para inyectar en el Canvas con 1 clic:
+- **Proyectos Reales del Ecosistema**:
+  1. `[ REAL-01 ] Mi Semestre // Academic Hub`: Next.js + Supabase + Vercel + Expo.
+  2. `[ REAL-02 ] Git Invaders // Arcade Game`: React SPA + Vite + Turso + Cloudflare Pages con $0 egress.
+  3. `[ REAL-03 ] Sketion // Vector Architecture Engine`: Next.js + Cloudflare R2 + GitHub Actions.
+  4. `[ REAL-04 ] File Converter Pro // Local WASM Processor`: Vite + WebAssembly + Cloudflare Workers.
+  5. `[ REAL-05 ] EduGenios // Institutional Learning SaaS`: Next.js + PostgreSQL RLS + Stripe + Postmark.
+- **Patrones de Producción de la Industria**:
+  6. `[ PATT-06 ] Production B2B SaaS Boilerplate`: Next.js + Clerk + Stripe + Supabase.
+  7. `[ PATT-07 ] AI Agent Worker & Vector Microservice`: FastAPI + pgvector + BullMQ + Hetzner VPS.
+  8. `[ PATT-08 ] Local-First Reactive SQLite Replicated`: React SPA + Hono + Turso libSQL + Cloudflare.
+  9. `[ PATT-09 ] Cross-Platform Mobile SaaS`: React Native Expo + Supabase + Resend + EAS.
+  10. `[ PATT-10 ] High-Throughput Event Streaming & Analytics`: Go + ClickHouse + Kafka/Redpanda.
+  11. `[ PATT-11 ] Edge E-Commerce Headless Storefront`: Astro + Stripe + Cloudflare Pages & Workers.
+  12. `[ PATT-12 ] Multi-Vendor Marketplace with Split Escrow`: Next.js + Stripe Connect + PostgreSQL.
+  13. `[ PATT-13 ] High-Concurrency WebSocket Multiplayer Hub`: Go Gin + Redis Streams + Fly.io.
+  14. `[ PATT-14 ] Self-Hosted Privacy-First Enterprise Stack`: Coolify + PostgreSQL + MinIO + Umami.
+  15. `Cal.com Architecture`: Next.js App Router + Prisma + PostgreSQL + Stripe.
+  16. `Supabase Studio Pattern`: Next.js + Go Fiber + PostgreSQL + GoTrue Auth.
+  17. `Vercel AI Chatbot`: Next.js + AI SDK + pgvector + Serverless Redis.
+  18. `Ghost Headless CMS`: React SPA + Node.js Ghost Core + MySQL + Cloudflare CDN.
+  19. `PostHog Analytics Engine`: ClickHouse + Kafka/BullMQ + Django backend + React.
+- **Filtros por Categoria en 1 Clic**: `[ TODOS ]`, `[ PROYECTOS REALES ]`, `[ SAAS PRO ]`, `[ LOCAL-FIRST ]`, `[ AI & DATA ]`, `[ MOVIL ]`, `[ EDGE & SEO ]`, `[ SELF-HOSTED ]`.
 
 ### 6. Generador de Architecture Decision Records (MADR 3.0)
 - Motor formal de documentación arquitectónica según la especificación **MADR 3.0** (Markdown Architectural Decision Records).
@@ -166,6 +184,7 @@ TrussStack/
 ├── src/
 │   ├── engine/                           # Nucleo determinista sin dependencias externas
 │   │   ├── types.ts                      # Tipos de dominio, tecnologia, categorias y especificaciones
+│   │   ├── systems.ts                    # Registro declarativo SystemRegistry con 12 perfiles de sistema
 │   │   ├── catalog.ts                    # Punto de entrada unificado y re-exportacion modular
 │   │   ├── catalog/                      # Catalogo modular de 179 tecnologias por dominio
 │   │   │   ├── builder.ts                # Helper funcional tipado para definicion de tecnologias
@@ -189,7 +208,7 @@ TrussStack/
 │   │   ├── flows.ts                      # Modelado de protocolos, flujos y checklist de seguridad
 │   │   ├── adrGenerator.ts               # Generador de registros MADR 3.0 en Markdown
 │   │   ├── linter.ts                     # Motor de auditoria estatica de package.json y CI exporter
-│   │   └── __tests__/                    # Suite de 25 pruebas unitarias automatizadas
+│   │   └── __tests__/                    # Suite de 30 pruebas unitarias automatizadas
 │   │       ├── engine.test.ts            # Tests del recomendador y matrices de friccion
 │   │       ├── costSimulator.test.ts     # Tests de calculo de infraestructura y trampas de egress
 │   │       ├── urlState.test.ts          # Tests de codificacion y decodificacion de blueprints
@@ -202,12 +221,13 @@ TrussStack/
 │   │   ├── home/
 │   │   │   └── LandingHero.tsx           # Pagina de inicio con banner, filosofia y blueprints
 │   │   ├── layout/
-│   │   │   └── Header.tsx                # Barra de navegacion superior descongestionada con GitHub
+│   │   │   ├── Header.tsx                # Barra superior compacta con botones minimalistas
+│   │   │   └── Footer.tsx                # Pie de pagina tecnico con autoria de Luis Rodriguez
 │   │   ├── common/
-│   │   │   ├── TechLogo.tsx              # 50+ logos vectoriales SVG nativos
+│   │   │   ├── TechLogo.tsx              # 50+ logos vectoriales SVG nativos y favicons oficiales
 │   │   │   └── TrussLogo.tsx             # Isotipo oficial de TrussStack
 │   │   ├── wizard/
-│   │   │   └── SpecWizard.tsx            # Asistente de calibracion de requisitos tecnicos
+│   │   │   └── SpecWizard.tsx            # Asistente de calibracion con filtros de grupo dinamicos
 │   │   ├── canvas/
 │   │   │   ├── ArchitectureCanvas.tsx    # Matriz visual de 5 capas con instrumentacion
 │   │   │   ├── FlowSimulatorBar.tsx      # Barra de control de flujos paso a paso y autoplay
@@ -215,9 +235,9 @@ TrussStack/
 │   │   │   ├── TradeoffDrawer.tsx        # Drawer lateral de trade-offs, radar y self-hosting
 │   │   │   └── ReplaceModal.tsx          # Modal de reemplazo en caliente de piezas
 │   │   ├── compare/
-│   │   │   └── StackComparator.tsx       # Comparador cara a cara de 3 arquetipos de arquitectura
+│   │   │   └── StackComparator.tsx       # Comparador cara a cara de 6 arquetipos de arquitectura
 │   │   ├── explore/
-│   │   │   └── BlueprintGallery.tsx      # Galeria de 8 blueprints reales de la industria
+│   │   │   └── StacksCatalog.tsx         # Catalogo interactivo de 19 blueprints con filtros de categoria
 │   │   ├── benchmarks/
 │   │   │   └── BenchmarkMatrix.tsx       # Matriz interactiva de cold starts, bundle y memoria
 │   │   ├── cost/
