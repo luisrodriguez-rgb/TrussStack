@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Technology } from '../../engine/types';
 import { TECH_BY_ID } from '../../engine/catalog';
+import { getLocalizedTech, getLocalizedFrictionMessage } from '../../engine/catalogI18n';
 import { TechLogo } from '../common/TechLogo';
 import { useI18n } from '../../i18n/I18nContext';
 
@@ -12,14 +13,15 @@ interface TradeoffDrawerProps {
 }
 
 export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
-  tech,
+  tech: rawTech,
   currentStack,
   onClose,
   onReplaceClick,
 }) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
 
-  if (!tech) return null;
+  if (!rawTech) return null;
+  const tech = getLocalizedTech(rawTech, lang);
 
   const metricItems = [
     { label: t.metricDx, val: tech.metrics.dx },
@@ -216,7 +218,9 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
                         </span>
                       </div>
                       <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
-                        {activeInt ? activeInt.explanation : t.synergyDefault}
+                        {activeInt
+                          ? getLocalizedFrictionMessage(tech.id, other.id, activeInt.explanation, lang)
+                          : t.synergyDefault}
                       </div>
                     </div>
                   );

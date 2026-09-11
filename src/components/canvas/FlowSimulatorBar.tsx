@@ -15,7 +15,7 @@ export const FlowSimulatorBar: React.FC<FlowSimulatorBarProps> = ({
   onSelectScenario,
   onStepChange,
 }) => {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const [isPlaying, setIsPlaying] = useState(false);
 
   // Auto-play interval
@@ -67,7 +67,7 @@ export const FlowSimulatorBar: React.FC<FlowSimulatorBarProps> = ({
               border: '1px solid var(--yellow-border)',
             }}
           >
-            [ SIMULADOR ]
+            {t.flowSimulatorBadge}
           </span>
           <span
             style={{
@@ -78,7 +78,7 @@ export const FlowSimulatorBar: React.FC<FlowSimulatorBarProps> = ({
               textTransform: 'uppercase',
             }}
           >
-            {lang === 'es' ? 'TRAZADO DE FLUJOS DE DATOS EN TIEMPO REAL' : 'REAL-TIME DATA FLOW TRACER'}
+            {t.flowSimulatorTitle}
           </span>
         </div>
 
@@ -117,7 +117,7 @@ export const FlowSimulatorBar: React.FC<FlowSimulatorBarProps> = ({
                 setIsPlaying(false);
               }}
             >
-              [ RESET X ]
+              {t.flowBtnReset}
             </button>
           )}
         </div>
@@ -153,7 +153,7 @@ export const FlowSimulatorBar: React.FC<FlowSimulatorBarProps> = ({
                 style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem' }}
                 onClick={() => setIsPlaying(!isPlaying)}
               >
-                {isPlaying ? '[ PAUSAR || ]' : '[ AUTO PLAY > ]'}
+                {isPlaying ? t.flowBtnPause : t.flowBtnAutoPlay}
               </button>
 
               <button
@@ -198,33 +198,33 @@ export const FlowSimulatorBar: React.FC<FlowSimulatorBarProps> = ({
           >
             <div>
               <span style={{ color: 'var(--text-dim)', fontSize: '0.7rem', display: 'block' }}>
-                {lang === 'es' ? 'ACCIÓN DEL PASO' : 'STEP ACTION'}
+                {t.flowStepAction}
               </span>
               <strong style={{ color: 'var(--text-pure)' }}>
-                {currentStep.step}. {currentStep.label}
+                {currentStep.step}. {lang === 'es' ? currentStep.label : currentStep.labelEn || currentStep.label}
               </strong>
             </div>
 
             <div>
               <span style={{ color: 'var(--text-dim)', fontSize: '0.7rem', display: 'block' }}>
-                {lang === 'es' ? 'PROTOCOLO // CONEXIÓN' : 'PROTOCOL // WIRE'}
+                {t.flowStepProtocol}
               </span>
               <span style={{ color: 'var(--yellow-vivid)' }}>{currentStep.protocol}</span>
             </div>
 
             <div>
               <span style={{ color: 'var(--text-dim)', fontSize: '0.7rem', display: 'block' }}>
-                {lang === 'es' ? 'LATENCIA ESTIMADA' : 'EST. LATENCY'}
+                {t.flowStepLatency}
               </span>
               <span style={{ color: 'var(--text-pure)', fontWeight: 700 }}>~{currentStep.latency}</span>
             </div>
 
             <div style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border-rule)', paddingTop: '0.4rem' }}>
               <span style={{ color: 'var(--text-dim)', fontSize: '0.7rem' }}>
-                {lang === 'es' ? 'PAYLOAD & CONTEXTO:' : 'PAYLOAD & CONTEXT:'}{' '}
+                {t.flowStepPayload}{' '}
               </span>
               <code style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
-                {currentStep.payloadDescription}
+                {lang === 'es' ? currentStep.payloadDescription : currentStep.payloadDescriptionEn || currentStep.payloadDescription}
               </code>
             </div>
           </div>

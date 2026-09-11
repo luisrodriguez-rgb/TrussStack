@@ -2,6 +2,7 @@ import React from 'react';
 import type { ReplacementAlternative, TechCategory, UserProjectSpec } from '../../engine/types';
 import { getReplacementAlternatives } from '../../engine/recommender';
 import { TECH_BY_ID } from '../../engine/catalog';
+import { getLocalizedTech } from '../../engine/catalogI18n';
 import { TechLogo } from '../common/TechLogo';
 import { useI18n } from '../../i18n/I18nContext';
 
@@ -20,14 +21,16 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
   onClose,
   onSelectAlternative,
 }) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const currentTechId = currentStack[category];
-  const currentTech = currentTechId ? TECH_BY_ID[currentTechId] : null;
+  const rawTech = currentTechId ? TECH_BY_ID[currentTechId] : null;
+  const currentTech = rawTech ? getLocalizedTech(rawTech, lang) : null;
 
   const alternatives: ReplacementAlternative[] = getReplacementAlternatives(
     category,
     currentStack,
-    spec
+    spec,
+    lang
   );
 
   return (

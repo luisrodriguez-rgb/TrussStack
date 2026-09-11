@@ -11,17 +11,23 @@ export const ProtocolModal: React.FC<ProtocolModalProps> = ({ protocol, onClose 
   const { lang, t } = useI18n();
   if (!protocol) return null;
 
+  const secList =
+    lang === 'es'
+      ? protocol.securityHardening
+      : protocol.securityHardeningEn || protocol.securityHardening;
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-dialog" style={{ maxWidth: '780px' }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
             <span className="pill-tag" style={{ color: 'var(--yellow-vivid)' }}>
-              [ INTERFACE PROTOCOL CONTRACT ]
+              {t.protoContractBadge}
             </span>
-            <h3>{protocol.protocolName}</h3>
+            <h3>{lang === 'es' ? protocol.protocolName : protocol.protocolNameEn || protocol.protocolName}</h3>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
-              {protocol.sourceLayer} &lt;--&gt; {protocol.targetLayer}
+              {lang === 'es' ? protocol.sourceLayer : protocol.sourceLayerEn || protocol.sourceLayer} &lt;--&gt;{' '}
+              {lang === 'es' ? protocol.targetLayer : protocol.targetLayerEn || protocol.targetLayer}
             </p>
           </div>
           <button type="button" className="drawer-close-btn" onClick={onClose} aria-label="Close">
@@ -46,21 +52,25 @@ export const ProtocolModal: React.FC<ProtocolModalProps> = ({ protocol, onClose 
           >
             <div>
               <span style={{ color: 'var(--text-dim)', display: 'block', fontSize: '0.7rem' }}>
-                {lang === 'es' ? 'TRANSPORTE DE RED' : 'NETWORK TRANSPORT'}
+                {t.protoTransport}
               </span>
-              <strong style={{ color: 'var(--text-pure)' }}>{protocol.transport}</strong>
+              <strong style={{ color: 'var(--text-pure)' }}>
+                {lang === 'es' ? protocol.transport : protocol.transportEn || protocol.transport}
+              </strong>
             </div>
             <div>
               <span style={{ color: 'var(--text-dim)', display: 'block', fontSize: '0.7rem' }}>
-                {lang === 'es' ? 'PUERTO ESTÁNDAR' : 'DEFAULT PORT'}
+                {t.protoPort}
               </span>
               <strong style={{ color: 'var(--yellow-vivid)' }}>{protocol.defaultPort}</strong>
             </div>
             <div>
               <span style={{ color: 'var(--text-dim)', display: 'block', fontSize: '0.7rem' }}>
-                {lang === 'es' ? 'PRESUPUESTO DE LATENCIA (P95)' : 'P95 LATENCY BUDGET'}
+                {t.protoLatency}
               </span>
-              <strong style={{ color: 'var(--text-pure)' }}>{protocol.latencyBudget}</strong>
+              <strong style={{ color: 'var(--text-pure)' }}>
+                {lang === 'es' ? protocol.latencyBudget : protocol.latencyBudgetEn || protocol.latencyBudget}
+              </strong>
             </div>
           </div>
 
@@ -76,10 +86,10 @@ export const ProtocolModal: React.FC<ProtocolModalProps> = ({ protocol, onClose 
                 marginBottom: '0.5rem',
               }}
             >
-              [ ! ] {lang === 'es' ? 'REQUISITOS DE SEGURIDAD & HARDENING' : 'SECURITY HARDENING & CONTRACTS'}
+              [ ! ] {t.protoSecurityTitle}
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              {protocol.securityHardening.map((sec, idx) => (
+              {secList.map((sec, idx) => (
                 <div
                   key={idx}
                   style={{
@@ -114,7 +124,7 @@ export const ProtocolModal: React.FC<ProtocolModalProps> = ({ protocol, onClose 
                 marginBottom: '0.5rem',
               }}
             >
-              [ CONFIG ] {lang === 'es' ? 'CABECERAS & PARÁMETROS CRÍTICOS' : 'CRITICAL HEADERS & PARAMETERS'}
+              [ CONFIG ] {t.protoHeadersTitle}
             </h4>
             <div
               style={{
@@ -148,7 +158,7 @@ export const ProtocolModal: React.FC<ProtocolModalProps> = ({ protocol, onClose 
                 marginBottom: '0.4rem',
               }}
             >
-              [ ARCHITECTURE NOTE ]
+              {t.protoArchNotesTitle}
             </h4>
             <p
               style={{
@@ -162,7 +172,7 @@ export const ProtocolModal: React.FC<ProtocolModalProps> = ({ protocol, onClose 
                 border: '1px solid var(--border-rule)',
               }}
             >
-              {protocol.architectureNotes}
+              {lang === 'es' ? protocol.architectureNotes : protocol.architectureNotesEn || protocol.architectureNotes}
             </p>
           </div>
         </div>

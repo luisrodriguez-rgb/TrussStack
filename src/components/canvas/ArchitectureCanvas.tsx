@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { StackRecommendation, TechCategory, Technology } from '../../engine/types';
 import { TECH_BY_ID } from '../../engine/catalog';
+import { getLocalizedTech } from '../../engine/catalogI18n';
 import { TechLogo } from '../common/TechLogo';
 import { useI18n } from '../../i18n/I18nContext';
 import { FlowSimulatorBar } from './FlowSimulatorBar';
@@ -24,7 +25,7 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
   onInspectTech,
   onOpenCostSim,
 }) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [activeScenario, setActiveScenario] = useState<FlowScenario | null>(null);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [activeProtocol, setActiveProtocol] = useState<ProtocolInspection | null>(null);
@@ -35,8 +36,9 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
   const renderCard = (category: TechCategory, customLayerName?: string, isHero = false) => {
     const techId = slots[category];
     if (!techId) return null;
-    const tech = TECH_BY_ID[techId];
-    if (!tech) return null;
+    const rawTech = TECH_BY_ID[techId];
+    if (!rawTech) return null;
+    const tech = getLocalizedTech(rawTech, lang);
 
     const isInFlow = activeScenario ? activeScenario.involvedCategories.includes(category) : false;
     const currentStep = activeScenario?.steps[currentStepIndex];
@@ -57,12 +59,12 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
           {/* Active Flow Badge if participating in current step */}
           {isStepTarget && (
             <span className="flow-step-badge">
-              [ PASO {currentStepIndex + 1}: DESTINO ]
+              [ {lang === 'es' ? 'PASO' : 'STEP'} {currentStepIndex + 1}: {t.flowStepTarget} ]
             </span>
           )}
           {isStepSource && (
             <span className="flow-step-badge" style={{ background: '#FFE600' }}>
-              [ PASO {currentStepIndex + 1}: ORIGEN ]
+              [ {lang === 'es' ? 'PASO' : 'STEP'} {currentStepIndex + 1}: {t.flowStepSource} ]
             </span>
           )}
 
@@ -168,14 +170,26 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         <div className="nutrition-metrics-row">
           <div className="nutrition-metric-box">
             <span className="metric-micro-label">{t.matrixTeam}</span>
-            <span className="metric-micro-val">1 DEV TEAM</span>
+            <span className="metric-micro-val">
+              {recommendation.spec.teamSize === 'solo'
+                ? lang === 'es'
+                  ? '1 SOLO DEV'
+                  : '1 SOLO DEV'
+                : recommendation.spec.teamSize === 'small_team'
+                ? '2-5 DEVS'
+                : '5+ DEVS'}
+            </span>
           </div>
 
           <div
             className="nutrition-metric-box"
             style={{ cursor: onOpenCostSim ? 'pointer' : 'default' }}
             onClick={onOpenCostSim}
-            title="Click para abrir la calculadora de escala y costes dinámicos"
+            title={
+              lang === 'es'
+                ? 'Click para abrir la calculadora de escala y costes dinámicos'
+                : 'Click to open dynamic scale and cost calculator'
+            }
           >
             <span className="metric-micro-label">{t.matrixCost} ↗</span>
             <span className="metric-micro-val citron">
@@ -249,7 +263,11 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         <div
           className="layer-connector interactive"
           onClick={() => setActiveProtocol(PROTOCOL_INSPECTIONS.ingress_to_app)}
-          title="Click para inspeccionar contrato de protocolo y seguridad"
+          title={
+            lang === 'es'
+              ? 'Click para inspeccionar contrato de protocolo y seguridad'
+              : 'Click to inspect protocol contract and security'
+          }
         >
           <div className="connector-line" />
           <span className="connector-pill interactive">
@@ -312,7 +330,11 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         <div
           className="layer-connector interactive"
           onClick={() => setActiveProtocol(PROTOCOL_INSPECTIONS.app_to_data)}
-          title="Click para inspeccionar contrato de protocolo y seguridad"
+          title={
+            lang === 'es'
+              ? 'Click para inspeccionar contrato de protocolo y seguridad'
+              : 'Click to inspect protocol contract and security'
+          }
         >
           <div className="connector-line" />
           <span className="connector-pill interactive">
@@ -336,7 +358,11 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         <div
           className="layer-connector interactive"
           onClick={() => setActiveProtocol(PROTOCOL_INSPECTIONS.app_to_services)}
-          title="Click para inspeccionar contrato de protocolo y seguridad"
+          title={
+            lang === 'es'
+              ? 'Click para inspeccionar contrato de protocolo y seguridad'
+              : 'Click to inspect protocol contract and security'
+          }
         >
           <div className="connector-line" />
           <span className="connector-pill interactive">
@@ -361,7 +387,11 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         <div
           className="layer-connector interactive"
           onClick={() => setActiveProtocol(PROTOCOL_INSPECTIONS.app_to_ops)}
-          title="Click para inspeccionar contrato de protocolo y seguridad"
+          title={
+            lang === 'es'
+              ? 'Click para inspeccionar contrato de protocolo y seguridad'
+              : 'Click to inspect protocol contract and security'
+          }
         >
           <div className="connector-line" />
           <span className="connector-pill interactive">
