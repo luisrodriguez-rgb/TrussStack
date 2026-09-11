@@ -1,41 +1,32 @@
 import React from 'react';
-import type { StackRecommendation } from '../../engine/types';
 import { useI18n } from '../../i18n/I18nContext';
 import { TrussLogo } from '../common/TrussLogo';
 
-export type AppView = 'wizard' | 'canvas' | 'compare' | 'explore' | 'benchmarks';
+export type AppView = 'home' | 'wizard' | 'canvas' | 'compare' | 'explore' | 'benchmarks';
 
 interface HeaderProps {
   currentView: AppView;
   onViewChange: (view: AppView) => void;
-  recommendation: StackRecommendation | null;
-  onOpenExport: () => void;
-  onOpenCostSim?: () => void;
   theme: 'dark' | 'light';
   onToggleTheme: () => void;
-  onShareBlueprint?: () => void;
-  isShareCopied?: boolean;
-  onOpenDriftAudit?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentView,
   onViewChange,
-  recommendation,
-  onOpenExport,
-  onOpenCostSim,
   theme,
   onToggleTheme,
-  onShareBlueprint,
-  isShareCopied = false,
-  onOpenDriftAudit,
 }) => {
   const { lang, toggleLang, t } = useI18n();
-  const frictionCount = recommendation?.frictionWarnings.length || 0;
 
   return (
     <header className="app-header">
-      <div className="brand-section">
+      <div
+        className="brand-section"
+        onClick={() => onViewChange('home')}
+        style={{ cursor: 'pointer' }}
+        title="TrussStack Home"
+      >
         <div className="brand-badge">
           <TrussLogo size={38} />
         </div>
@@ -46,6 +37,13 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <nav className="header-nav" aria-label="Modos principales">
+        <button
+          type="button"
+          className={`nav-tab-btn ${currentView === 'home' ? 'active' : ''}`}
+          onClick={() => onViewChange('home')}
+        >
+          {t.navHome}
+        </button>
         <button
           type="button"
           className={`nav-tab-btn ${currentView === 'wizard' ? 'active' : ''}`}
@@ -104,92 +102,16 @@ export const Header: React.FC<HeaderProps> = ({
           {theme === 'dark' ? t.themeDark : t.themeLight}
         </button>
 
-        {recommendation && (
-          <>
-            <div
-              className="kpi-chip"
-              title={lang === 'es' ? 'Afinidad con tus preferencias declaradas' : 'Fit Score based on declared preferences'}
-            >
-              <span className="kpi-label">{t.kpiFitScore}</span>
-              <span className={`kpi-value ${recommendation.fitScore >= 80 ? 'healthy' : 'warning'}`}>
-                {recommendation.fitScore}%
-              </span>
-            </div>
-
-            <div
-              className="kpi-chip"
-              style={{ cursor: onOpenCostSim ? 'pointer' : 'default' }}
-              onClick={onOpenCostSim}
-              title={lang === 'es' ? 'Click para abrir la calculadora de costes y auditoría de egress' : 'Click to open cost calculator & egress audit'}
-            >
-              <span className="kpi-label">{t.kpiCost}</span>
-              <span className="kpi-value healthy">
-                {recommendation.overallCostEstimate.split(' ')[0]} ↗
-              </span>
-            </div>
-
-            <div
-              className="kpi-chip"
-              title={lang === 'es' ? 'Advertencias de fricción arquitectónica' : 'Architectural friction warnings'}
-            >
-              <span className="kpi-label">{t.kpiFriction}</span>
-              <span className={`kpi-value ${frictionCount === 0 ? 'healthy' : 'warning'}`}>
-                {frictionCount === 0 ? '0' : `! ${frictionCount}`}
-              </span>
-            </div>
-
-            {onOpenCostSim && (
-              <button
-                type="button"
-                className="btn-theme-toggle"
-                onClick={onOpenCostSim}
-                title={lang === 'es' ? 'Abrir Simulador Dinámico de Costes' : 'Open Dynamic Cost Simulator'}
-                style={{ color: 'var(--yellow-vivid)', borderColor: 'var(--yellow-border)' }}
-              >
-                {t.btnOpenCostSim}
-              </button>
-            )}
-
-            {onShareBlueprint && (
-              <button
-                type="button"
-                className="btn-theme-toggle"
-                onClick={onShareBlueprint}
-                title={t.btnShareTooltip}
-                style={
-                  isShareCopied
-                    ? {
-                        backgroundColor: 'var(--yellow-vivid)',
-                        color: '#090B10',
-                        borderColor: 'var(--yellow-vivid)',
-                        fontWeight: 700,
-                      }
-                    : {
-                        color: 'var(--yellow-vivid)',
-                        borderColor: 'var(--yellow-border)',
-                      }
-                }
-              >
-                {isShareCopied ? t.btnShareCopied : t.btnShare}
-              </button>
-            )}
-
-            {onOpenDriftAudit && (
-              <button
-                type="button"
-                className="btn-theme-toggle"
-                onClick={onOpenDriftAudit}
-                title={lang === 'es' ? 'Auditar drift arquitectónico en package.json' : 'Audit architectural drift in package.json'}
-              >
-                {t.btnAuditDrift}
-              </button>
-            )}
-
-            <button type="button" className="btn-export" onClick={onOpenExport}>
-              {t.btnExport}
-            </button>
-          </>
-        )}
+        {/* GitHub Star Button */}
+        <a
+          href="https://github.com/luisrodriguez-rgb/TrussStack"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-header-github"
+          title="Star on GitHub"
+        >
+          {t.btnGitHubStar}
+        </a>
       </div>
     </header>
   );

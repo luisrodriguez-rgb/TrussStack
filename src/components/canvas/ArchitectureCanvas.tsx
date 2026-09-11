@@ -17,6 +17,10 @@ interface ArchitectureCanvasProps {
   onReplaceCategory: (category: TechCategory) => void;
   onInspectTech: (tech: Technology) => void;
   onOpenCostSim?: () => void;
+  onOpenExport?: () => void;
+  onShareBlueprint?: () => void;
+  isShareCopied?: boolean;
+  onOpenDriftAudit?: () => void;
 }
 
 export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
@@ -24,6 +28,10 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
   onReplaceCategory,
   onInspectTech,
   onOpenCostSim,
+  onOpenExport,
+  onShareBlueprint,
+  isShareCopied = false,
+  onOpenDriftAudit,
 }) => {
   const { t, lang } = useI18n();
   const [activeScenario, setActiveScenario] = useState<FlowScenario | null>(null);
@@ -153,6 +161,82 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
 
   return (
     <div className="canvas-view">
+      {/* 0. Canvas Instrumentation & Actions Ribbon */}
+      <div className="canvas-instrumentation-bar">
+        <div className="canvas-bar-kpis">
+          <div className="canvas-kpi-pill" title={t.canvasBarFitTooltip}>
+            <span className="canvas-kpi-label">{t.kpiFitScore}</span>
+            <span className={`canvas-kpi-value ${fitScore >= 80 ? 'healthy' : 'warning'}`}>
+              {fitScore}%
+            </span>
+          </div>
+
+          <div
+            className="canvas-kpi-pill interactive"
+            onClick={onOpenCostSim}
+            title={t.canvasBarCostTooltip}
+          >
+            <span className="canvas-kpi-label">{t.kpiCost}</span>
+            <span className="canvas-kpi-value healthy">
+              {overallCostEstimate.split(' ')[0]} ↗
+            </span>
+          </div>
+
+          <div className="canvas-kpi-pill" title={t.canvasBarFrictionTooltip}>
+            <span className="canvas-kpi-label">{t.kpiFriction}</span>
+            <span className={`canvas-kpi-value ${frictionWarnings.length === 0 ? 'healthy' : 'warning'}`}>
+              {frictionWarnings.length === 0 ? '0' : `! ${frictionWarnings.length}`}
+            </span>
+          </div>
+        </div>
+
+        <div className="canvas-bar-actions">
+          {onOpenCostSim && (
+            <button
+              type="button"
+              className="btn-canvas-action"
+              onClick={onOpenCostSim}
+              title={lang === 'es' ? 'Abrir Simulador Dinámico de Costes' : 'Open Dynamic Cost Simulator'}
+            >
+              {t.btnOpenCostSim}
+            </button>
+          )}
+
+          {onShareBlueprint && (
+            <button
+              type="button"
+              className={`btn-canvas-action ${isShareCopied ? 'copied' : ''}`}
+              onClick={onShareBlueprint}
+              title={t.btnShareTooltip}
+            >
+              {isShareCopied ? t.btnShareCopied : t.btnShare}
+            </button>
+          )}
+
+          {onOpenDriftAudit && (
+            <button
+              type="button"
+              className="btn-canvas-action"
+              onClick={onOpenDriftAudit}
+              title={lang === 'es' ? 'Auditar drift arquitectónico en package.json' : 'Audit architectural drift in package.json'}
+            >
+              {t.btnAuditDrift}
+            </button>
+          )}
+
+          {onOpenExport && (
+            <button
+              type="button"
+              className="btn-canvas-action primary"
+              onClick={onOpenExport}
+              title="Export Production Bundle"
+            >
+              {t.btnExport}
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* 1. SPECIFICATION MATRIX HEADER PANEL */}
       <div className="nutrition-panel">
         <div className="nutrition-headline-group">
