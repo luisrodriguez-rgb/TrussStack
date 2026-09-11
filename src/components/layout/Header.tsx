@@ -3,7 +3,7 @@ import type { StackRecommendation } from '../../engine/types';
 import { useI18n } from '../../i18n/I18nContext';
 import { TrussLogo } from '../common/TrussLogo';
 
-export type AppView = 'wizard' | 'canvas' | 'compare' | 'explore';
+export type AppView = 'wizard' | 'canvas' | 'compare' | 'explore' | 'benchmarks';
 
 interface HeaderProps {
   currentView: AppView;
@@ -73,6 +73,13 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={() => onViewChange('explore')}
         >
           {t.navExplore}
+        </button>
+        <button
+          type="button"
+          className={`nav-tab-btn ${currentView === 'benchmarks' ? 'active' : ''}`}
+          onClick={() => onViewChange('benchmarks')}
+        >
+          {t.navBenchmarks}
         </button>
       </nav>
 

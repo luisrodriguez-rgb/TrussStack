@@ -2860,6 +2860,8 @@ export const TECHNOLOGIES: Technology[] = [
   ...NEW_TECHNOLOGIES,
 ];
 
+export const TECH_CATALOG = TECHNOLOGIES;
+
 export const TECH_BY_ID: Record<string, Technology> = TECHNOLOGIES.reduce(
   (acc, tech) => {
     acc[tech.id] = tech;

@@ -256,7 +256,10 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
             <span className="layer-tag">{t.layer01Tag}</span>
             <span className="layer-title">{t.layer01Title}</span>
           </div>
-          <div className="layer-nodes-grid">{renderCard('frontend', 'frontend', true)}</div>
+          <div className="layer-nodes-grid">
+            {renderCard('frontend', 'frontend', true)}
+            {slots.mobile && renderCard('mobile', 'mobile client')}
+          </div>
         </div>
 
         {/* Conector 1 */}
@@ -323,6 +326,7 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
                 </div>
               </div>
             )}
+            {slots.queues && renderCard('queues', 'background queues')}
           </div>
         </div>
 
@@ -351,6 +355,7 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
           <div className="layer-nodes-grid">
             {renderCard('database', 'database')}
             {slots.storage && renderCard('storage', 'storage')}
+            {slots.ai && renderCard('ai', 'vector & ai search')}
           </div>
         </div>
 

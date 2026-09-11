@@ -17,6 +17,7 @@ import { SpecWizard } from './components/wizard/SpecWizard';
 import { ArchitectureCanvas } from './components/canvas/ArchitectureCanvas';
 import { StackComparator } from './components/compare/StackComparator';
 import { StacksCatalog } from './components/explore/StacksCatalog';
+import { BenchmarkMatrix } from './components/benchmarks/BenchmarkMatrix';
 import { TradeoffDrawer } from './components/canvas/TradeoffDrawer';
 import { ReplaceModal } from './components/canvas/ReplaceModal';
 import { ExportModal } from './components/export/ExportModal';
@@ -229,6 +230,10 @@ export const App: React.FC = () => {
 
         {currentView === 'explore' && (
           <StacksCatalog onLoadBlueprint={handleLoadCustomSlots} />
+        )}
+
+        {currentView === 'benchmarks' && (
+          <BenchmarkMatrix onInspectTech={(tech) => setSelectedTechForDrawer(tech)} />
         )}
       </main>
 

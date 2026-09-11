@@ -17,18 +17,25 @@ export interface TechBenchmarks {
   coldStartMs?: number;         // Tiempos de arranque en frío en ms (Edge <5ms, Node ~150ms, Python ~600ms)
   bundleSizeKb?: number;        // Tamaño de bundle JS inicial en KB transferidos (Astro 0-12KB, Vite 42KB, Next 84KB)
   connectionLatencyMs?: number; // Latencia p95 de conexión a BD / API en ms (Local 0.8ms, WS 12ms, HTTP fetch 45ms)
+  p95LatencyMs?: number;        // Alias común para latencia p95
   throughputRps?: number;       // Throughput promedio estimado por nodo / worker (req/s)
 }
 
 export interface SelfHostProfile {
   canSelfHost: boolean;
   dockerImage?: string;
+  dockerCommand?: string;
   minRamMb?: number;
   minCpuCores?: number;
   maintenanceHoursPerMonth?: number;
   monthlyManagedCost?: string;
   monthlySelfHostedCost?: string;
   operationalBurden: 1 | 2 | 3 | 4 | 5; // 1=trivial, 5=alta complejidad operativa
+  costComparison?: {
+    cloudManagedUsd: number;
+    selfHostedVpsUsd: number;
+    breakEvenPoint: string;
+  };
   gotchasEs: string[];
   gotchasEn: string[];
 }
@@ -104,6 +111,7 @@ export interface Technology {
   costProfile: TechCostProfile;
   tradeoffs: TechTradeoffs;
   integrations: Record<string, TechIntegration>;
+  stars?: number;
   benchmarks?: TechBenchmarks;
   selfHostProfile?: SelfHostProfile;
 }

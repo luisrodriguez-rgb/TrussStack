@@ -1487,3 +1487,632 @@ input[type="range"] {
 .btn-download-file:hover {
   background: var(--yellow-hover);
 }
+
+/* ==========================================================================
+   FASE 4: BENCHMARKS MATRIX & EMPIRICAL TELEMETRY
+   ========================================================================== */
+
+.benchmarks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 0 3rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.benchmarks-header-banner {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.benchmarks-title-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.benchmarks-title {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-pure);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.benchmarks-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 900px;
+}
+
+.benchmarks-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-rule);
+}
+
+.bench-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: var(--bg-card);
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border-rule);
+  border-radius: var(--radius-xs);
+}
+
+.bench-stat-card .stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.bench-stat-card .stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-pure);
+}
+
+.benchmarks-controls-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.benchmarks-filter-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.control-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.category-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.bench-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-rule);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.bench-chip:hover {
+  color: var(--text-pure);
+  border-color: var(--yellow-vivid);
+}
+
+.bench-chip.active {
+  background: var(--yellow-vivid);
+  color: #090B10;
+  border-color: var(--yellow-vivid);
+  font-weight: 800;
+}
+
+.search-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 260px;
+}
+
+.bench-search-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border-rule);
+  color: var(--text-pure);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-xs);
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.bench-search-input:focus {
+  border-color: var(--yellow-vivid);
+  box-shadow: 0 0 0 1px var(--yellow-vivid);
+}
+
+.bench-legend-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-rule);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.legend-item strong {
+  color: var(--text-secondary);
+}
+
+.legend-count {
+  color: var(--yellow-vivid);
+  font-weight: 700;
+}
+
+.benchmarks-table-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.bench-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.bench-table th {
+  background: #0B0E15;
+  color: #94A3B8;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid var(--border-rule);
+  white-space: nowrap;
+}
+
+.th-sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: var(--transition-fast);
+}
+
+.th-sortable:hover {
+  color: var(--yellow-vivid);
+}
+
+.th-sortable.active-sort {
+  color: var(--yellow-vivid);
+  background: rgba(255, 208, 0, 0.08);
+}
+
+.bench-row {
+  border-bottom: 1px solid var(--border-rule);
+  transition: var(--transition-fast);
+  cursor: pointer;
+}
+
+.bench-row:hover {
+  background: rgba(255, 208, 0, 0.04);
+}
+
+.bench-row td {
+  padding: 0.85rem 1rem;
+  vertical-align: middle;
+}
+
+.tech-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 220px;
+}
+
+.tech-logo-small {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-xs);
+  background: var(--bg-card);
+  border: 1px solid var(--border-rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tech-name-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.tech-name {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+.tech-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.bench-cat-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-xs);
+  background: var(--bg-card);
+  border: 1px solid var(--border-rule);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.td-metric {
+  min-width: 140px;
+}
+
+.metric-meter-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.metric-val-num {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+.mini-meter-bg {
+  width: 100%;
+  height: 4px;
+  background: var(--border-rule);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.mini-meter-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 200ms ease;
+}
+
+.metric-na {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stars-num {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+.license-pill {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-rule);
+}
+
+.selfhost-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-xs);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.selfhost-badge.yes {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.selfhost-badge.managed {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94A3B8;
+  border: 1px solid var(--border-rule);
+}
+
+.btn-bench-inspect {
+  background: transparent;
+  border: 1px solid var(--border-rule);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-bench-inspect:hover {
+  color: #090B10;
+  background: var(--yellow-vivid);
+  border-color: var(--yellow-vivid);
+}
+
+/* Methodology Card */
+.methodology-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.methodology-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.methodology-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--yellow-vivid);
+  font-weight: 700;
+}
+
+.methodology-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-pure);
+}
+
+.methodology-text {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.methodology-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-rule);
+}
+
+.spec-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: var(--bg-card);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-rule);
+  border-radius: var(--radius-xs);
+}
+
+.spec-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.spec-val {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-pure);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   FASE 4: SELF-HOSTED VS CLOUD EVALUATOR IN DRAWER
+   ========================================================================== */
+
+.selfhost-evaluator-card {
+  margin-top: 1.5rem;
+  border: 1px solid var(--border-rule);
+  border-radius: var(--radius-xs);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.selfhost-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: #0B0E15;
+  border-bottom: 1px solid var(--border-rule);
+}
+
+.selfhost-mode-toggle {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.selfhost-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--border-rule);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.selfhost-toggle-btn.active {
+  background: var(--yellow-vivid);
+  color: #090B10;
+  border-color: var(--yellow-vivid);
+}
+
+.selfhost-body-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.selfhost-specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.selfhost-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-rule);
+}
+
+.selfhost-spec-key {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.selfhost-spec-val {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+.selfhost-docker-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.selfhost-docker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selfhost-docker-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.btn-copy-docker {
+  background: transparent;
+  border: 1px solid var(--border-rule);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+
+.btn-copy-docker:hover {
+  color: var(--yellow-vivid);
+  border-color: var(--yellow-vivid);
+}
+
+.selfhost-docker-code {
+  background: #090B10;
+  border: 1px solid var(--border-rule);
+  border-radius: var(--radius-xs);
+  padding: 0.6rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #A7F3D0;
+  overflow-x: auto;
+}
+
+.selfhost-comparison-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.85rem;
+  background: rgba(255, 208, 0, 0.04);
+  border: 1px solid rgba(255, 208, 0, 0.2);
+  border-radius: var(--radius-xs);
+}
+
+.selfhost-comp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.selfhost-comp-label {
+  color: var(--text-secondary);
+}
+
+.selfhost-comp-val {
+  font-weight: 700;
+  color: var(--text-pure);
+}
+
+.selfhost-breakeven-note {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--yellow-vivid);
+  line-height: 1.4;
+  padding-top: 0.4rem;
+  border-top: 1px dashed rgba(255, 208, 0, 0.25);
+}
+
