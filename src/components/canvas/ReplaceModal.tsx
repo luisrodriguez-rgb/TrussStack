@@ -3,6 +3,7 @@ import type { ReplacementAlternative, TechCategory, UserProjectSpec } from '../.
 import { getReplacementAlternatives } from '../../engine/recommender';
 import { TECH_BY_ID } from '../../engine/catalog';
 import { TechLogo } from '../common/TechLogo';
+import { useI18n } from '../../i18n/I18nContext';
 
 interface ReplaceModalProps {
   category: TechCategory;
@@ -19,6 +20,7 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
   onClose,
   onSelectAlternative,
 }) => {
+  const { t } = useI18n();
   const currentTechId = currentStack[category];
   const currentTech = currentTechId ? TECH_BY_ID[currentTechId] : null;
 
@@ -34,22 +36,21 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
         <div className="modal-header">
           <div>
             <span className="pill-tag" style={{ color: 'var(--citron)' }}>
-              SUSTITUCIÓN EN CALIENTE
+              {t.replaceModalTag}
             </span>
             <h3>
-              REEMPLAZAR {category.toUpperCase()}:{' '}
-              <span style={{ color: 'var(--cream-muted)' }}>{currentTech?.name || 'VACÍO'}</span>
+              {t.replaceModalTitle} {category.toUpperCase()}:{' '}
+              <span style={{ color: 'var(--text-secondary)' }}>{currentTech?.name || t.replaceEmpty}</span>
             </h3>
           </div>
-          <button type="button" className="drawer-close-btn" onClick={onClose}>
-            [ X ]
+          <button type="button" className="drawer-close-btn" onClick={onClose} aria-label="Close">
+            {t.drawerClose}
           </button>
         </div>
 
         <div className="modal-content">
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--cream-muted)' }}>
-            Elige un ingrediente alternativo. El sistema recalculará en tiempo real el Fit Score, la pureza de la
-            fórmula y te mostrará el impacto exacto en trade-offs.
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+            {t.replaceModalDesc}
           </p>
 
           {alternatives.map((alt) => {
@@ -73,7 +74,7 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
                     </span>
                     {alt.tech.costProfile.freeTier.hasFreeTier && (
                       <span className="badge-sin-tarjeta" style={{ marginBottom: 0 }}>
-                        SIN TARJETA
+                        {t.badgeNoCard}
                       </span>
                     )}
                   </div>
@@ -88,14 +89,14 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
                   </div>
                 </div>
 
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--cream-muted)' }}>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                   {alt.tech.description}
                 </p>
 
                 {/* Consequences Grid */}
                 <div className="consequences-grid">
                   <div className="consequence-col">
-                    <div className="consequence-title gain">[ + QUÉ GANAS ]</div>
+                    <div className="consequence-title gain">{t.replaceGains}</div>
                     {alt.gains.map((gain, i) => (
                       <div key={i} className="consequence-item">
                         • {gain}
@@ -104,7 +105,7 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
                   </div>
 
                   <div className="consequence-col">
-                    <div className="consequence-title loss">[ ! QUÉ SACRIFICAS ]</div>
+                    <div className="consequence-title loss">{t.replaceLosses}</div>
                     {alt.losses.map((loss, i) => (
                       <div key={i} className="consequence-item">
                         • {loss}
@@ -116,7 +117,7 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
                 {/* Friction Alert */}
                 {alt.frictionAlerts.length > 0 && (
                   <div className="friction-notice-box" style={{ padding: '0.5rem 0.75rem', fontSize: '0.75rem' }}>
-                    <strong>[ ! ] FRICCIÓN DETECTADA:</strong> {alt.frictionAlerts[0].message}
+                    <strong>{t.replaceFrictionAlert}</strong> {alt.frictionAlerts[0].message}
                   </div>
                 )}
 
@@ -129,7 +130,7 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
                       onSelectAlternative(category, alt.tech.id);
                     }}
                   >
-                    {`[ SUSTITUIR POR ${alt.tech.name.toUpperCase()} -> ]`}
+                    {`[ ${t.btnSwapTo} ${alt.tech.name.toUpperCase()} -> ]`}
                   </button>
                 </div>
               </div>

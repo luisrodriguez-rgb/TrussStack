@@ -8,6 +8,7 @@ import type {
   TeamSize,
   UserProjectSpec,
 } from '../../engine/types';
+import { useI18n } from '../../i18n/I18nContext';
 
 interface SpecWizardProps {
   initialSpec: UserProjectSpec;
@@ -15,6 +16,7 @@ interface SpecWizardProps {
 }
 
 export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit }) => {
+  const { t } = useI18n();
   const [projectType, setProjectType] = useState<ProjectType>(initialSpec.projectType);
   const [scale, setScale] = useState<ProjectScale>(initialSpec.scale);
   const [teamSize, setTeamSize] = useState<TeamSize>(initialSpec.teamSize);
@@ -48,32 +50,27 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
     <div className="wizard-view">
       <div className="wizard-hero">
         <h1>
-          DISEÑA LA FÓRMULA DE TU <span>APLICACIÓN COMPLETA</span>
+          {t.wizardTitle} <span>{t.wizardTitleHighlight}</span>
         </h1>
-        <p>
-          [ BATCH SPECIFICATION ] // Motor determinista que evalúa restricciones reales,
-          audita incompatibilidades y propone la arquitectura técnica ideal con trade-offs transparentes.
-        </p>
+        <p>{t.wizardSubtitle}</p>
       </div>
 
       <form onSubmit={handleSubmit}>
         {/* 1. Tipo de Proyecto */}
         <section className="wizard-card">
           <h2 className="wizard-section-title">
-            <span className="section-num">01</span> Tipo de Sistema / Arquitectura
+            <span className="section-num">01</span> {t.section01Title}
           </h2>
-          <p className="wizard-section-desc">
-            Define la naturaleza computacional de la carga (SSR, edge rendering, APIs desacopladas).
-          </p>
+          <p className="wizard-section-desc">{t.section01Desc}</p>
 
           <div className="options-grid">
             {[
-              { id: 'saas', code: 'SAAS-01', title: 'SaaS B2B/B2C', desc: 'Auth, cobros recurrentes y multi-tenancy' },
-              { id: 'ecommerce', code: 'ECOM-02', title: 'E-commerce', desc: 'Catálogo de stock, checkout y carritos' },
-              { id: 'dashboard', code: 'DASH-03', title: 'Dashboard Interno', desc: 'Panel administrativo reactivo y CRM' },
-              { id: 'api_backend', code: 'CORE-04', title: 'API / Backend Puro', desc: 'Microservicio o motor transaccional' },
-              { id: 'content_blog', code: 'BLOG-05', title: 'Contenido / Editorial', desc: 'SEO de máxima velocidad y static gen' },
-              { id: 'realtime_app', code: 'SYNC-06', title: 'Realtime / Sockets', desc: 'Colaboración en vivo, chat y streaming' },
+              { id: 'saas', code: 'SAAS-01', title: t.typeSaasTitle, desc: t.typeSaasDesc },
+              { id: 'ecommerce', code: 'ECOM-02', title: t.typeEcomTitle, desc: t.typeEcomDesc },
+              { id: 'dashboard', code: 'DASH-03', title: t.typeDashTitle, desc: t.typeDashDesc },
+              { id: 'api_backend', code: 'CORE-04', title: t.typeApiTitle, desc: t.typeApiDesc },
+              { id: 'content_blog', code: 'BLOG-05', title: t.typeBlogTitle, desc: t.typeBlogDesc },
+              { id: 'realtime_app', code: 'SYNC-06', title: t.typeRealtimeTitle, desc: t.typeRealtimeDesc },
             ].map((item) => (
               <div
                 key={item.id}
@@ -93,21 +90,19 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
         {/* 2. Escala & Equipo */}
         <section className="wizard-card">
           <h2 className="wizard-section-title">
-            <span className="section-num">02</span> Escala y Recursos del Equipo
+            <span className="section-num">02</span> {t.section02Title}
           </h2>
-          <p className="wizard-section-desc">
-            Evita la sobre-ingeniería adaptando la complejidad operativa a las personas reales que mantienen el sistema.
-          </p>
+          <p className="wizard-section-desc">{t.section02Desc}</p>
 
-          <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--cream-dim)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-            Escala de Usuarios Inicial
+          <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+            {t.scaleLabel}
           </h4>
           <div className="chips-bar">
             {[
-              { id: 'mvp_100', label: '[ 1 - 100 USUARIOS ] MVP INICIAL' },
-              { id: 'early_1k', label: '[ 100 - 1.000 USUARIOS ]' },
-              { id: 'mid_10k', label: '[ 1.000 - 10.000 USUARIOS ]' },
-              { id: 'scale_100k', label: '[ 10.000+ USUARIOS ] ESCALA ALTA' },
+              { id: 'mvp_100', label: t.scaleMvp },
+              { id: 'early_1k', label: t.scaleEarly },
+              { id: 'mid_10k', label: t.scaleMid },
+              { id: 'scale_100k', label: t.scaleScale },
             ].map((s) => (
               <button
                 key={s.id}
@@ -122,36 +117,36 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '1.25rem' }}>
             <div>
-              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--cream-dim)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                Tamaño del Equipo
+              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                {t.teamSizeLabel}
               </h4>
               <div className="chips-bar">
                 {[
-                  { id: 'solo', label: '[ 1 SOLO DEV ]' },
-                  { id: 'small_team', label: '[ 2 - 5 DEVS ]' },
-                  { id: 'scale_team', label: '[ 5+ DEVS ]' },
-                ].map((t) => (
+                  { id: 'solo', label: t.teamSolo },
+                  { id: 'small_team', label: t.teamSmall },
+                  { id: 'scale_team', label: t.teamScale },
+                ].map((team) => (
                   <button
-                    key={t.id}
+                    key={team.id}
                     type="button"
-                    className={`chip-btn ${teamSize === t.id ? 'selected' : ''}`}
-                    onClick={() => setTeamSize(t.id as TeamSize)}
+                    className={`chip-btn ${teamSize === team.id ? 'selected' : ''}`}
+                    onClick={() => setTeamSize(team.id as TeamSize)}
                   >
-                    {t.label}
+                    {team.label}
                   </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--cream-dim)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                Seniority Técnico
+              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                {t.seniorityLabel}
               </h4>
               <div className="chips-bar">
                 {[
-                  { id: 'beginner', label: '[ PRINCIPIANTE ]' },
-                  { id: 'intermediate', label: '[ INTERMEDIO ]' },
-                  { id: 'senior', label: '[ SENIOR ]' },
+                  { id: 'beginner', label: t.senBeginner },
+                  { id: 'intermediate', label: t.senIntermediate },
+                  { id: 'senior', label: t.senSenior },
                 ].map((sen) => (
                   <button
                     key={sen.id}
@@ -170,20 +165,18 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
         {/* 3. Presupuesto & Restricciones */}
         <section className="wizard-card">
           <h2 className="wizard-section-title">
-            <span className="section-num">03</span> Presupuesto e Ingredientes Funcionales
+            <span className="section-num">03</span> {t.section03Title}
           </h2>
-          <p className="wizard-section-desc">
-            Activa módulos arquitectónicos y penaliza proveedores sin planes gratuitos viables.
-          </p>
+          <p className="wizard-section-desc">{t.section03Desc}</p>
 
-          <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--cream-dim)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-            Presupuesto Mensual de Infraestructura
+          <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+            {t.budgetLabel}
           </h4>
           <div className="chips-bar">
             {[
-              { id: 'zero_free', label: '[ $0/MES ] HARD FREE TIER ESTRICTO' },
-              { id: 'low_50', label: '[ < $50/MES ] PRESUPUESTO BAJO' },
-              { id: 'growth_flexible', label: '[ FLEXIBLE ] CRECIMIENTO PRO' },
+              { id: 'zero_free', label: t.budgetZero },
+              { id: 'low_50', label: t.budgetLow },
+              { id: 'growth_flexible', label: t.budgetGrowth },
             ].map((b) => (
               <button
                 key={b.id}
@@ -196,17 +189,17 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
             ))}
           </div>
 
-          <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--cream-dim)', margin: '1.5rem 0 0.5rem', textTransform: 'uppercase' }}>
-            Requerimientos Funcionales Críticos
+          <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-dim)', margin: '1.5rem 0 0.5rem', textTransform: 'uppercase' }}>
+            {t.constraintsLabel}
           </h4>
           <div className="checkboxes-grid">
             {[
-              { key: 'needsAuth', code: 'AUTH', title: 'Autenticación & Sesiones', desc: 'Login social, roles, tokens seguros' },
-              { key: 'needsPayments', code: 'PAY', title: 'Pagos & Suscripciones', desc: 'Stripe, Merchant of Record y facturación' },
-              { key: 'needsStorage', code: 'STORAGE', title: 'Subida de Archivos / Media', desc: 'Storage compatible con S3 o RLS' },
-              { key: 'needsSeo', code: 'SEO', title: 'SEO Crítico en Buscadores', desc: 'Server-Side Rendering y static HTML' },
-              { key: 'needsRealtime', code: 'SOCKET', title: 'Tiempo Real / WebSockets', desc: 'Sincronización en vivo sin recarga' },
-              { key: 'needsBackgroundJobs', code: 'QUEUES', title: 'Colas & Background Tasks', desc: 'Trabajos asíncronos y cron jobs' },
+              { key: 'needsAuth', code: 'AUTH', title: t.constAuthTitle, desc: t.constAuthDesc },
+              { key: 'needsPayments', code: 'PAY', title: t.constPayTitle, desc: t.constPayDesc },
+              { key: 'needsStorage', code: 'STORAGE', title: t.constStorageTitle, desc: t.constStorageDesc },
+              { key: 'needsSeo', code: 'SEO', title: t.constSeoTitle, desc: t.constSeoDesc },
+              { key: 'needsRealtime', code: 'SOCKET', title: t.constRealtimeTitle, desc: t.constRealtimeDesc },
+              { key: 'needsBackgroundJobs', code: 'QUEUES', title: t.constBgTitle, desc: t.constBgDesc },
             ].map((item) => {
               const k = item.key as keyof ProjectConstraints;
               const isChecked = constraints[k];
@@ -234,19 +227,17 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
         {/* 4. Ponderación de Prioridades */}
         <section className="wizard-card">
           <h2 className="wizard-section-title">
-            <span className="section-num">04</span> Ponderación de Preferencias Declaradas
+            <span className="section-num">04</span> {t.section04Title}
           </h2>
-          <p className="wizard-section-desc">
-            Pondera los vectores de decisión para calibrar el <strong>Formula Fit Score</strong> exacto.
-          </p>
+          <p className="wizard-section-desc">{t.section04Desc}</p>
 
           <div className="sliders-grid">
             {[
-              { key: 'developmentSpeed', label: 'Velocidad de Entrega (DX & Tooling)' },
-              { key: 'costMinimization', label: 'Minimizar Costes de Entrada' },
-              { key: 'scalability', label: 'Techo de Concurrencia & Escala' },
-              { key: 'lowVendorLockin', label: 'Cero Lock-in (Open Source & Portabilidad)' },
-              { key: 'operationalSimplicity', label: 'Simplicidad Operativa (Cero Mantenimiento)' },
+              { key: 'developmentSpeed', label: t.prioritySpeed },
+              { key: 'costMinimization', label: t.priorityCost },
+              { key: 'scalability', label: t.priorityScale },
+              { key: 'lowVendorLockin', label: t.priorityLockin },
+              { key: 'operationalSimplicity', label: t.prioritySimplicity },
             ].map((slider) => {
               const k = slider.key as keyof typeof priorities;
               const val = priorities[k];
@@ -269,7 +260,7 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
           </div>
 
           <button type="submit" className="btn-generate-stack">
-            {'[ GENERAR FÓRMULA TÉCNICA // ARCHITECTURE -> ]'}
+            {t.btnGenerateStack}
           </button>
         </section>
       </form>

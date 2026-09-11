@@ -2,6 +2,7 @@ import React from 'react';
 import type { StackRecommendation, TechCategory, Technology } from '../../engine/types';
 import { TECH_BY_ID } from '../../engine/catalog';
 import { TechLogo } from '../common/TechLogo';
+import { useI18n } from '../../i18n/I18nContext';
 
 interface ArchitectureCanvasProps {
   recommendation: StackRecommendation;
@@ -14,6 +15,7 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
   onReplaceCategory,
   onInspectTech,
 }) => {
+  const { t } = useI18n();
   const { slots, fitScore, overallCostEstimate, frictionWarnings, dimensionScores, whyReasons } =
     recommendation;
 
@@ -45,7 +47,7 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="card-icon-btn"
-                title="Visitar sitio oficial"
+                title="Website"
               >
                 ↗
               </a>
@@ -53,7 +55,7 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
                 type="button"
                 className="card-icon-btn"
                 onClick={() => onReplaceCategory(category)}
-                title="Sustituir ingrediente"
+                title="Replace"
               >
                 +
               </button>
@@ -63,17 +65,17 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
           {/* Description */}
           <p className="card-description">{tech.description}</p>
 
-          {/* Outlined Badge like reference image */}
+          {/* Outlined Yellow Badge like reference image */}
           <div
             className={`badge-sin-tarjeta ${
               tech.costProfile.freeTier.hasFreeTier ? '' : 'orange'
             }`}
           >
             {tech.costProfile.freeTier.hasFreeTier
-              ? 'SIN TARJETA'
+              ? t.badgeNoCard
               : tech.costProfile.initialCost === 'free'
-              ? 'TIER GRATIS'
-              : 'PAGO POR USO'}
+              ? t.badgeFreeTier
+              : t.badgeUsageBased}
           </div>
 
           {/* Quota / Free tier breakdown */}
@@ -98,14 +100,14 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
               className="btn-card-swap"
               onClick={() => onReplaceCategory(category)}
             >
-              [ REEMPLAZAR ]
+              {t.btnCardSwap}
             </button>
             <button
               type="button"
               className="btn-card-details"
               onClick={() => onInspectTech(tech)}
             >
-              TRADE-OFFS ↗
+              {t.btnCardTradeoffs}
             </button>
           </div>
         </div>
@@ -115,45 +117,45 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
 
   return (
     <div className="canvas-view">
-      {/* 1. STACK NUTRITION FACTS / FORMULA SPEC PANEL */}
+      {/* 1. SPECIFICATION MATRIX HEADER PANEL */}
       <div className="nutrition-panel">
         <div className="nutrition-headline-group">
           <div className="nutrition-stamp">
             <span className="nutrition-stamp-num">{fitScore}%</span>
-            <span className="nutrition-stamp-lbl">PURITY</span>
+            <span className="nutrition-stamp-lbl">FIT</span>
           </div>
 
           <div className="nutrition-headline">
-            <h2>FORMULA NUTRITION FACTS // BATCH #2026.09</h2>
-            <p>Arquitectura calculada determinísticamente sin ingredientes artificiales ni sesgo</p>
+            <h2>{t.matrixTitle}</h2>
+            <p>{t.matrixDesc}</p>
           </div>
         </div>
 
         <div className="nutrition-metrics-row">
           <div className="nutrition-metric-box">
-            <span className="metric-micro-label">SERVING SIZE</span>
+            <span className="metric-micro-label">{t.matrixTeam}</span>
             <span className="metric-micro-val">1 DEV TEAM</span>
           </div>
 
           <div className="nutrition-metric-box">
-            <span className="metric-micro-label">EST. RUNTIME COST</span>
+            <span className="metric-micro-label">{t.matrixCost}</span>
             <span className="metric-micro-val citron">
               {overallCostEstimate.split(' ')[0]}
             </span>
           </div>
 
           <div className="nutrition-metric-box">
-            <span className="metric-micro-label">DEVELOPER DX</span>
+            <span className="metric-micro-label">{t.matrixDx}</span>
             <span className="metric-micro-val">{dimensionScores.speed}%</span>
           </div>
 
           <div className="nutrition-metric-box">
-            <span className="metric-micro-label">NO LOCK-IN</span>
+            <span className="metric-micro-label">{t.matrixLockin}</span>
             <span className="metric-micro-val">{dimensionScores.portability}%</span>
           </div>
 
           <div className="nutrition-metric-box">
-            <span className="metric-micro-label">SIMPLICITY</span>
+            <span className="metric-micro-label">{t.matrixSimplicity}</span>
             <span className="metric-micro-val">{dimensionScores.simplicity}%</span>
           </div>
         </div>
@@ -162,7 +164,7 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
       {/* 2. Banner de Fricción Arquitectónica (si existe) */}
       {frictionWarnings.length > 0 && (
         <div className="friction-notice-box">
-          <strong>[ ! ] ATENCIÓN ARQUITECTÓNICA:</strong>{' '}
+          <strong>{t.frictionNotice}</strong>{' '}
           {frictionWarnings.map((f, i) => (
             <span key={i}>
               [{f.sourceName} + {f.targetName}]: {f.message}{' '}
@@ -171,10 +173,10 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         </div>
       )}
 
-      {/* 3. Justificación de Receta ("Why?") */}
+      {/* 3. Fundamentos de la Arquitectura ("Why?") */}
       {whyReasons.length > 0 && (
         <div className="why-reasons-box">
-          <div className="why-reasons-title">[ RECETA TÉCNICA // POR QUÉ ENCAJA ]</div>
+          <div className="why-reasons-title">{t.whyTitle}</div>
           <ul className="why-reasons-list">
             {whyReasons.map((why, idx) => (
               <li key={idx} className="why-reason-item">
@@ -190,8 +192,8 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         {/* CAPA 1: INGRESS & CLIENT */}
         <div className="layer-section">
           <div className="layer-header">
-            <span className="layer-tag">[ 01 ]</span>
-            <span className="layer-title">Ingress & Client Interface</span>
+            <span className="layer-tag">{t.layer01Tag}</span>
+            <span className="layer-title">{t.layer01Title}</span>
           </div>
           <div className="layer-nodes-grid">{renderCard('frontend', 'frontend', true)}</div>
         </div>
@@ -205,8 +207,8 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         {/* CAPA 2: APPLICATION & API */}
         <div className="layer-section">
           <div className="layer-header">
-            <span className="layer-tag">[ 02 ]</span>
-            <span className="layer-title">Application Engine & Business Logic</span>
+            <span className="layer-tag">{t.layer02Tag}</span>
+            <span className="layer-title">{t.layer02Title}</span>
           </div>
           <div className="layer-nodes-grid">
             {slots.backend ? (
@@ -217,7 +219,7 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
                 style={{
                   borderStyle: 'dashed',
                   justifyContent: 'center',
-                  background: 'rgba(14, 19, 30, 0.4)',
+                  background: 'var(--bg-card)',
                 }}
               >
                 <div style={{ textAlign: 'center', padding: '1rem' }}>
@@ -232,20 +234,20 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
                       fontFamily: 'var(--font-display)',
                       fontSize: '1.15rem',
                       fontWeight: 700,
-                      color: 'var(--cream-pure)',
+                      color: 'var(--text-pure)',
                     }}
                   >
-                    SERVERLESS ROUTE HANDLERS
+                    {t.serverlessTitle}
                   </div>
                   <p
                     style={{
                       fontFamily: 'var(--font-mono)',
                       fontSize: '0.8rem',
-                      color: 'var(--cream-dim)',
+                      color: 'var(--text-secondary)',
                       marginTop: '0.35rem',
                     }}
                   >
-                    Integrados directamente en {TECH_BY_ID[slots.frontend!]?.name || 'Frontend'} sin requerir servidor backend independiente.
+                    {t.serverlessDesc}
                   </p>
                 </div>
               </div>
@@ -262,8 +264,8 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         {/* CAPA 3: DATA & STATE */}
         <div className="layer-section">
           <div className="layer-header">
-            <span className="layer-tag">[ 03 ]</span>
-            <span className="layer-title">Persistence, Database & State</span>
+            <span className="layer-tag">{t.layer03Tag}</span>
+            <span className="layer-title">{t.layer03Title}</span>
           </div>
           <div className="layer-nodes-grid">
             {renderCard('database', 'database')}
@@ -280,8 +282,8 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         {/* CAPA 4: THIRD-PARTY SERVICES */}
         <div className="layer-section">
           <div className="layer-header">
-            <span className="layer-tag">[ 04 ]</span>
-            <span className="layer-title">Third-Party Managed Services</span>
+            <span className="layer-tag">{t.layer04Tag}</span>
+            <span className="layer-title">{t.layer04Title}</span>
           </div>
           <div className="layer-nodes-grid">
             {slots.auth && renderCard('auth', 'auth')}
@@ -299,8 +301,8 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         {/* CAPA 5: INFRASTRUCTURE & OPS */}
         <div className="layer-section">
           <div className="layer-header">
-            <span className="layer-tag">[ 05 ]</span>
-            <span className="layer-title">Cloud Infrastructure & Observability</span>
+            <span className="layer-tag">{t.layer05Tag}</span>
+            <span className="layer-title">{t.layer05Title}</span>
           </div>
           <div className="layer-nodes-grid">
             {renderCard('hosting', 'hosting')}

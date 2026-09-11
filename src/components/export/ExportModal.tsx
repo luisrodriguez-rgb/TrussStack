@@ -3,6 +3,7 @@ import type { StackRecommendation } from '../../engine/types';
 import { generateMermaidDiagram } from '../../exporters/mermaidExporter';
 import { generateJsonExport } from '../../exporters/jsonExporter';
 import { generateExcalidrawScene } from '../../exporters/excalidrawExporter';
+import { useI18n } from '../../i18n/I18nContext';
 
 interface ExportModalProps {
   recommendation: StackRecommendation;
@@ -10,6 +11,7 @@ interface ExportModalProps {
 }
 
 export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClose }) => {
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<'mermaid' | 'json' | 'excalidraw'>('mermaid');
   const [copied, setCopied] = useState(false);
 
@@ -56,12 +58,12 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
         <div className="modal-header">
           <div>
             <span className="pill-tag" style={{ color: 'var(--citron)' }}>
-              RECIPE EXPORT CENTER
+              {t.exportModalTag}
             </span>
-            <h3>EXPORTAR ARQUITECTURA TÉCNICA</h3>
+            <h3>{t.exportModalTitle}</h3>
           </div>
-          <button type="button" className="drawer-close-btn" onClick={onClose}>
-            [ X ]
+          <button type="button" className="drawer-close-btn" onClick={onClose} aria-label="Close">
+            {t.drawerClose}
           </button>
         </div>
 
@@ -72,21 +74,21 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
               className={`export-tab-btn ${activeTab === 'mermaid' ? 'active' : ''}`}
               onClick={() => setActiveTab('mermaid')}
             >
-              [ MERMAID .MD ]
+              {t.exportTabMermaid}
             </button>
             <button
               type="button"
               className={`export-tab-btn ${activeTab === 'json' ? 'active' : ''}`}
               onClick={() => setActiveTab('json')}
             >
-              [ CANONICAL JSON ]
+              {t.exportTabJson}
             </button>
             <button
               type="button"
               className={`export-tab-btn ${activeTab === 'excalidraw' ? 'active' : ''}`}
               onClick={() => setActiveTab('excalidraw')}
             >
-              [ EXCALIDRAW / SKETION ]
+              {t.exportTabExcalidraw}
             </button>
           </div>
 
@@ -100,7 +102,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                   : 'EXCALIDRAW VECTOR SCENE V2 (COMPATIBLE CON SKETION)'}
               </span>
               <button type="button" className="btn-copy-code" onClick={handleCopy}>
-                {copied ? '[ OK COPIADO ]' : '[ COPIAR AL PORTAPAPELES ]'}
+                {copied ? t.btnCopiedCode : t.btnCopyCode}
               </button>
             </div>
             <pre className="code-viewer-pre">
@@ -115,7 +117,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                 className="btn-download-file"
                 onClick={() => handleDownload('stackforge.json', jsonCode, 'application/json')}
               >
-                [ DESCARGAR STACKFORGE.JSON ]
+                {t.btnDownloadJson}
               </button>
             )}
 
@@ -127,7 +129,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                   handleDownload('architecture.excalidraw', excalidrawCode, 'application/json')
                 }
               >
-                [ DESCARGAR ARCHITECTURE.EXCALIDRAW ]
+                {t.btnDownloadExcalidraw}
               </button>
             )}
 
@@ -137,7 +139,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                 className="btn-download-file"
                 onClick={() => handleDownload('architecture.mmd', mermaidCode, 'text/plain')}
               >
-                [ DESCARGAR ARCHITECTURE.MMD ]
+                {t.btnDownloadMmd}
               </button>
             )}
           </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import type { Technology } from '../../engine/types';
 import { TECH_BY_ID } from '../../engine/catalog';
 import { TechLogo } from '../common/TechLogo';
+import { useI18n } from '../../i18n/I18nContext';
 
 interface TradeoffDrawerProps {
   tech: Technology | null;
@@ -16,17 +17,19 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
   onClose,
   onReplaceClick,
 }) => {
+  const { t } = useI18n();
+
   if (!tech) return null;
 
   const metricItems = [
-    { label: 'DEVELOPER EXPERIENCE (DX)', val: tech.metrics.dx },
-    { label: 'CURVA DE APRENDIZAJE', val: tech.metrics.learningCurve },
-    { label: 'ESCALABILIDAD TÉCNICA', val: tech.metrics.scalability },
-    { label: 'ECOSISTEMA & LIBRERÍAS', val: tech.metrics.ecosystem },
-    { label: 'COMUNIDAD & SOPORTE', val: tech.metrics.community },
-    { label: 'MADUREZ EN PRODUCCIÓN', val: tech.metrics.maturity },
-    { label: 'COMPLEJIDAD OPERATIVA (OPS)', val: tech.metrics.operationalComplexity },
-    { label: 'VENDOR LOCK-IN (RIESGO)', val: tech.metrics.vendorLockin },
+    { label: t.metricDx, val: tech.metrics.dx },
+    { label: t.metricLearning, val: tech.metrics.learningCurve },
+    { label: t.metricScalability, val: tech.metrics.scalability },
+    { label: t.metricEcosystem, val: tech.metrics.ecosystem },
+    { label: t.metricCommunity, val: tech.metrics.community },
+    { label: t.metricMaturity, val: tech.metrics.maturity },
+    { label: t.metricOps, val: tech.metrics.operationalComplexity },
+    { label: t.metricLockinRisk, val: tech.metrics.vendorLockin },
   ];
 
   return (
@@ -42,14 +45,14 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
               <h2>{tech.name}</h2>
             </div>
           </div>
-          <button type="button" className="drawer-close-btn" onClick={onClose} aria-label="Cerrar">
-            [ X ]
+          <button type="button" className="drawer-close-btn" onClick={onClose} aria-label="Close">
+            {t.drawerClose}
           </button>
         </div>
 
         <div className="drawer-body">
           {/* Tagline */}
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--cream-muted)' }}>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
             {tech.tagline}
           </p>
 
@@ -63,13 +66,13 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
               onReplaceClick(tech.category);
             }}
           >
-            [ SUSTITUIR POR OTRO INGREDIENTE ]
+            {t.drawerSwapBtn}
           </button>
 
           {/* Sacrifices */}
           <div>
             <h3 className="drawer-section-title" style={{ color: 'var(--vermouth)' }}>
-              [ ! ] LO QUE ESTÁS SACRIFICANDO AL ELEGIR ESTO
+              {t.drawerSacrificesTitle}
             </h3>
             <ul className="tradeoff-list">
               {tech.tradeoffs.sacrifices.map((sac, idx) => (
@@ -84,7 +87,7 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
           {/* Pros */}
           <div>
             <h3 className="drawer-section-title" style={{ color: 'var(--citron)' }}>
-              [ + ] VENTAJAS TÉCNICAS CLAVE
+              {t.drawerProsTitle}
             </h3>
             <ul className="tradeoff-list">
               {tech.tradeoffs.pros.map((pro, idx) => (
@@ -99,7 +102,7 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
           {/* Cons */}
           <div>
             <h3 className="drawer-section-title">
-              [ - ] CONSIDERACIONES Y LÍMITES
+              {t.drawerConsTitle}
             </h3>
             <ul className="tradeoff-list">
               {tech.tradeoffs.cons.map((con, idx) => (
@@ -113,7 +116,7 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
 
           {/* Free Tier Profile */}
           <div>
-            <h3 className="drawer-section-title">[ COSTES // FREE TIER ]</h3>
+            <h3 className="drawer-section-title">{t.drawerCostsTitle}</h3>
             <div
               style={{
                 background: 'var(--bg-card)',
@@ -125,13 +128,13 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-                <span style={{ color: 'var(--cream-dim)' }}>COSTE INICIAL:</span>
+                <span style={{ color: 'var(--text-dim)' }}>{t.drawerInitCost}</span>
                 <span style={{ fontWeight: 800, color: 'var(--citron)' }}>
                   {tech.costProfile.initialCost.toUpperCase()}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-                <span style={{ color: 'var(--cream-dim)' }}>RIESGO AL ESCALAR:</span>
+                <span style={{ color: 'var(--text-dim)' }}>{t.drawerScaleRisk}</span>
                 <span
                   style={{
                     fontWeight: 800,
@@ -141,7 +144,7 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
                   {tech.costProfile.scalingRisk.toUpperCase()}
                 </span>
               </div>
-              <div style={{ borderTop: '1px solid var(--border-rule)', paddingTop: '0.5rem', marginTop: '0.5rem', color: 'var(--cream-muted)' }}>
+              <div style={{ borderTop: '1px solid var(--border-rule)', paddingTop: '0.5rem', marginTop: '0.5rem', color: 'var(--text-secondary)' }}>
                 {tech.costProfile.freeTier.limitsDescription}
               </div>
             </div>
@@ -149,7 +152,7 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
 
           {/* Radar Metrics */}
           <div>
-            <h3 className="drawer-section-title">[ RADAR DE INGREDIENTE // 1 A 5 ]</h3>
+            <h3 className="drawer-section-title">{t.drawerRadarTitle}</h3>
             <div className="metric-bars-list">
               {metricItems.map((m) => (
                 <div key={m.label} className="metric-bar-item">
@@ -172,7 +175,7 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
 
           {/* Sinergias con el stack actual */}
           <div>
-            <h3 className="drawer-section-title">[ SINERGIA CON EL STACK ACTUAL ]</h3>
+            <h3 className="drawer-section-title">{t.drawerSynergyTitle}</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {Object.entries(currentStack)
                 .filter(([cat, id]) => id && id !== tech.id && cat !== tech.category)
@@ -202,18 +205,18 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
-                        <span style={{ fontWeight: 700, color: 'var(--cream-pure)' }}>{other.name}</span>
+                        <span style={{ fontWeight: 700, color: 'var(--text-pure)' }}>{other.name}</span>
                         <span
                           style={{
                             fontSize: '0.7rem',
-                            color: isFriction ? 'var(--vermouth)' : isNatural ? 'var(--citron)' : 'var(--cream-dim)',
+                            color: isFriction ? 'var(--vermouth)' : isNatural ? 'var(--citron)' : 'var(--text-dim)',
                           }}
                         >
-                          {isFriction ? '[ ! FRICCIÓN ]' : isNatural ? '[ OK NATIVO ]' : '[ COMPATIBLE ]'}
+                          {isFriction ? t.synergyFriction : isNatural ? t.synergyNative : t.synergyCompatible}
                         </span>
                       </div>
-                      <div style={{ color: 'var(--cream-muted)', fontSize: '0.75rem' }}>
-                        {activeInt ? activeInt.explanation : 'Conexión estándar sobre protocolos HTTP/REST.'}
+                      <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
+                        {activeInt ? activeInt.explanation : t.synergyDefault}
                       </div>
                     </div>
                   );
@@ -238,9 +241,9 @@ export const TradeoffDrawer: React.FC<TradeoffDrawerProps> = ({
               rel="noopener noreferrer"
               style={{ color: 'var(--citron)', textDecoration: 'none' }}
             >
-              WEBSITE OFICIAL ↗
+              {t.drawerOfficialWeb}
             </a>
-            <span style={{ color: 'var(--cream-dim)' }}>LICENCIA: {tech.license}</span>
+            <span style={{ color: 'var(--text-dim)' }}>{t.drawerLicense} {tech.license}</span>
           </div>
         </div>
       </div>
