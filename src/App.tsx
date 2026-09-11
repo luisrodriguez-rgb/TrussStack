@@ -13,6 +13,7 @@ import {
 import { TECH_BY_ID } from './engine/catalog';
 import { getLocalizedFrictionMessage } from './engine/catalogI18n';
 import { Header, type AppView } from './components/layout/Header';
+import { LandingHero } from './components/home/LandingHero';
 import { SpecWizard } from './components/wizard/SpecWizard';
 import { ArchitectureCanvas } from './components/canvas/ArchitectureCanvas';
 import { StackComparator } from './components/compare/StackComparator';
@@ -66,7 +67,7 @@ export const App: React.FC = () => {
   });
 
   const [currentView, setCurrentView] = useState<AppView>(() =>
-    initialBlueprint ? 'canvas' : 'canvas'
+    initialBlueprint ? 'canvas' : 'home'
   );
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [spec, setSpec] = useState<UserProjectSpec>(() => initialBlueprint?.spec || defaultSpec);
@@ -83,13 +84,17 @@ export const App: React.FC = () => {
   const [isShareCopied, setIsShareCopied] = useState<boolean>(false);
   const [isDriftModalOpen, setIsDriftModalOpen] = useState<boolean>(false);
 
-  // Sincronización continua en segundo plano con el URL hash (sin recarga de página)
+  // Sincronización continua en segundo plano con el URL hash cuando estamos en canvas
   useEffect(() => {
     if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
-      const token = encodeBlueprint(spec, recommendation.slots);
-      window.history.replaceState(null, '', `#blueprint=${token}`);
+      if (currentView === 'canvas') {
+        const token = encodeBlueprint(spec, recommendation.slots);
+        window.history.replaceState(null, '', `#blueprint=${token}`);
+      } else if (currentView === 'home' && window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
     }
-  }, [spec, recommendation.slots]);
+  }, [spec, recommendation.slots, currentView]);
 
   // Sincronizar tema con el atributo del DOM
   useEffect(() => {
@@ -200,17 +205,23 @@ export const App: React.FC = () => {
       <Header
         currentView={currentView}
         onViewChange={setCurrentView}
-        recommendation={recommendation}
-        onOpenExport={() => setIsExportOpen(true)}
-        onOpenCostSim={() => setIsCostSimOpen(true)}
         theme={theme}
         onToggleTheme={handleToggleTheme}
-        onShareBlueprint={handleShareBlueprint}
-        isShareCopied={isShareCopied}
-        onOpenDriftAudit={() => setIsDriftModalOpen(true)}
       />
 
       <main className="main-content">
+        {currentView === 'home' && (
+          <LandingHero
+            onStartWizard={() => setCurrentView('wizard')}
+            onExploreStacks={() => setCurrentView('explore')}
+            onOpenBenchmarks={() => setCurrentView('benchmarks')}
+            onLoadBlueprint={(slots) => {
+              handleLoadCustomSlots(slots);
+              setCurrentView('canvas');
+            }}
+          />
+        )}
+
         {currentView === 'wizard' && (
           <SpecWizard initialSpec={spec} onSubmit={handleGenerateStack} />
         )}
@@ -221,6 +232,10 @@ export const App: React.FC = () => {
             onReplaceCategory={(category) => setReplacingCategory(category)}
             onInspectTech={(tech) => setSelectedTechForDrawer(tech)}
             onOpenCostSim={() => setIsCostSimOpen(true)}
+            onOpenExport={() => setIsExportOpen(true)}
+            onShareBlueprint={handleShareBlueprint}
+            isShareCopied={isShareCopied}
+            onOpenDriftAudit={() => setIsDriftModalOpen(true)}
           />
         )}
 
