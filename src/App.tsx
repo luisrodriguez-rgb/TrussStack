@@ -22,6 +22,11 @@ import { ReplaceModal } from './components/canvas/ReplaceModal';
 import { ExportModal } from './components/export/ExportModal';
 import { CostSimulatorModal } from './components/cost/CostSimulatorModal';
 import { useI18n } from './i18n/I18nContext';
+import {
+  copyShareableUrlToClipboard,
+  decodeBlueprint,
+  encodeBlueprint,
+} from './utils/urlState';
 
 // Especificación inicial por defecto: SaaS MVP optimizado para 1 dev
 const defaultSpec: UserProjectSpec = {
@@ -49,12 +54,40 @@ const defaultSpec: UserProjectSpec = {
 
 export const App: React.FC = () => {
   const { lang } = useI18n();
-  const [currentView, setCurrentView] = useState<AppView>('canvas');
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [spec, setSpec] = useState<UserProjectSpec>(defaultSpec);
-  const [recommendation, setRecommendation] = useState<StackRecommendation>(() =>
-    recommendStack(defaultSpec, 'es')
+
+  // Detección inicial de blueprint en URL hash (#blueprint=...)
+  const [initialBlueprint] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      return decodeBlueprint(window.location.hash);
+    }
+    return null;
+  });
+
+  const [currentView, setCurrentView] = useState<AppView>(() =>
+    initialBlueprint ? 'canvas' : 'canvas'
   );
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [spec, setSpec] = useState<UserProjectSpec>(() => initialBlueprint?.spec || defaultSpec);
+  const [recommendation, setRecommendation] = useState<StackRecommendation>(() => {
+    const base = recommendStack(initialBlueprint?.spec || defaultSpec, 'es');
+    if (initialBlueprint?.slots) {
+      return {
+        ...base,
+        slots: { ...base.slots, ...initialBlueprint.slots },
+      };
+    }
+    return base;
+  });
+  const [isShareCopied, setIsShareCopied] = useState<boolean>(false);
+  const [isDriftModalOpen, setIsDriftModalOpen] = useState<boolean>(false);
+
+  // Sincronización continua en segundo plano con el URL hash (sin recarga de página)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
+      const token = encodeBlueprint(spec, recommendation.slots);
+      window.history.replaceState(null, '', `#blueprint=${token}`);
+    }
+  }, [spec, recommendation.slots]);
 
   // Sincronizar tema con el atributo del DOM
   useEffect(() => {
@@ -150,6 +183,16 @@ export const App: React.FC = () => {
     setReplacingCategory(null);
   };
 
+  const handleShareBlueprint = async () => {
+    try {
+      await copyShareableUrlToClipboard(spec, recommendation.slots);
+      setIsShareCopied(true);
+      setTimeout(() => setIsShareCopied(false), 2500);
+    } catch {
+      // Fallback
+    }
+  };
+
   return (
     <div className="app-container" data-theme={theme}>
       <Header
@@ -160,6 +203,9 @@ export const App: React.FC = () => {
         onOpenCostSim={() => setIsCostSimOpen(true)}
         theme={theme}
         onToggleTheme={handleToggleTheme}
+        onShareBlueprint={handleShareBlueprint}
+        isShareCopied={isShareCopied}
+        onOpenDriftAudit={() => setIsDriftModalOpen(true)}
       />
 
       <main className="main-content">
@@ -219,6 +265,9 @@ export const App: React.FC = () => {
           onClose={() => setIsCostSimOpen(false)}
         />
       )}
+
+      {/* Modal de Auditoría de Drift (placeholder hasta montar componente) */}
+      {isDriftModalOpen && null}
     </div>
   );
 };

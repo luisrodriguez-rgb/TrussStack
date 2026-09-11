@@ -13,6 +13,9 @@ interface HeaderProps {
   onOpenCostSim?: () => void;
   theme: 'dark' | 'light';
   onToggleTheme: () => void;
+  onShareBlueprint?: () => void;
+  isShareCopied?: boolean;
+  onOpenDriftAudit?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -23,6 +26,9 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCostSim,
   theme,
   onToggleTheme,
+  onShareBlueprint,
+  isShareCopied = false,
+  onOpenDriftAudit,
 }) => {
   const { lang, toggleLang, t } = useI18n();
   const frictionCount = recommendation?.frictionWarnings.length || 0;
@@ -134,6 +140,41 @@ export const Header: React.FC<HeaderProps> = ({
                 style={{ color: 'var(--yellow-vivid)', borderColor: 'var(--yellow-border)' }}
               >
                 {t.btnOpenCostSim}
+              </button>
+            )}
+
+            {onShareBlueprint && (
+              <button
+                type="button"
+                className="btn-theme-toggle"
+                onClick={onShareBlueprint}
+                title={t.btnShareTooltip}
+                style={
+                  isShareCopied
+                    ? {
+                        backgroundColor: 'var(--yellow-vivid)',
+                        color: '#090B10',
+                        borderColor: 'var(--yellow-vivid)',
+                        fontWeight: 700,
+                      }
+                    : {
+                        color: 'var(--yellow-vivid)',
+                        borderColor: 'var(--yellow-border)',
+                      }
+                }
+              >
+                {isShareCopied ? t.btnShareCopied : t.btnShare}
+              </button>
+            )}
+
+            {onOpenDriftAudit && (
+              <button
+                type="button"
+                className="btn-theme-toggle"
+                onClick={onOpenDriftAudit}
+                title={lang === 'es' ? 'Auditar drift arquitectónico en package.json' : 'Audit architectural drift in package.json'}
+              >
+                {t.btnAuditDrift}
               </button>
             )}
 
