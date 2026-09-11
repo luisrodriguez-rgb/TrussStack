@@ -28,44 +28,44 @@ export function generateMermaidDiagram(recommendation: StackRecommendation): str
   ];
 
   if (frontend) {
-    lines.push(`        Client["📱/💻 ${frontend.name} (Client)"]:::clientLayer`);
+    lines.push(`        Client["[CLIENT] ${frontend.name}"]:::clientLayer`);
   }
   lines.push('    end', '', '    subgraph Application["2. Application & API"]');
 
   if (backend) {
-    lines.push(`        API["⚙️ ${backend.name} (API Server)"]:::appLayer`);
+    lines.push(`        API["[API] ${backend.name}"]:::appLayer`);
   } else if (frontend) {
-    lines.push(`        API["⚡ ${frontend.name} Route Handlers (Serverless)"]:::appLayer`);
+    lines.push(`        API["[SERVERLESS] ${frontend.name} Route Handlers"]:::appLayer`);
   }
   lines.push('    end', '', '    subgraph DataState["3. Data & State Layer"]');
 
   if (database) {
-    lines.push(`        DB[("🗄️ ${database.name}")]:::dataLayer`);
+    lines.push(`        DB[("[DB] ${database.name}")]:::dataLayer`);
   }
   if (storage) {
-    lines.push(`        Storage["📦 ${storage.name}"]:::dataLayer`);
+    lines.push(`        Storage["[STORAGE] ${storage.name}"]:::dataLayer`);
   }
   lines.push('    end', '', '    subgraph ThirdParty["4. Services & Auth"]');
 
   if (auth) {
-    lines.push(`        Auth["🔑 ${auth.name}"]:::serviceLayer`);
+    lines.push(`        Auth["[AUTH] ${auth.name}"]:::serviceLayer`);
   }
   if (payments) {
-    lines.push(`        Payments["💳 ${payments.name}"]:::serviceLayer`);
+    lines.push(`        Payments["[PAY] ${payments.name}"]:::serviceLayer`);
   }
   if (email) {
-    lines.push(`        Email["✉️ ${email.name}"]:::serviceLayer`);
+    lines.push(`        Email["[MAIL] ${email.name}"]:::serviceLayer`);
   }
   lines.push('    end', '', '    subgraph InfraOps["5. Hosting & Ops"]');
 
   if (hosting) {
-    lines.push(`        Host["☁️ ${hosting.name}"]:::infraLayer`);
+    lines.push(`        Host["[HOST] ${hosting.name}"]:::infraLayer`);
   }
   if (monitoring) {
-    lines.push(`        Observability["📊 ${monitoring.name}"]:::infraLayer`);
+    lines.push(`        Observability["[OBSERVABILITY] ${monitoring.name}"]:::infraLayer`);
   }
   if (cicd) {
-    lines.push(`        CI["🚀 ${cicd.name}"]:::infraLayer`);
+    lines.push(`        CI["[CI/CD] ${cicd.name}"]:::infraLayer`);
   }
   lines.push('    end', '');
 

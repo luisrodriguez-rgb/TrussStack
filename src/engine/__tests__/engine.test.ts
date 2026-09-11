@@ -3,7 +3,7 @@ import { recommendStack, getReplacementAlternatives, detectStackFrictions } from
 import { TECH_BY_ID } from '../catalog';
 import type { UserProjectSpec } from '../types';
 
-console.log('🧪 Ejecutando Suite de Pruebas Deterministas de StackForge...\n');
+console.log('[TEST] Ejecutando Suite de Pruebas Deterministas de TONIC...\n');
 
 // Test Case 1: SaaS MVP con presupuesto $0 y solo developer
 const saasSpec: UserProjectSpec = {
@@ -36,7 +36,7 @@ assert.strictEqual(saasRecommendation.slots.database, 'supabase-db', 'Database r
 assert.strictEqual(saasRecommendation.slots.auth, 'supabase-auth', 'Auth recomendado debe alinearse con Supabase');
 assert.ok(saasRecommendation.fitScore >= 85, `Fit Score debe ser >= 85%, obtenido: ${saasRecommendation.fitScore}%`);
 assert.ok(saasRecommendation.whyReasons.length > 0, 'Debe generar explicaciones deterministas del porqué');
-console.log('✅ Test 1 Superado: SaaS MVP $0 recomienda Next.js + Supabase con Fit Score', saasRecommendation.fitScore, '%');
+console.log('[OK] Test 1 Superado: SaaS MVP $0 recomienda Next.js + Supabase con Fit Score', saasRecommendation.fitScore, '%');
 
 // Test Case 2: Sitio de contenido / Blog con SEO crítico
 const blogSpec: UserProjectSpec = {
@@ -65,13 +65,13 @@ const blogSpec: UserProjectSpec = {
 const blogRecommendation = recommendStack(blogSpec);
 assert.strictEqual(blogRecommendation.slots.frontend, 'astro', 'Para sitio de contenido SEO debe recomendar Astro');
 assert.strictEqual(blogRecommendation.slots.hosting, 'cloudflare-pages', 'Hosting para Astro en free tier debe ser Cloudflare Pages');
-console.log('✅ Test 2 Superado: Blog de contenido con SEO crítico recomienda Astro + Cloudflare Pages');
+console.log('[OK] Test 2 Superado: Blog de contenido con SEO crítico recomienda Astro + Cloudflare Pages');
 
 // Test Case 3: Detección de fricciones arquitectónicas
 const frictions = detectStackFrictions(['astro', 'authjs']);
 assert.ok(frictions.length > 0, 'Debe detectar fricción arquitectónica entre Astro y Auth.js');
 assert.strictEqual(frictions[0].level, 'high');
-console.log('✅ Test 3 Superado: Fricción detectada correctamente entre Astro y Auth.js ->', frictions[0].message);
+console.log('[OK] Test 3 Superado: Fricción detectada correctamente entre Astro y Auth.js ->', frictions[0].message);
 
 // Test Case 4: Sustitución en caliente [Replace]
 const alternatives = getReplacementAlternatives('database', saasRecommendation.slots, saasSpec);
@@ -79,8 +79,8 @@ assert.ok(alternatives.length > 0, 'Debe ofrecer alternativas de sustitución pa
 
 const neonAlt = alternatives.find((a) => a.tech.id === 'neon');
 assert.ok(neonAlt, 'Neon debe ser una alternativa disponible');
-assert.ok(neonAlt.gains.length > 0, 'Debe calcular qué se gana al cambiar a Neon');
-assert.ok(neonAlt.losses.length > 0, 'Debe calcular qué se pierde al cambiar a Neon');
-console.log('✅ Test 4 Superado: [Replace] calcula deltas, ganancias y pérdidas para Neon');
+assert.ok(neonAlt!.gains.length > 0, 'Debe calcular qué se gana al cambiar a Neon');
+assert.ok(neonAlt!.losses.length > 0, 'Debe calcular qué se pierde al cambiar a Neon');
+console.log('[OK] Test 4 Superado: [Replace] calcula deltas, ganancias y pérdidas para Neon');
 
-console.log('\n🎉 Todas las pruebas del motor determinista pasaron exitosamente.');
+console.log('\n[DONE] Todas las pruebas del motor determinista pasaron exitosamente.');

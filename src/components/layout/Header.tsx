@@ -19,10 +19,10 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="app-header">
       <div className="brand-section">
-        <div className="brand-logo">▲</div>
+        <div className="brand-badge">T</div>
         <div className="brand-title">
-          <span className="brand-name">StackForge</span>
-          <span className="brand-tagline">Tech Stack Architect</span>
+          <span className="brand-name">TONIC</span>
+          <span className="brand-tagline">CRAFT STACK ARCHITECT</span>
         </div>
       </div>
 
@@ -32,14 +32,14 @@ export const Header: React.FC<HeaderProps> = ({
           className={`nav-tab-btn ${currentView === 'wizard' ? 'active' : ''}`}
           onClick={() => onViewChange('wizard')}
         >
-          <span>📋</span> Requisitos
+          [ 01. FORMULA / REQUISITOS ]
         </button>
         <button
           type="button"
           className={`nav-tab-btn ${currentView === 'canvas' ? 'active' : ''}`}
           onClick={() => onViewChange('canvas')}
         >
-          <span>📐</span> Arquitectura
+          [ 02. ARQUITECTURA / CANVAS ]
         </button>
       </nav>
 
@@ -47,28 +47,28 @@ export const Header: React.FC<HeaderProps> = ({
         {recommendation && (
           <>
             <div className="kpi-chip" title="Afinidad con tus preferencias declaradas">
-              <span className="kpi-label">Fit Score</span>
+              <span className="kpi-label">FORMULA FIT</span>
               <span className={`kpi-value ${recommendation.fitScore >= 80 ? 'healthy' : 'warning'}`}>
                 {recommendation.fitScore}%
               </span>
             </div>
 
             <div className="kpi-chip" title="Estimación de coste mensual">
-              <span className="kpi-label">Coste</span>
+              <span className="kpi-label">COSTE</span>
               <span className="kpi-value healthy">
                 {recommendation.overallCostEstimate.split(' ')[0]}
               </span>
             </div>
 
             <div className="kpi-chip" title="Advertencias de fricción arquitectónica">
-              <span className="kpi-label">Fricción</span>
+              <span className="kpi-label">FRICCIÓN</span>
               <span className={`kpi-value ${frictionCount === 0 ? 'healthy' : 'warning'}`}>
-                {frictionCount === 0 ? '0' : `⚠ ${frictionCount}`}
+                {frictionCount === 0 ? '0' : `! ${frictionCount}`}
               </span>
             </div>
 
             <button type="button" className="btn-export" onClick={onOpenExport}>
-              <span>📤</span> Exportar
+              EXPORTAR RECETA ↗
             </button>
           </>
         )}

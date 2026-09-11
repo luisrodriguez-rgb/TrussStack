@@ -2,6 +2,7 @@ import React from 'react';
 import type { ReplacementAlternative, TechCategory, UserProjectSpec } from '../../engine/types';
 import { getReplacementAlternatives } from '../../engine/recommender';
 import { TECH_BY_ID } from '../../engine/catalog';
+import { TechLogo } from '../common/TechLogo';
 
 interface ReplaceModalProps {
   category: TechCategory;
@@ -32,23 +33,23 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
       <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <span className="node-category-pill" style={{ color: 'var(--cyan-400)' }}>
-              Sustitución en Caliente
+            <span className="pill-tag" style={{ color: 'var(--citron)' }}>
+              SUSTITUCIÓN EN CALIENTE
             </span>
             <h3>
-              Reemplazar {category.toUpperCase()}:{' '}
-              <span style={{ color: 'var(--text-secondary)' }}>{currentTech?.name || 'Vacío'}</span>
+              REEMPLAZAR {category.toUpperCase()}:{' '}
+              <span style={{ color: 'var(--cream-muted)' }}>{currentTech?.name || 'VACÍO'}</span>
             </h3>
           </div>
           <button type="button" className="drawer-close-btn" onClick={onClose}>
-            &times;
+            [ X ]
           </button>
         </div>
 
         <div className="modal-content">
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-            Elige una alternativa compatible. El sistema recalculará en tiempo real el Fit Score, el coste estimado
-            y te mostrará qué ganas y qué sacrificas con el cambio.
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--cream-muted)' }}>
+            Elige un ingrediente alternativo. El sistema recalculará en tiempo real el Fit Score, la pureza de la
+            fórmula y te mostrará el impacto exacto en trade-offs.
           </p>
 
           {alternatives.map((alt) => {
@@ -63,12 +64,17 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
               >
                 <div className="alt-header">
                   <div className="alt-name-group">
+                    <div className="card-logo-box">
+                      <TechLogo id={alt.tech.id} size={18} />
+                    </div>
                     <span className="alt-name">{alt.tech.name}</span>
-                    <span className="node-tag-item">
-                      {alt.tech.isManaged ? 'Managed Cloud' : 'Open Source / Self-Hosted'}
+                    <span className="pill-tag">
+                      {alt.tech.isManaged ? 'cloud managed' : 'open source'}
                     </span>
                     {alt.tech.costProfile.freeTier.hasFreeTier && (
-                      <span className="node-tag-item free">Free Tier</span>
+                      <span className="badge-sin-tarjeta" style={{ marginBottom: 0 }}>
+                        SIN TARJETA
+                      </span>
                     )}
                   </div>
 
@@ -77,19 +83,19 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
                       isPositive ? 'positive' : isNeutral ? 'neutral' : 'negative'
                     }`}
                   >
-                    {isPositive ? `+${alt.fitScoreDelta}%` : `${alt.fitScoreDelta}%`} Fit (
+                    {isPositive ? `+${alt.fitScoreDelta}%` : `${alt.fitScoreDelta}%`} FIT (
                     {alt.resultingFitScore}%)
                   </div>
                 </div>
 
-                <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                  {alt.tech.tagline}
-                </div>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--cream-muted)' }}>
+                  {alt.tech.description}
+                </p>
 
-                {/* Grid de Consecuencias (+ Ganas / - Pierdes) */}
+                {/* Consequences Grid */}
                 <div className="consequences-grid">
                   <div className="consequence-col">
-                    <span className="consequence-title gain">✓ Qué Ganas</span>
+                    <div className="consequence-title gain">[ + QUÉ GANAS ]</div>
                     {alt.gains.map((gain, i) => (
                       <div key={i} className="consequence-item">
                         • {gain}
@@ -98,7 +104,7 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
                   </div>
 
                   <div className="consequence-col">
-                    <span className="consequence-title loss">⚠ Qué Sacrificas / Pierdes</span>
+                    <div className="consequence-title loss">[ ! QUÉ SACRIFICAS ]</div>
                     {alt.losses.map((loss, i) => (
                       <div key={i} className="consequence-item">
                         • {loss}
@@ -107,32 +113,23 @@ export const ReplaceModal: React.FC<ReplaceModalProps> = ({
                   </div>
                 </div>
 
-                {/* Alertas de fricción si introduce alguna */}
+                {/* Friction Alert */}
                 {alt.frictionAlerts.length > 0 && (
-                  <div
-                    style={{
-                      background: 'rgba(245, 158, 11, 0.1)',
-                      border: '1px solid rgba(245, 158, 11, 0.3)',
-                      borderRadius: 'var(--radius-sm)',
-                      padding: '0.5rem 0.75rem',
-                      fontSize: '0.78rem',
-                      color: 'var(--amber-400)',
-                    }}
-                  >
-                    ⚠ <strong>Alerta de Fricción:</strong> {alt.frictionAlerts[0].message}
+                  <div className="friction-notice-box" style={{ padding: '0.5rem 0.75rem', fontSize: '0.75rem' }}>
+                    <strong>[ ! ] FRICCIÓN DETECTADA:</strong> {alt.frictionAlerts[0].message}
                   </div>
                 )}
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.25rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.35rem' }}>
                   <button
                     type="button"
-                    className="btn-node-replace"
+                    className="btn-card-swap"
                     onClick={(e) => {
                       e.stopPropagation();
                       onSelectAlternative(category, alt.tech.id);
                     }}
                   >
-                    Sustituir por {alt.tech.name} ➔
+                    {`[ SUSTITUIR POR ${alt.tech.name.toUpperCase()} -> ]`}
                   </button>
                 </div>
               </div>

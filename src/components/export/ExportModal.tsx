@@ -52,16 +52,16 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-dialog" style={{ maxWidth: '780px' }} onClick={(e) => e.stopPropagation()}>
+      <div className="modal-dialog" style={{ maxWidth: '820px' }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <span className="node-category-pill" style={{ color: 'var(--cyan-400)' }}>
-              Centro de Exportación
+            <span className="pill-tag" style={{ color: 'var(--citron)' }}>
+              RECIPE EXPORT CENTER
             </span>
-            <h3>Exportar Arquitectura StackForge</h3>
+            <h3>EXPORTAR ARQUITECTURA TÉCNICA</h3>
           </div>
           <button type="button" className="drawer-close-btn" onClick={onClose}>
-            &times;
+            [ X ]
           </button>
         </div>
 
@@ -72,21 +72,21 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
               className={`export-tab-btn ${activeTab === 'mermaid' ? 'active' : ''}`}
               onClick={() => setActiveTab('mermaid')}
             >
-              Mermaid (.md)
+              [ MERMAID .MD ]
             </button>
             <button
               type="button"
               className={`export-tab-btn ${activeTab === 'json' ? 'active' : ''}`}
               onClick={() => setActiveTab('json')}
             >
-              stackforge.json
+              [ CANONICAL JSON ]
             </button>
             <button
               type="button"
               className={`export-tab-btn ${activeTab === 'excalidraw' ? 'active' : ''}`}
               onClick={() => setActiveTab('excalidraw')}
             >
-              Excalidraw (.excalidraw)
+              [ EXCALIDRAW / SKETION ]
             </button>
           </div>
 
@@ -94,13 +94,13 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
             <div className="code-viewer-header">
               <span className="code-lang-label">
                 {activeTab === 'mermaid'
-                  ? 'Mermaid Flowchart TD'
+                  ? 'MERMAID FLOWCHART TD'
                   : activeTab === 'json'
-                  ? 'Canonical JSON Schema v1.0'
-                  : 'Excalidraw Vector Scene v2 (Compatible con Sketion)'}
+                  ? 'CANONICAL JSON SCHEMA V1.0'
+                  : 'EXCALIDRAW VECTOR SCENE V2 (COMPATIBLE CON SKETION)'}
               </span>
               <button type="button" className="btn-copy-code" onClick={handleCopy}>
-                {copied ? '✓ ¡Copiado!' : 'Copiar al Portapapeles'}
+                {copied ? '[ OK COPIADO ]' : '[ COPIAR AL PORTAPAPELES ]'}
               </button>
             </div>
             <pre className="code-viewer-pre">
@@ -115,7 +115,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                 className="btn-download-file"
                 onClick={() => handleDownload('stackforge.json', jsonCode, 'application/json')}
               >
-                <span>💾</span> Descargar stackforge.json
+                [ DESCARGAR STACKFORGE.JSON ]
               </button>
             )}
 
@@ -127,7 +127,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                   handleDownload('architecture.excalidraw', excalidrawCode, 'application/json')
                 }
               >
-                <span>🎨</span> Descargar architecture.excalidraw
+                [ DESCARGAR ARCHITECTURE.EXCALIDRAW ]
               </button>
             )}
 
@@ -137,7 +137,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({ recommendation, onClos
                 className="btn-download-file"
                 onClick={() => handleDownload('architecture.mmd', mermaidCode, 'text/plain')}
               >
-                <span>📄</span> Descargar architecture.mmd
+                [ DESCARGAR ARCHITECTURE.MMD ]
               </button>
             )}
           </div>
