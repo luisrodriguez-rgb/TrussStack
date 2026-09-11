@@ -12,9 +12,9 @@
 <p align="center">
   <a href="https://github.com/luisrodriguez-rgb/TrussStack"><img src="https://img.shields.io/badge/VERSION-4.0%20GA-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="Version 4.0 GA" /></a>
   <a href="https://github.com/luisrodriguez-rgb/TrussStack/blob/main/LICENSE"><img src="https://img.shields.io/badge/LICENCIA-MIT-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="License MIT" /></a>
-  <img src="https://img.shields.io/badge/ENGINE-100%25%20DETERMINISTIC%20TS-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="Deterministic Engine" />
+  <img src="https://img.shields.io/badge/CATALOG-179%20TECHNOLOGIES-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="179 Technologies" />
   <img src="https://img.shields.io/badge/AI%20DEPENDENCY-ZERO%20HALLUCINATIONS-FFD000?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="Zero Hallucinations" />
-  <img src="https://img.shields.io/badge/TESTS-19%20PASSING-00E699?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="19 Tests Passing" />
+  <img src="https://img.shields.io/badge/TESTS-25%20PASSING-00E699?style=for-the-badge&logoColor=090B10&labelColor=090B10" alt="25 Tests Passing" />
 </p>
 
 ---
@@ -67,18 +67,21 @@ Descarga el bundle de producción con documentación formal MADR 3.0, configurac
 
 ## Caracteristicas de la Plataforma
 
-### 1. Topologia de Arquitectura en 5 Capas + 3 Categorias de Infraestructura
-Organización desacoplada con protocolos explícitos de red:
-1. **[ 01 ] Ingress & Client Interface**: Next.js (App Router), Astro, Remix, Vite (React SPA), SvelteKit.
-2. **[ 02 ] Application Engine & Business Logic**: FastAPI, Express, NestJS, Go Fiber, Hono (Edge API).
-3. **[ 03 ] Persistence, Database & State**: PostgreSQL, Supabase Postgres, Neon Serverless, PlanetScale, Cloudflare D1/R2, Turso (libSQL), AWS S3.
-4. **[ 04 ] Third-Party Managed Services**: Auth.js, Clerk Auth, Better Auth, Supabase Auth, Stripe, Lemon Squeezy, Resend, Postmark.
-5. **[ 05 ] Cloud Infrastructure & Observability**: Vercel, Cloudflare Pages, Fly.io, Railway, Hetzner Cloud, Sentry, Better Stack, GitHub Actions.
-
-*Categorias de ampliacion de infraestructura*:
-- **AI & Vector Search**: pgvector (PostgreSQL), LangChain / LlamaIndex, OpenAI / Anthropic APIs, Ollama (Local LLM).
-- **Asynchronous Background Queues**: BullMQ (Redis-backed), RabbitMQ, AWS SQS, Upstash QStash.
-- **Cross-Platform Mobile**: React Native / Expo, Flutter, Capacitor, Tauri Mobile.
+### 1. Catalogo de 179 Tecnologias en 13 Dominios Tecnicos
+Organización modular desacoplada con protocolos explícitos de red y evaluación paramétrica:
+1. **[ 01 ] Ingress & Client Interface (15)**: Next.js, React + Vite, Astro, SvelteKit, Remix, Nuxt, SolidStart, Qwik City, Angular, Vue 3, TanStack Start, HTMX, Preact, Alpine.js, Web Components.
+2. **[ 02 ] Application Engine & Business Logic (18)**: Node.js (Express), NestJS, FastAPI, Go (Gin/Fiber), Hono, Django, Ruby on Rails, Spring Boot, ASP.NET Core, Laravel, Elixir (Phoenix), Rust (Actix-web), Rust (Axum), Bun, Deno, ElysiaJS, Fiber (Go), Fastify.
+3. **[ 03 ] Persistence, Database & State (21)**: PostgreSQL, Supabase Postgres, Neon, PlanetScale, Turso (libSQL), MongoDB, Redis, MySQL, SQLite, DynamoDB, Cassandra, ClickHouse, Dragonfly, Keyv, SurrealDB, Couchbase, ScyllaDB, TiDB, CockroachDB, Nhost, Aiven.
+4. **[ 04 ] Authentication & Identity (12)**: Clerk, Auth.js (NextAuth), Better Auth, Supabase Auth, Auth0, Kinde, Logto, WorkOS, Stytch, Descope, Firebase Auth, Keycloak.
+5. **[ 05 ] Storage & CDN (12)**: Cloudflare R2, AWS S3, Supabase Storage, UploadThing, Cloudinary, Backblaze B2, ImageKit, Uploadcare, Filestack, MinIO, Google Cloud Storage, Azure Blob.
+6. **[ 06 ] Cloud Hosting & Compute (15)**: Vercel, Cloudflare Pages, Render, Fly.io, Railway, Hetzner Cloud, Netlify, Koyeb, Northflank, AWS ECS / Fargate, Google Cloud Run, DigitalOcean App Platform, Scaleway, Linode (Akamai), Coolify.
+7. **[ 07 ] Payments & Monetization (10)**: Stripe, Lemon Squeezy, Paddle, Mercado Pago, PayPal, Chargebee, Braintree, Dodo Payments, Mollie, Adyen.
+8. **[ 08 ] Email & Customer Messaging (12)**: Resend, Loops, Brevo, Postmark, AWS SES, SendGrid, Mailjet, Mailtrap, Plunk, Courier, Customer.io, OneSignal.
+9. **[ 09 ] Observability, APM & Analytics (16)**: Sentry, Better Stack, PostHog, Umami, Grafana, Axiom, Datadog, New Relic, GlitchTip, Cronitor, Checkly, UptimeRobot, Healthchecks.io, Aptabase, Mixpanel, Amplitude.
+10. **[ 10 ] Continuous Delivery & CI/CD (10)**: GitHub Actions, GitLab CI/CD, Vercel CI, CircleCI, Buildkite, Docker Hub, Argo CD, Bitbucket Pipelines, Woodpecker CI, Drone CI.
+11. **[ 11 ] AI, Vector Search & LLM Tooling (19)**: pgvector, Qdrant, Pinecone, Chroma, Milvus, Weaviate, LangChain, LlamaIndex, OpenAI API, Anthropic Claude API, Groq, Mistral AI, Cerebras, Hugging Face, OpenRouter, Langfuse, Portkey, Braintrust, Ollama.
+12. **[ 12 ] Asynchronous Message Queues (10)**: BullMQ, Upstash QStash, RabbitMQ, AWS SQS, Apache Kafka, NATS, Inngest, Temporal, Celery, Sidekiq.
+13. **[ 13 ] Cross-Platform & Mobile (9)**: React Native (Expo), Flutter, Capacitor, Tauri, Swift / SwiftUI (iOS), Kotlin / Jetpack Compose (Android), Electron, Kotlin Multiplatform (KMP), Ionic Framework.
 
 ### 2. Trazador de Flujos de Datos & Protocolos en Tiempo Real
 Simulador interactivo montado sobre el canvas de arquitectura:
@@ -163,21 +166,38 @@ TrussStack/
 ├── src/
 │   ├── engine/                           # Nucleo determinista sin dependencias externas
 │   │   ├── types.ts                      # Tipos de dominio, tecnologia, categorias y especificaciones
-│   │   ├── catalog.ts                    # Catalogo de 50+ tecnologias con metricas y perfiles
-│   │   ├── extendedCatalog.ts            # Extension con categorias de AI, Queues y Mobile
+│   │   ├── catalog.ts                    # Punto de entrada unificado y re-exportacion modular
+│   │   ├── catalog/                      # Catalogo modular de 179 tecnologias por dominio
+│   │   │   ├── builder.ts                # Helper funcional tipado para definicion de tecnologias
+│   │   │   ├── frontend.ts               # Ingress & Client Interface (15 tecnologias)
+│   │   │   ├── backend.ts                # Application Engine & Business Logic (18 tecnologias)
+│   │   │   ├── database.ts               # Persistence, Database & State (21 tecnologias)
+│   │   │   ├── auth.ts                   # Authentication & Identity (12 tecnologias)
+│   │   │   ├── storage.ts                # Storage & CDN (12 tecnologias)
+│   │   │   ├── hosting.ts                # Cloud Hosting & Compute (15 tecnologias)
+│   │   │   ├── payments.ts               # Payments & Monetization (10 tecnologias)
+│   │   │   ├── email.ts                  # Email & Customer Messaging (12 tecnologias)
+│   │   │   ├── monitoring.ts             # Observability, APM & Analytics (16 tecnologias)
+│   │   │   ├── cicd.ts                   # Continuous Delivery & CI/CD (10 tecnologias)
+│   │   │   ├── ai.ts                     # AI, Vector Search & LLM Tooling (19 tecnologias)
+│   │   │   ├── queues.ts                 # Asynchronous Message Queues (10 tecnologias)
+│   │   │   └── mobile.ts                 # Cross-Platform & Mobile (9 tecnologias)
+│   │   ├── extendedCatalog.ts            # Enriquecimiento de telemetria de benchmarks y self-host
 │   │   ├── catalogI18n.ts                # Diccionarios de traduccion de descripciones y fricciones
 │   │   ├── recommender.ts                # Motor de scoring ponderado, compatibilidad y trade-offs
 │   │   ├── costSimulator.ts              # Calculadora dinamica de costes, egress y breakeven
 │   │   ├── flows.ts                      # Modelado de protocolos, flujos y checklist de seguridad
 │   │   ├── adrGenerator.ts               # Generador de registros MADR 3.0 en Markdown
 │   │   ├── linter.ts                     # Motor de auditoria estatica de package.json y CI exporter
-│   │   └── __tests__/                    # Suite de 19 pruebas unitarias automatizadas
+│   │   └── __tests__/                    # Suite de 25 pruebas unitarias automatizadas
 │   │       ├── engine.test.ts            # Tests del recomendador y matrices de friccion
 │   │       ├── costSimulator.test.ts     # Tests de calculo de infraestructura y trampas de egress
 │   │       ├── urlState.test.ts          # Tests de codificacion y decodificacion de blueprints
 │   │       ├── adrGenerator.test.ts      # Tests de generacion de documentos MADR 3.0
 │   │       ├── linter.test.ts            # Tests del auditor de drift arquitectonico
-│   │       └── benchmarks.test.ts        # Tests de telemetria, cold starts y self-hosting
+│   │       ├── benchmarks.test.ts        # Tests de telemetria, cold starts y self-hosting
+│   │       ├── exporters.test.ts         # Tests de exporters (docker, env, json, mermaid, excalidraw)
+│   │       └── catalog.test.ts           # Tests de integridad de >150 tecnologias y 13 categorias
 │   ├── components/
 │   │   ├── home/
 │   │   │   └── LandingHero.tsx           # Pagina de inicio con banner, filosofia y blueprints

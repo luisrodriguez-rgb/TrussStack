@@ -1,0 +1,578 @@
+{
+  "nextjs": {
+    "vercel": {
+      "targetId": "vercel",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Integración nativa con zero-config, preview branches y Edge Middleware optimizado.",
+      "fitDelta": 10
+    },
+    "supabase-db": {
+      "targetId": "supabase-db",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "SSR seguro con `@supabase/ssr` en Server Components y Server Actions.",
+      "fitDelta": 8
+    },
+    "cloudflare-pages": {
+      "targetId": "cloudflare-pages",
+      "relation": "compatible",
+      "frictionLevel": "low",
+      "explanation": "Requiere adaptador OpenNext para características avanzadas de Node.js.",
+      "fitDelta": 2
+    }
+  },
+  "react-vite": {
+    "cloudflare-pages": {
+      "targetId": "cloudflare-pages",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Alojamiento global ilimitado con 0 coste de egress.",
+      "fitDelta": 8
+    },
+    "fastapi": {
+      "targetId": "fastapi",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Desacoplamiento limpio entre UI reactiva y API tipada de alto rendimiento.",
+      "fitDelta": 7
+    }
+  },
+  "astro": {
+    "cloudflare-pages": {
+      "targetId": "cloudflare-pages",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Despliegue SSG inmediato con latencia global cercana a 0 ms.",
+      "fitDelta": 10
+    },
+    "authjs": {
+      "targetId": "authjs",
+      "relation": "friction",
+      "frictionLevel": "high",
+      "explanation": "Astro está orientado a contenido estático; integrar sesiones dinámicas con Auth.js añade complejidad.",
+      "fitDelta": -12
+    }
+  },
+  "sveltekit": {
+    "cloudflare-pages": {
+      "targetId": "cloudflare-pages",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Adaptador oficial `@sveltejs/adapter-cloudflare` de primera clase.",
+      "fitDelta": 8
+    }
+  },
+  "remix": {
+    "flyio": {
+      "targetId": "flyio",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Despliegue cercano a usuarios en contenedores Docker con excelente rendimiento.",
+      "fitDelta": 7
+    }
+  },
+  "nuxt": {
+    "supabase-db": {
+      "targetId": "supabase-db",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Módulo oficial `@nuxtjs/supabase` con autenticación y llamadas reactivas.",
+      "fitDelta": 7
+    }
+  },
+  "express": {
+    "postgres": {
+      "targetId": "postgres",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Conexión estándar con Prisma, Drizzle o pg pool.",
+      "fitDelta": 6
+    }
+  },
+  "nestjs": {
+    "postgres": {
+      "targetId": "postgres",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Soporte TypeORM y Prisma oficial con inyección de repositorios.",
+      "fitDelta": 8
+    }
+  },
+  "fastapi": {
+    "postgres": {
+      "targetId": "postgres",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Excelente rendimiento con asyncpg y SQLAlchemy 2.0.",
+      "fitDelta": 8
+    },
+    "authjs": {
+      "targetId": "authjs",
+      "relation": "friction",
+      "frictionLevel": "medium",
+      "explanation": "NextAuth está diseñado para ecosistemas JS/Node; conectarlo a FastAPI requiere validar JWTs manualmente.",
+      "fitDelta": -8
+    }
+  },
+  "go-gin": {
+    "postgres": {
+      "targetId": "postgres",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Drivers pgx de Go extremadamente rápidos y eficientes.",
+      "fitDelta": 9
+    },
+    "hetzner-vps": {
+      "targetId": "hetzner-vps",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Un VPS de €4/mes puede soportar millones de peticiones con un binario Go.",
+      "fitDelta": 9
+    }
+  },
+  "hono": {
+    "cloudflare-pages": {
+      "targetId": "cloudflare-pages",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Integración perfecta en Cloudflare Workers & Pages Functions.",
+      "fitDelta": 10
+    },
+    "turso": {
+      "targetId": "turso",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Edge compute con edge database: latencias globales por debajo de 20ms.",
+      "fitDelta": 9
+    }
+  },
+  "django": {
+    "postgres": {
+      "targetId": "postgres",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "El soporte de PostgreSQL en Django es el estándar de oro en Python.",
+      "fitDelta": 10
+    }
+  },
+  "supabase-db": {
+    "supabase-auth": {
+      "targetId": "supabase-auth",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Integrado directamente en la tabla auth.users de Postgres con RLS nativo.",
+      "fitDelta": 10
+    },
+    "supabase-storage": {
+      "targetId": "supabase-storage",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Políticas de almacenamiento sincronizadas con el mismo RLS de la base de datos.",
+      "fitDelta": 10
+    },
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Soporte oficial para cookies y Server Components en Next.js App Router.",
+      "fitDelta": 8
+    }
+  },
+  "postgres": {
+    "hetzner-vps": {
+      "targetId": "hetzner-vps",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Rendimiento bestial por precio mínimo en hardware dedicado o VPS.",
+      "fitDelta": 9
+    }
+  },
+  "neon": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Driver `@neondatabase/serverless` optimizado para Edge y Serverless sin agotar conexiones.",
+      "fitDelta": 9
+    },
+    "clerk": {
+      "targetId": "clerk",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Combinación perfecta: Clerk para Auth de lujo + Neon para base de datos serverless pura.",
+      "fitDelta": 9
+    }
+  },
+  "planetscale": {
+    "vercel": {
+      "targetId": "vercel",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Integración en el marketplace de Vercel con connection pooling integrado.",
+      "fitDelta": 7
+    }
+  },
+  "turso": {
+    "hono": {
+      "targetId": "hono",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Sinergia perfecta en Cloudflare Workers: lectura local en memoria.",
+      "fitDelta": 10
+    }
+  },
+  "mongodb": {
+    "express": {
+      "targetId": "express",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "El clásico stack MERN con Mongoose.",
+      "fitDelta": 7
+    }
+  },
+  "redis": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Rate limiting en Edge Middleware con `@upstash/ratelimit`.",
+      "fitDelta": 8
+    }
+  },
+  "supabase-auth": {
+    "supabase-db": {
+      "targetId": "supabase-db",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Integración nativa con SQL y RLS.",
+      "fitDelta": 10
+    }
+  },
+  "clerk": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "El middleware de `@clerk/nextjs` protege rutas en 3 líneas de código.",
+      "fitDelta": 10
+    },
+    "neon": {
+      "targetId": "neon",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Separación limpia de responsabilidades: Clerk para Auth y Neon para datos relacionales.",
+      "fitDelta": 9
+    }
+  },
+  "auth0": {
+    "nestjs": {
+      "targetId": "nestjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Passport.js y validación de tokens JWT en NestJS.",
+      "fitDelta": 7
+    }
+  },
+  "better-auth": {
+    "neon": {
+      "targetId": "neon",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Se conecta limpiamente mediante Drizzle o Prisma sobre PostgreSQL serverless.",
+      "fitDelta": 9
+    },
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Integración fluida con Server Components y cookies seguras.",
+      "fitDelta": 9
+    }
+  },
+  "authjs": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Diseñado históricamente como NextAuth dentro del ecosistema Next.",
+      "fitDelta": 9
+    },
+    "fastapi": {
+      "targetId": "fastapi",
+      "relation": "friction",
+      "frictionLevel": "medium",
+      "explanation": "Fricción: Validar tokens de Auth.js en FastAPI requiere sincronizar secretos y verificar JWKs.",
+      "fitDelta": -8
+    }
+  },
+  "cloudflare-r2": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Generación de URLs prefirmadas de subida directa desde el navegador.",
+      "fitDelta": 9
+    }
+  },
+  "aws-s3": {
+    "fastapi": {
+      "targetId": "fastapi",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Uso nativo con `boto3` en Python.",
+      "fitDelta": 8
+    }
+  },
+  "supabase-storage": {
+    "supabase-db": {
+      "targetId": "supabase-db",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Seguridad integrada con políticas SQL de RLS.",
+      "fitDelta": 10
+    }
+  },
+  "uploadthing": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Diseñado específicamente para Next.js App Router.",
+      "fitDelta": 9
+    }
+  },
+  "vercel": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Creadores de Next.js: la compatibilidad es siempre perfecta y de día cero.",
+      "fitDelta": 10
+    },
+    "fastapi": {
+      "targetId": "fastapi",
+      "relation": "friction",
+      "frictionLevel": "medium",
+      "explanation": "Vercel soporta Python mediante serverless, pero no es óptimo para APIs complejas con background tasks.",
+      "fitDelta": -7
+    }
+  },
+  "cloudflare-pages": {
+    "astro": {
+      "targetId": "astro",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "El emparejamiento perfecto para sitios ultrarrápidos con 0 costo de infraestructura.",
+      "fitDelta": 10
+    },
+    "hono": {
+      "targetId": "hono",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Hono nació pensando en Cloudflare Workers: rendimiento nativo.",
+      "fitDelta": 10
+    }
+  },
+  "railway": {
+    "fastapi": {
+      "targetId": "fastapi",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Despliegue inmediato de FastAPI con Uvicorn sin configurar servidores.",
+      "fitDelta": 9
+    },
+    "nestjs": {
+      "targetId": "nestjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Excelente soporte para servidores Node de larga duración.",
+      "fitDelta": 8
+    }
+  },
+  "render": {
+    "express": {
+      "targetId": "express",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Despliegue directo desde git.",
+      "fitDelta": 7
+    }
+  },
+  "flyio": {
+    "remix": {
+      "targetId": "remix",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Soporte oficial de plantillas Remix preparadas para Fly.",
+      "fitDelta": 8
+    }
+  },
+  "hetzner-vps": {
+    "go-gin": {
+      "targetId": "go-gin",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Rendimiento bestial: soporta millones de visitas por mes por €4.",
+      "fitDelta": 10
+    },
+    "postgres": {
+      "targetId": "postgres",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Base de datos PostgreSQL en NVMe sin límites artificiales de cómputo.",
+      "fitDelta": 9
+    }
+  },
+  "stripe": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "SDK oficial de Node/TS con webhooks en Route Handlers.",
+      "fitDelta": 10
+    }
+  },
+  "lemonsqueezy": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "SDK `@lemonsqueezy/lemonsqueezy.js` con webhooks tipados.",
+      "fitDelta": 9
+    }
+  },
+  "paddle": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Overlay Checkout integrado.",
+      "fitDelta": 8
+    }
+  },
+  "mercadopago": {
+    "express": {
+      "targetId": "express",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "SDK oficial `mercadopago` en Node.js.",
+      "fitDelta": 7
+    }
+  },
+  "resend": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Integración perfecta con React Email en Server Actions.",
+      "fitDelta": 10
+    }
+  },
+  "postmark": {
+    "nestjs": {
+      "targetId": "nestjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Cliente oficial de Node con webhooks de rebotes automáticos.",
+      "fitDelta": 7
+    }
+  },
+  "aws-ses": {
+    "fastapi": {
+      "targetId": "fastapi",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Envío eficiente mediante `boto3`.",
+      "fitDelta": 8
+    }
+  },
+  "sendgrid": {
+    "django": {
+      "targetId": "django",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Backend SMTP clásico de Django.",
+      "fitDelta": 7
+    }
+  },
+  "sentry": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Wizard de instalación `@sentry/nextjs` con subida automática de sourcemaps.",
+      "fitDelta": 10
+    }
+  },
+  "posthog": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Captura automática de eventos de navegación en Next.js.",
+      "fitDelta": 9
+    }
+  },
+  "betterstack": {
+    "vercel": {
+      "targetId": "vercel",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Chequeo continuo de los endpoints y avisos de incidentes.",
+      "fitDelta": 8
+    }
+  },
+  "datadog": {
+    "nestjs": {
+      "targetId": "nestjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Agente DD-Trace para perfilado de transacciones.",
+      "fitDelta": 7
+    }
+  },
+  "github-actions": {
+    "cloudflare-pages": {
+      "targetId": "cloudflare-pages",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Wrangler Action para despliegues automatizados.",
+      "fitDelta": 9
+    },
+    "vercel": {
+      "targetId": "vercel",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Validación de tests y tipos antes de permitir el merge a producción.",
+      "fitDelta": 9
+    }
+  },
+  "gitlab-ci": {
+    "hetzner-vps": {
+      "targetId": "hetzner-vps",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Conexión vía SSH o runner nativo en el servidor.",
+      "fitDelta": 8
+    }
+  },
+  "vercel-ci": {
+    "nextjs": {
+      "targetId": "nextjs",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Construido el uno para el otro.",
+      "fitDelta": 10
+    }
+  },
+  "docker-hub": {
+    "hetzner-vps": {
+      "targetId": "hetzner-vps",
+      "relation": "natural",
+      "frictionLevel": "none",
+      "explanation": "Pull instantáneo de la imagen Docker en el servidor de producción.",
+      "fitDelta": 9
+    }
+  }
+}

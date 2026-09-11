@@ -46,12 +46,17 @@ export type LicenseType =
   | 'BSL'
   | 'Proprietary'
   | 'AGPL-3.0'
+  | 'GPL-3.0'
+  | 'LGPL-3.0'
   | 'BSD-3-Clause'
+  | 'BSD-2-Clause'
   | 'SSPL'
   | 'RSALv2'
   | 'ISC'
   | 'PostgreSQL'
-  | 'MPL-2.0';
+  | 'MPL-2.0'
+  | 'FSL-1.1-Apache-2.0'
+  | 'Polyform-Small-Business';
 
 export type CostTier = 'free' | 'low' | 'medium' | 'high';
 
