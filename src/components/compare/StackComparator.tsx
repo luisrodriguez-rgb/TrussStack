@@ -177,6 +177,147 @@ export const ARCHITECTURE_ARCHETYPES: ArchitectureArchetype[] = [
     verdictEn:
       'Unbeatable for blogs, documentation hubs, headless e-commerce, and public-facing SEO platforms.',
   },
+  {
+    id: 'ai_agent_pipeline',
+    code: 'ARCH-04',
+    name: 'Autonomous AI Agent & Vector Pipeline',
+    nameEn: 'Autonomous AI Agent & Vector Pipeline',
+    tagline: 'Workers asíncronos para tareas de LLM, embeddings semánticos y persistencia vectorial.',
+    taglineEn: 'Asynchronous task workers for LLM pipelines, semantic embeddings, and vector indexing.',
+    slots: {
+      frontend: 'react-vite',
+      backend: 'fastapi',
+      database: 'postgres',
+      auth: 'better-auth',
+      storage: 'cloudflare-r2',
+      hosting: 'hetzner-vps',
+      payments: 'stripe',
+      email: 'postmark',
+      monitoring: 'betterstack',
+      cicd: 'github-actions',
+      ai: 'pgvector',
+      queues: 'bullmq',
+      mobile: null,
+    },
+    costZero: '~$18 / mes (VPS Hetzner CPX31)',
+    costZeroEn: '~$18 / mo (Hetzner CPX31 VPS)',
+    costTenK: '~$40 - $85 / mes (VPS + API Inference tokens)',
+    costTenKEn: '~$40 - $85 / mo (VPS + API Inference tokens)',
+    attributes: {
+      dx: 82,
+      seo: 45,
+      speed: 72,
+      scale: 94,
+      simplicity: 65,
+      portability: 92,
+    },
+    sacrifices: [
+      'Sacrificas serverless efímero: necesitas servidores persistentes para workers y memoria de procesos.',
+      'Sacrificas predictibilidad de costes si dependes de tokens de APIs externas de LLMs sin caching.',
+    ],
+    sacrificesEn: [
+      'Sacrifices pure ephemeral serverless: requires persistent processes for job workers and memory.',
+      'Sacrifices cost predictability if consuming external closed LLM tokens without caching.',
+    ],
+    verdict:
+      'La arquitectura de referencia para agentes autónomos con flujos multietapa, RAG y extracción de datos.',
+    verdictEn:
+      'The golden pattern for multi-step agent loops, semantic retrieval, and asynchronous extraction.',
+  },
+  {
+    id: 'event_driven_microservices',
+    code: 'ARCH-05',
+    name: 'Event-Driven Async Microservices & Analytics',
+    nameEn: 'Event-Driven Async Microservices & Analytics',
+    tagline: 'Desacoplamiento total por eventos, tolerancia a particiones y almacenamiento columnar.',
+    taglineEn: 'Fully event-driven choreography, partition fault tolerance, and columnar analytics.',
+    slots: {
+      frontend: 'react-vite',
+      backend: 'go-gin',
+      database: 'clickhouse',
+      auth: 'better-auth',
+      storage: 'cloudflare-r2',
+      hosting: 'hetzner-vps',
+      payments: null,
+      email: null,
+      monitoring: 'grafana',
+      cicd: 'github-actions',
+      ai: null,
+      queues: 'kafka',
+      mobile: null,
+    },
+    costZero: '~$25 / mes (VPS con Docker Compose)',
+    costZeroEn: '~$25 / mo (VPS with Docker Compose)',
+    costTenK: '~$35 - $60 / mes (ClickHouse comprimido + Redpanda)',
+    costTenKEn: '~$35 - $60 / mo (Compressed ClickHouse + Redpanda)',
+    attributes: {
+      dx: 70,
+      seo: 30,
+      speed: 65,
+      scale: 100,
+      simplicity: 48,
+      portability: 95,
+    },
+    sacrifices: [
+      'Sacrificas consistencia inmediata: las lecturas analíticas son eventualmente consistentes.',
+      'Sacrificas simplicidad mental y operativa: depurar transacciones distribuidas requiere trazado distribuido.',
+    ],
+    sacrificesEn: [
+      'Sacrifices immediate consistency: analytical stream consumer views are eventually consistent.',
+      'Sacrifices mental and operational simplicity: distributed tracing is required for debugging.',
+    ],
+    verdict:
+      'Indispensable para ingesta de millones de eventos diarios, streaming de telemetría y OLAP.',
+    verdictEn:
+      'Crucial for millions of daily ingestion events, telemetry streaming, and high-volume OLAP.',
+  },
+  {
+    id: 'local_first_replicated',
+    code: 'ARCH-06',
+    name: 'Local-First Offline-Ready Replicated',
+    nameEn: 'Local-First Offline-Ready Replicated',
+    tagline: 'Latencia de 0ms en cliente con réplica embebida, resiliencia offline y sincronización en background.',
+    taglineEn: 'Zero-latency client interaction with embedded local replicas, offline resilience, and background sync.',
+    slots: {
+      frontend: 'react-vite',
+      backend: 'hono',
+      database: 'turso',
+      auth: 'better-auth',
+      storage: 'cloudflare-r2',
+      hosting: 'cloudflare-pages',
+      payments: 'lemonsqueezy',
+      email: 'resend',
+      monitoring: 'betterstack',
+      cicd: 'github-actions',
+      ai: null,
+      queues: null,
+      mobile: 'react-native-expo',
+    },
+    costZero: '$0 / mes (100% Free Tier)',
+    costZeroEn: '$0 / mo (100% Free Tier)',
+    costTenK: '$0 - $12 / mes (Turso Free Tier + Cloudflare Pages)',
+    costTenKEn: '$0 - $12 / mo (Turso Free Tier + Cloudflare Pages)',
+    attributes: {
+      dx: 86,
+      seo: 50,
+      speed: 85,
+      scale: 92,
+      simplicity: 82,
+      portability: 90,
+    },
+    sacrifices: [
+      'Sacrificas sincronización de estado trivial: resolver conflictos concurrentes exige CRDTs o timestamps deterministas.',
+      'Sacrificas queries centralizadas complejas de reporting directo sobre todas las bases de datos descentralizadas.',
+    ],
+    sacrificesEn: [
+      'Sacrifices naive state sync: concurrent updates require CRDT conflict resolution or vector clocks.',
+      'Sacrifices direct centralized SQL queries across multiple decentralized client replicas.',
+    ],
+    verdict:
+      'La mejor experiencia de usuario para aplicaciones interactivas, móviles y herramientas de productividad offline.',
+    verdictEn:
+      'The definitive UX pattern for deeply responsive tools, mobile apps, and offline productivity suites.',
+  },
 ];
 
 interface StackComparatorProps {
@@ -201,7 +342,7 @@ export const StackComparator: React.FC<StackComparatorProps> = ({ onLoadStack })
       <div className="nutrition-panel" style={{ marginBottom: '2rem' }}>
         <div className="nutrition-headline-group">
           <div className="nutrition-stamp">
-            <span className="nutrition-stamp-num">3X</span>
+            <span className="nutrition-stamp-num">6X</span>
             <span className="nutrition-stamp-lbl">VS</span>
           </div>
           <div className="nutrition-headline">
