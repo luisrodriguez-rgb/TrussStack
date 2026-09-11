@@ -820,6 +820,220 @@ export const TECH_I18N_EN: Record<string, TechTranslationData> = {
       'Sacrifices turnkey managed frontend deployment speeds.',
     ],
   },
+
+  // AI & VECTOR DATABASES
+  pinecone: {
+    tagline: 'Fully managed serverless vector database engineered for semantic search and RAG.',
+    description: 'Cloud-native vector database offering ultra-low query latency, automated index management, and serverless scaling to billions of vectors.',
+    freeTierLimits: 'Starter tier with up to 100,000 vectors and 1 index for free.',
+    pros: [
+      'Zero infrastructure overhead: instant serverless provisioning and automatic indexing.',
+      'Optimized semantic filtering with metadata namespaces for multi-tenant RAG.',
+      'High-throughput similarity search with sub-25ms response budgets.',
+    ],
+    cons: [
+      'Proprietary cloud API: high vendor lock-in with closed-source engine.',
+      'Query and vector volume costs scale rapidly in large-scale production.',
+    ],
+    sacrifices: [
+      'Sacrifices local offline execution and freedom to self-host.',
+    ],
+  },
+  qdrant: {
+    tagline: 'Open-source Rust vector search engine with rich payload filtering and distributed scaling.',
+    description: 'High-performance vector similarity search engine written in Rust. Supports approximate nearest neighbor search with complex payload filters.',
+    freeTierLimits: '1GB free cluster on Qdrant Cloud or 100% free self-hosted via Docker.',
+    pros: [
+      'Open-source Apache-2.0 license with zero vendor lock-in.',
+      'Blazing-fast execution speed and low memory footprint powered by Rust.',
+      'Deep payload filtering directly inside vector search queries.',
+    ],
+    cons: [
+      'Self-hosting requires memory capacity planning for HNSW graph indexes.',
+    ],
+    sacrifices: [
+      'Sacrifices turnkey zero-maintenance convenience if choosing self-hosted deployment.',
+    ],
+  },
+  chroma: {
+    tagline: 'Developer-first open-source embedding database designed for rapid AI prototyping.',
+    description: 'Embedding database built for developer ergonomics, featuring native Python and JS clients, local persistence, and LangChain integration.',
+    freeTierLimits: '100% free and open-source for local and Docker execution.',
+    pros: [
+      'Minimalist API allowing you to bootstrap vector search in under 5 lines of code.',
+      'Runs locally with zero external server dependencies for offline development.',
+      'Rich ecosystem integration with LangChain, LlamaIndex, and Ollama.',
+    ],
+    cons: [
+      'Less mature distributed clustering compared to Qdrant or Milvus.',
+    ],
+    sacrifices: [
+      'Sacrifices multi-region horizontal partitioning for billion-scale vectors.',
+    ],
+  },
+  pgvector: {
+    tagline: 'Native vector similarity search for PostgreSQL: unify relational data and embeddings in one ACID engine.',
+    description: 'Official extension for PostgreSQL enabling vector storage and similarity search (HNSW and IVFFlat) using standard SQL queries.',
+    freeTierLimits: 'Included natively in Supabase, Neon, and local PostgreSQL installations.',
+    pros: [
+      'Architectural consolidation: single database for users, relational tables, and vectors.',
+      'ACID transaction guarantees and Row Level Security (RLS) policies applied to vector search.',
+      'Zero new infrastructure or API subscriptions required.',
+    ],
+    cons: [
+      'High-volume vector search queries compete for CPU and RAM with OLTP workloads.',
+    ],
+    sacrifices: [
+      'Sacrifices extreme throughput optimizations of dedicated standalone vector engines.',
+    ],
+  },
+  langchain: {
+    tagline: 'Modular orchestration framework for composable LLM chains, autonomous agents, and RAG pipelines.',
+    description: 'Framework providing standardized abstractions for LLM providers, prompt templates, vector store retrievers, and tool-calling agent loops.',
+    freeTierLimits: '100% open-source library (underlying LLM API token consumption is billed by providers).',
+    pros: [
+      'Consistent abstraction across OpenAI, Anthropic, Gemini, Groq, and local models.',
+      'Vast library of pre-built integrations with document loaders and vector stores.',
+    ],
+    cons: [
+      'Heavy abstractions can introduce redundant HTTP calls and complicate debugging.',
+    ],
+    sacrifices: [
+      'Sacrifices lightweight simplicity compared to direct native REST SDK calls.',
+    ],
+  },
+
+  // QUEUES & BACKGROUND WORKERS
+  'upstash-qstash': {
+    tagline: '100% serverless HTTP message queue and task scheduler without persistent sockets.',
+    description: 'HTTP-based message broker designed specifically for Serverless and Edge runtimes (Vercel, Cloudflare, AWS Lambda).',
+    freeTierLimits: '500 messages per day for free; $1 per 100,000 messages thereafter.',
+    pros: [
+      'Zero persistent TCP connections: delivers jobs via standard HTTP POST webhooks.',
+      'Automated exponential retries, deduplication, and scheduled cron execution.',
+      'Cryptographic HMAC payload verification ensuring webhook security.',
+    ],
+    cons: [
+      'Not suited for continuous high-frequency streaming workloads (>100k events/sec).',
+    ],
+    sacrifices: [
+      'Sacrifices fine-grained low-level AMQP exchange controls.',
+    ],
+  },
+  bullmq: {
+    tagline: 'The fastest, battle-tested distributed message queue for Node.js backed by Redis.',
+    description: 'Production-grade queue and background worker toolkit for Node.js and TypeScript with atomic Redis persistence.',
+    freeTierLimits: '100% open-source MIT library. Runs on any local or managed Redis instance.',
+    pros: [
+      'Massive throughput: tens of thousands of jobs per second with sub-millisecond overhead.',
+      'Advanced job priority, concurrency limits, rate limiting, and parent-child workflows.',
+      'Complete open-source portability across any cloud or VPS provider.',
+    ],
+    cons: [
+      'Requires persistent Node.js worker processes (cannot run on pure ephemeral Edge).',
+    ],
+    sacrifices: [
+      'Sacrifices pure serverless ergonomics: requires a dedicated worker VM or container.',
+    ],
+  },
+  inngest: {
+    tagline: 'Event-driven durable execution engine with step functions for TypeScript.',
+    description: 'Platform for writing reliable background jobs and multi-step workflows with automated retries, concurrency control, and delays.',
+    freeTierLimits: 'Hobby plan with up to 25,000 monthly step executions for free.',
+    pros: [
+      'Write durable workflows directly as code (`step.run`, `step.sleep`).',
+      'Zero queue infrastructure maintenance: seamless compatibility with Next.js App Router.',
+      'Real-time visualization and execution telemetry for every workflow step.',
+    ],
+    cons: [
+      'Step-based pricing model scales with execution frequency.',
+    ],
+    sacrifices: [
+      'Sacrifices low-level message broker tuning.',
+    ],
+  },
+  rabbitmq: {
+    tagline: 'The world-standard enterprise message broker for decoupled architectures and microservices.',
+    description: 'Robust messaging system supporting AMQP 0-9-1, MQTT, STOMP, and flexible exchange routing (direct, topic, fanout).',
+    freeTierLimits: '100% open-source on Docker/VPS or managed plans on CloudAMQP.',
+    pros: [
+      'Sophisticated message routing, consumer acknowledgments, and dead-letter exchanges.',
+      'Decade-long battle-tested enterprise track record across banking and high-scale systems.',
+    ],
+    cons: [
+      'Steeper learning curve and cluster operational maintenance overhead.',
+    ],
+    sacrifices: [
+      'Sacrifices initial setup simplicity compared to simple HTTP webhooks.',
+    ],
+  },
+
+  // MOBILE & DESKTOP
+  'react-native-expo': {
+    tagline: 'The modern standard for cross-platform native iOS and Android apps with React and TypeScript.',
+    description: 'Cross-platform mobile development ecosystem with instant Fast Refresh, cloud build pipelines (EAS), and universal API bridges.',
+    freeTierLimits: 'Framework is 100% free; EAS Build provides monthly free cloud build tiers.',
+    pros: [
+      'Share up to 90% of business logic, state, and TypeScript definitions with your web app.',
+      'Expo Router provides intuitive file-based routing identical to Next.js App Router.',
+      'Pre-configured native modules without requiring mandatory local Xcode/Android Studio setups.',
+    ],
+    cons: [
+      'Slightly higher memory overhead compared to raw pure C++ or native Swift/Kotlin.',
+    ],
+    sacrifices: [
+      'Sacrifices absolute bare-metal memory performance for 10x developer shipping speed.',
+    ],
+  },
+  flutter: {
+    tagline: 'Google multi-platform framework compiling to native ARM machine code from a single Dart codebase.',
+    description: 'UI toolkit rendering every pixel directly to the GPU using Impeller/Skia for iOS, Android, Desktop, and Web.',
+    freeTierLimits: '100% free and open-source by Google.',
+    pros: [
+      'Consistent 60/120 FPS render performance guaranteed by direct GPU canvas drawing.',
+      'Comprehensive suite of built-in Cupertino and Material Design widgets.',
+    ],
+    cons: [
+      'Requires learning Dart, fragmenting team tooling if your web application uses TypeScript.',
+      'Initial application binary size is larger than lightweight React Native bundles.',
+    ],
+    sacrifices: [
+      'Sacrifices code sharing with existing React or Next.js web application codebases.',
+    ],
+  },
+  tauri: {
+    tagline: 'Modern, ultra-lightweight, and secure Electron alternative with Rust backend and web frontend.',
+    description: 'Framework for building desktop applications (<15MB) leveraging native OS webviews instead of bundling full Chromium instances.',
+    freeTierLimits: '100% open-source MIT license.',
+    pros: [
+      'Insignificant memory footprint (30-60MB RAM vs 500+ MB on Electron).',
+      'Tiny distribution bundles (<15MB) utilizing native OS webview runtimes.',
+      'Robust security isolation with strict Rust IPC bridge permissions.',
+    ],
+    cons: [
+      'Native webview rendering can exhibit subtle cross-platform CSS differences.',
+    ],
+    sacrifices: [
+      'Sacrifices the convenience of a bundled identical Chromium browser runtime.',
+    ],
+  },
+  electron: {
+    tagline: 'The industry standard for cross-platform desktop software powered by Node.js and Chromium.',
+    description: 'Desktop application engine powering VS Code, Slack, Discord, and Figma using standard web technologies.',
+    freeTierLimits: '100% open-source MIT license.',
+    pros: [
+      'Absolute guarantee of pixel-identical rendering across macOS, Windows, and Linux.',
+      'Decade of battle-tested stability powering world-class enterprise applications.',
+      'Unrestricted access to the entire Node.js ecosystem in the desktop main process.',
+    ],
+    cons: [
+      'High memory and CPU resource footprint from embedding dedicated Chromium instances.',
+      'Installer bundle size typically exceeds 80 - 120 MB.',
+    ],
+    sacrifices: [
+      'Sacrifices low hardware resource consumption on end-user machines.',
+    ],
+  },
 };
 
 /**

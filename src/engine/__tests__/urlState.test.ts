@@ -38,6 +38,9 @@ describe('TrussStack URL State Serialization', () => {
     email: 'resend',
     monitoring: 'betterstack',
     cicd: 'github-actions',
+    ai: null,
+    queues: null,
+    mobile: null,
   };
 
   it('deberia codificar y decodificar una spec y slots exactamente', () => {

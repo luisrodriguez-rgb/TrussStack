@@ -179,6 +179,9 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
     email: null,
     monitoring: null,
     cicd: null,
+    ai: null,
+    queues: null,
+    mobile: null,
   };
 
   // Función interna para escoger la mejor tecnología de una categoría
@@ -254,6 +257,14 @@ export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): St
     slots.cicd = 'vercel-ci';
   } else {
     slots.cicd = 'github-actions';
+  }
+
+  // 11. Queues & Background Workers
+  if (spec.constraints.needsBackgroundJobs) {
+    const queueCandidates = TECHNOLOGIES.filter((t) => t.category === 'queues');
+    if (queueCandidates.length > 0) {
+      slots.queues = pickBest('queues').id;
+    }
   }
 
   // Cálculo del Fit Score general de la arquitectura completa

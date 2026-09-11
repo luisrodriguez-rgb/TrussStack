@@ -1,6 +1,7 @@
 import type { Technology } from './types';
+import { NEW_TECHNOLOGIES, enrichTechnology } from './extendedCatalog';
 
-export const TECHNOLOGIES: Technology[] = [
+const BASE_TECHNOLOGIES: Technology[] = [
   // ==========================================
   // FRONTEND (6)
   // ==========================================
@@ -2852,6 +2853,11 @@ export const TECHNOLOGIES: Technology[] = [
       },
     },
   },
+];
+
+export const TECHNOLOGIES: Technology[] = [
+  ...BASE_TECHNOLOGIES.map(enrichTechnology),
+  ...NEW_TECHNOLOGIES,
 ];
 
 export const TECH_BY_ID: Record<string, Technology> = TECHNOLOGIES.reduce(

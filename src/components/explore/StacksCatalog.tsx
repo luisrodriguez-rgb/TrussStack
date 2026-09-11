@@ -56,6 +56,9 @@ export const STACK_BLUEPRINTS: StackBlueprint[] = [
       email: 'resend',
       monitoring: 'sentry',
       cicd: 'vercel-ci',
+      ai: null,
+      queues: null,
+      mobile: 'react-native-expo',
     },
   },
   {
@@ -91,6 +94,9 @@ export const STACK_BLUEPRINTS: StackBlueprint[] = [
       email: null,
       monitoring: 'betterstack',
       cicd: 'github-actions',
+      ai: null,
+      queues: null,
+      mobile: null,
     },
   },
   {
@@ -126,6 +132,9 @@ export const STACK_BLUEPRINTS: StackBlueprint[] = [
       email: 'resend',
       monitoring: 'sentry',
       cicd: 'github-actions',
+      ai: null,
+      queues: null,
+      mobile: null,
     },
   },
   {
@@ -161,6 +170,9 @@ export const STACK_BLUEPRINTS: StackBlueprint[] = [
       email: 'resend',
       monitoring: 'sentry',
       cicd: 'vercel-ci',
+      ai: null,
+      queues: 'bullmq',
+      mobile: null,
     },
   },
   {
@@ -196,6 +208,9 @@ export const STACK_BLUEPRINTS: StackBlueprint[] = [
       email: 'postmark',
       monitoring: 'betterstack',
       cicd: 'github-actions',
+      ai: 'pgvector',
+      queues: 'bullmq',
+      mobile: null,
     },
   },
   {
@@ -231,6 +246,9 @@ export const STACK_BLUEPRINTS: StackBlueprint[] = [
       email: 'resend',
       monitoring: 'betterstack',
       cicd: 'github-actions',
+      ai: null,
+      queues: null,
+      mobile: null,
     },
   },
 ];
