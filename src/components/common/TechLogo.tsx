@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface TechLogoProps {
   id: string;
@@ -6,7 +6,109 @@ interface TechLogoProps {
   className?: string;
 }
 
+const FAVICON_MAP: Record<string, string> = {
+  // Database / State
+  'supabase-db': '/favicons/supabase.com.webp',
+  'supabase-auth': '/favicons/supabase.com.webp',
+  'supabase-storage': '/favicons/supabase.com.webp',
+  neon: '/favicons/neon.tech.webp',
+  turso: '/favicons/turso.tech.webp',
+  mongodb: '/favicons/mongodb.com.webp',
+  convex: '/favicons/convex.dev.png',
+  cockroachdb: '/favicons/cockroachlabs.com.webp',
+  tidb: '/favicons/pingcap.com.png',
+  nhost: '/favicons/nhost.io.webp',
+  aiven: '/favicons/aiven.io.webp',
+  'upstash-redis': '/favicons/upstash.com.webp',
+  'upstash-qstash': '/favicons/upstash.com.webp',
+
+  // Auth
+  clerk: '/favicons/clerk.com.webp',
+  auth0: '/favicons/auth0.com.webp',
+  kinde: '/favicons/kinde.com.webp',
+  logto: '/favicons/logto.io.webp',
+  workos: '/favicons/workos.com.webp',
+  stytch: '/favicons/stytch.com.webp',
+  descope: '/favicons/descope.com.webp',
+
+  // Hosting / Edge / Storage
+  vercel: '/favicons/vercel.com.webp',
+  'cloudflare-pages': '/favicons/cloudflare.com.webp',
+  'cloudflare-r2': '/favicons/cloudflare.com.webp',
+  render: '/favicons/render.com.svg',
+  netlify: '/favicons/netlify.com.webp',
+  koyeb: '/favicons/koyeb.com.png',
+  northflank: '/favicons/northflank.com.webp',
+  'deno-deploy': '/favicons/deno.com.webp',
+  backblaze: '/favicons/backblaze.com.png',
+  uploadthing: '/favicons/uploadthing.com.png',
+  cloudinary: '/favicons/cloudinary.com.webp',
+  imagekit: '/favicons/imagekit.io.webp',
+  uploadcare: '/favicons/uploadcare.com.webp',
+  filestack: '/favicons/filestack.com.png',
+
+  // Email
+  resend: '/favicons/resend.com.webp',
+  loops: '/favicons/loops.so.png',
+  brevo: '/favicons/brevo.com.webp',
+  mailjet: '/favicons/mailjet.com.webp',
+  mailtrap: '/favicons/mailtrap.io.webp',
+  plunk: '/favicons/useplunk.com.png',
+  courier: '/favicons/courier.com.png',
+
+  // Monitoring
+  sentry: '/favicons/sentry.io.webp',
+  betterstack: '/favicons/betterstack.com.webp',
+  posthog: '/favicons/posthog.com.webp',
+  umami: '/favicons/umami.is.webp',
+  grafana: '/favicons/grafana.com.webp',
+  axiom: '/favicons/axiom.co.webp',
+  newrelic: '/favicons/newrelic.com.webp',
+  glitchtip: '/favicons/glitchtip.com.png',
+  cronitor: '/favicons/cronitor.io.png',
+  checkly: '/favicons/checklyhq.com.webp',
+  uptimerobot: '/favicons/uptimerobot.com.webp',
+  healthchecks: '/favicons/healthchecks.io.webp',
+  aptabase: '/favicons/aptabase.com.png',
+  mixpanel: '/favicons/mixpanel.com.webp',
+  amplitude: '/favicons/amplitude.com.webp',
+
+  // CI/CD
+  'github-actions': '/favicons/github.com.webp',
+  'gitlab-ci': '/favicons/docs.gitlab.com.webp',
+  circleci: '/favicons/circleci.com.webp',
+  buildkite: '/favicons/buildkite.com.webp',
+
+  // AI & Vector
+  qdrant: '/favicons/qdrant.tech.png',
+  groq: '/favicons/console.groq.com.webp',
+  mistral: '/favicons/console.mistral.ai.webp',
+  cerebras: '/favicons/cloud.cerebras.ai.webp',
+  huggingface: '/favicons/huggingface.co.webp',
+  openrouter: '/favicons/openrouter.ai.webp',
+  langfuse: '/favicons/langfuse.com.webp',
+  portkey: '/favicons/portkey.ai.webp',
+  braintrust: '/favicons/braintrustdata.com.webp',
+};
+
 export const TechLogo: React.FC<TechLogoProps> = ({ id, size = 28, className = '' }) => {
+  const [hasError, setHasError] = useState(false);
+  const faviconUrl = FAVICON_MAP[id];
+
+  if (faviconUrl && !hasError) {
+    return (
+      <img
+        src={faviconUrl}
+        alt={id}
+        width={size}
+        height={size}
+        className={`tech-logo-img ${className}`}
+        loading="lazy"
+        onError={() => setHasError(true)}
+      />
+    );
+  }
+
   const commonProps = {
     width: size,
     height: size,

@@ -1755,6 +1755,14 @@ input[type="range"] {
   flex-shrink: 0;
 }
 
+.tech-logo-img {
+  border-radius: var(--radius-xs);
+  object-fit: contain;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .tech-name-box {
   display: flex;
   flex-direction: column;
