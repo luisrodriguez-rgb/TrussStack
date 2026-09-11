@@ -206,4 +206,13 @@ assert.strictEqual(marketplaceRecommendation.slots.frontend, 'nextjs', 'Marketpl
 assert.strictEqual(marketplaceRecommendation.slots.payments, 'stripe', 'Marketplace debe utilizar Stripe Connect');
 console.log('[OK] Test 9 Superado: Marketplace recomienda Next.js + Stripe + ' + marketplaceRecommendation.slots.database);
 
+// Test Case 10: Validar Score Breakdown y Causal Rules (Explicabilidad)
+assert.ok(saasRecommendation.scoreBreakdown, 'Debe incluir desglose matemático scoreBreakdown');
+assert.strictEqual(typeof saasRecommendation.scoreBreakdown.finalFitScore, 'number');
+assert.ok(saasRecommendation.scoreBreakdown.prioritiesPercentage.cost >= 0);
+assert.ok(saasRecommendation.causalRules.length >= 3, 'Debe disparar al menos 3 reglas causales estructuradas');
+const teamRule = saasRecommendation.causalRules.find((r) => r.id === 'rule-team-size');
+assert.ok(teamRule, 'Debe contener regla causal para tamaño de equipo');
+console.log('[OK] Test 10 Superado: Score Breakdown matemático y ' + saasRecommendation.causalRules.length + ' Causal Rules generadas correctamente');
+
 console.log('\n[DONE] Todas las pruebas del motor determinista extendido pasaron exitosamente.');
