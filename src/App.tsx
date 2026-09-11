@@ -21,6 +21,7 @@ import { TradeoffDrawer } from './components/canvas/TradeoffDrawer';
 import { ReplaceModal } from './components/canvas/ReplaceModal';
 import { ExportModal } from './components/export/ExportModal';
 import { CostSimulatorModal } from './components/cost/CostSimulatorModal';
+import { DriftAuditModal } from './components/linter/DriftAuditModal';
 import { useI18n } from './i18n/I18nContext';
 import {
   copyShareableUrlToClipboard,
@@ -266,8 +267,13 @@ export const App: React.FC = () => {
         />
       )}
 
-      {/* Modal de Auditoría de Drift (placeholder hasta montar componente) */}
-      {isDriftModalOpen && null}
+      {/* Modal de Auditoría de Drift */}
+      {isDriftModalOpen && (
+        <DriftAuditModal
+          recommendation={recommendation}
+          onClose={() => setIsDriftModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
