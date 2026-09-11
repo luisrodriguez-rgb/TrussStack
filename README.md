@@ -1,5 +1,9 @@
 # TRUSSSTACK // Technical Architecture & Trade-off Engine
 
+<p align="center">
+  <img src="./public/trussstack-banner.jpg" alt="TrussStack - Motor de Arquitectura Determinista" width="700" />
+</p>
+
 **TrussStack** es un motor determinista de diseño y evaluación de arquitecturas de software. Modela el stack técnico completo de un proyecto, audita incompatibilidades y fricciones en tiempo real, calcula el balance exacto de compromisos (*trade-offs* en el frente de Pareto) y permite sustituir componentes en caliente con exportación a diagramas de producción.
 
 Disenado con una estética **Modern-Retro** de alto contraste (amarillo vivo `#FFD000` y negro carbón `#090B10`), tipografía técnica monoespaciada, soporte nativo de **Modo Oscuro / Modo Claro**, **Modo Bilingüe (Español / Inglés)** y **cero emojis**.

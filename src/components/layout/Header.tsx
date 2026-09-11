@@ -1,6 +1,7 @@
 import React from 'react';
 import type { StackRecommendation } from '../../engine/types';
 import { useI18n } from '../../i18n/I18nContext';
+import { TrussLogo } from '../common/TrussLogo';
 
 interface HeaderProps {
   currentView: 'wizard' | 'canvas';
@@ -25,7 +26,9 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="app-header">
       <div className="brand-section">
-        <div className="brand-badge">▲</div>
+        <div className="brand-badge">
+          <TrussLogo size={38} />
+        </div>
         <div className="brand-title">
           <span className="brand-name">TRUSSSTACK</span>
           <span className="brand-tagline">{t.brandTagline}</span>

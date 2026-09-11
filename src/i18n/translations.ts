@@ -3,7 +3,7 @@ export type Language = 'es' | 'en';
 export const translations = {
   es: {
     // Header
-    brandTagline: 'MODERN-RETRO ARCHITECT',
+    brandTagline: 'MOTOR DE ARQUITECTURA DETERMINISTA',
     navRequirements: '[ 01. REQUISITOS ]',
     navArchitecture: '[ 02. ARQUITECTURA ]',
     themeDark: '[ TEMA: OSCURO ]',
@@ -167,7 +167,7 @@ export const translations = {
 
   en: {
     // Header
-    brandTagline: 'MODERN-RETRO ARCHITECT',
+    brandTagline: 'DETERMINISTIC ARCHITECTURE ENGINE',
     navRequirements: '[ 01. REQUIREMENTS ]',
     navArchitecture: '[ 02. ARCHITECTURE ]',
     themeDark: '[ THEME: DARK ]',
