@@ -5,7 +5,7 @@ import { getLocalizedTech } from '../../engine/catalogI18n';
 import { TechLogo } from '../common/TechLogo';
 import { useI18n } from '../../i18n/I18nContext';
 
-export type BlueprintTag = 'all' | 'real' | 'saas' | 'local_first' | 'ai' | 'edge';
+export type BlueprintTag = 'all' | 'real' | 'saas' | 'local_first' | 'ai' | 'edge' | 'mobile' | 'data';
 
 export interface StackBlueprint {
   id: string;
@@ -251,6 +251,310 @@ export const STACK_BLUEPRINTS: StackBlueprint[] = [
       mobile: null,
     },
   },
+  {
+    id: 'file_converter_pro',
+    code: 'REAL-04',
+    name: 'File Converter Pro // Local WASM Processor',
+    nameEn: 'File Converter Pro // Local WASM Processor',
+    tag: 'real',
+    tagLabel: 'PROYECTO REAL',
+    tagLabelEn: 'REAL-WORLD APP',
+    description:
+      'Suite de conversión de archivos multimedia en el navegador con WebAssembly sin transferir datos a servidores, con almacenamiento de metadatos en Turso.',
+    descriptionEn:
+      'Browser-based multimedia file conversion suite running client-side WebAssembly without sending raw files to servers, storing history in Turso.',
+    highlights: [
+      'Cero coste de ancho de banda: procesamiento y transcodificación 100% en cliente con WASM',
+      'Despliegue ultrarrápido en Cloudflare Pages con almacenamiento opcional en Cloudflare R2',
+      'Sincronización de historiales de conversión con libSQL embebido',
+    ],
+    highlightsEn: [
+      'Zero bandwidth bills: 100% client-side conversion and transcoding via WebAssembly',
+      'Global low-latency delivery on Cloudflare Pages with optional Cloudflare R2 storage',
+      'Lightweight conversion history state sync powered by embedded libSQL',
+    ],
+    slots: {
+      frontend: 'react-vite',
+      backend: 'hono',
+      database: 'turso',
+      auth: null,
+      storage: 'cloudflare-r2',
+      hosting: 'cloudflare-pages',
+      payments: null,
+      email: null,
+      monitoring: 'betterstack',
+      cicd: 'github-actions',
+      ai: null,
+      queues: null,
+      mobile: null,
+    },
+  },
+  {
+    id: 'edugenios_saas',
+    code: 'REAL-05',
+    name: 'EduGenios // Multi-Tenant Learning Platform',
+    nameEn: 'EduGenios // Multi-Tenant Learning Platform',
+    tag: 'real',
+    tagLabel: 'PROYECTO REAL',
+    tagLabelEn: 'REAL-WORLD APP',
+    description:
+      'Plataforma educativa para colegios e instituciones con aislamiento estricto por escuela mediante políticas Row-Level Security y cobros automatizados.',
+    descriptionEn:
+      'Educational platform for schools and academies featuring tenant isolation via Row-Level Security and automated tuition subscriptions.',
+    highlights: [
+      'PostgreSQL RLS para segregación de datos escolares en una base de datos unificada',
+      'Suscripciones y cobros de colegiatura gestionados de forma segura con Stripe',
+      'Entrega transaccional de reportes de calificaciones y alertas mediante Postmark',
+    ],
+    highlightsEn: [
+      'PostgreSQL RLS for tenant school data segregation on a single unified instance',
+      'Tuition and subscription billing processed securely with Stripe Checkout',
+      'High-deliverability academic report card dispatch via Postmark',
+    ],
+    slots: {
+      frontend: 'nextjs',
+      backend: null,
+      database: 'postgres',
+      auth: 'supabase-auth',
+      storage: 'supabase-storage',
+      hosting: 'vercel',
+      payments: 'stripe',
+      email: 'postmark',
+      monitoring: 'sentry',
+      cicd: 'vercel-ci',
+      ai: null,
+      queues: 'bullmq',
+      mobile: null,
+    },
+  },
+  {
+    id: 'mobile_saas_expo',
+    code: 'PATT-07',
+    name: 'Cross-Platform Mobile SaaS',
+    nameEn: 'Cross-Platform Mobile SaaS',
+    tag: 'mobile',
+    tagLabel: 'MÓVIL',
+    tagLabelEn: 'MOBILE',
+    description:
+      'Arquitectura de aplicación móvil para iOS y Android con React Native Expo, sincronización offline local y backend BaaS unificado.',
+    descriptionEn:
+      'Cross-platform iOS and Android mobile app architecture powered by React Native Expo, local offline caching, and unified BaaS.',
+    highlights: [
+      'Ecosistema Expo con compilación nativa en la nube vía EAS Build y updates OTA',
+      'Autenticación persistente con tokens seguros en biometría y Supabase Auth',
+      'Notificaciones push automáticas y emails transaccionales con Resend',
+    ],
+    highlightsEn: [
+      'Expo ecosystem with cloud native builds via EAS and instant Over-The-Air updates',
+      'Biometric keychain persistence and token exchange with Supabase Auth',
+      'Automated cross-platform push notifications and transactional email via Resend',
+    ],
+    slots: {
+      frontend: 'react-vite',
+      backend: 'fastapi',
+      database: 'supabase-db',
+      auth: 'supabase-auth',
+      storage: 'supabase-storage',
+      hosting: 'hetzner-vps',
+      payments: 'stripe',
+      email: 'resend',
+      monitoring: 'sentry',
+      cicd: 'github-actions',
+      ai: null,
+      queues: null,
+      mobile: 'react-native-expo',
+    },
+  },
+  {
+    id: 'data_streaming_olap',
+    code: 'PATT-08',
+    name: 'High-Throughput Streaming & Analytics',
+    nameEn: 'High-Throughput Streaming & Analytics',
+    tag: 'data',
+    tagLabel: 'DATA & OLAP',
+    tagLabelEn: 'DATA & OLAP',
+    description:
+      'Pipeline de ingesta de eventos distribuidos a escala con ClickHouse columnar, colas Kafka/Redpanda y visualizaciones en tiempo real.',
+    descriptionEn:
+      'Distributed event ingestion pipeline at scale with columnar ClickHouse, Kafka/Redpanda queues, and real-time observability.',
+    highlights: [
+      'Almacenamiento columnar en ClickHouse con compresión zstd para billones de filas',
+      'Ingesta de alto rendimiento en Go Gin procesando decenas de miles de eventos/seg',
+      'Dashboards operativos en Grafana con métricas de latencia de particiones',
+    ],
+    highlightsEn: [
+      'Columnar ClickHouse storage with zstd compression handling billions of events',
+      'Ultra-fast Go Gin ingestion microservice sustaining tens of thousands events/sec',
+      'Operational Grafana telemetry dashboards with partition consumer lag metrics',
+    ],
+    slots: {
+      frontend: 'react-vite',
+      backend: 'go-gin',
+      database: 'clickhouse',
+      auth: 'better-auth',
+      storage: 'cloudflare-r2',
+      hosting: 'hetzner-vps',
+      payments: null,
+      email: null,
+      monitoring: 'grafana',
+      cicd: 'github-actions',
+      ai: null,
+      queues: 'kafka',
+      mobile: null,
+    },
+  },
+  {
+    id: 'edge_headless_ecommerce',
+    code: 'PATT-09',
+    name: 'Edge Headless E-Commerce Storefront',
+    nameEn: 'Edge Headless E-Commerce Storefront',
+    tag: 'edge',
+    tagLabel: 'EDGE & SEO',
+    tagLabelEn: 'EDGE & SEO',
+    description:
+      'Tienda electrónica global con páginas estáticas generadas en Astro, micro-APIs en Hono y checkout integrado con Stripe.',
+    descriptionEn:
+      'Global online storefront featuring static pre-rendered Astro pages, edge micro-APIs in Hono, and Stripe payment processing.',
+    highlights: [
+      'HTML puro pre-renderizado con Astro para 100/100 en Core Web Vitals y SEO',
+      'Distribución global en Cloudflare CDN con latencia TTFB inferior a 25ms',
+      'Checkout seguro con Stripe y almacenamiento de catálogo en SQLite distribuido',
+    ],
+    highlightsEn: [
+      'Pure pre-rendered HTML with Astro securing 100/100 Core Web Vitals and SEO',
+      'Global edge distribution on Cloudflare CDN with sub-25ms TTFB worldwide',
+      'Secure Stripe checkout pipeline backed by distributed edge SQLite on Turso',
+    ],
+    slots: {
+      frontend: 'astro',
+      backend: 'hono',
+      database: 'turso',
+      auth: 'authjs',
+      storage: 'cloudflare-r2',
+      hosting: 'cloudflare-pages',
+      payments: 'stripe',
+      email: 'resend',
+      monitoring: 'betterstack',
+      cicd: 'github-actions',
+      ai: null,
+      queues: null,
+      mobile: null,
+    },
+  },
+  {
+    id: 'marketplace_split_escrow',
+    code: 'PATT-10',
+    name: 'Two-Sided Marketplace & Split Escrow',
+    nameEn: 'Two-Sided Marketplace & Split Escrow',
+    tag: 'saas',
+    tagLabel: 'MARKETPLACE',
+    tagLabelEn: 'MARKETPLACE',
+    description:
+      'Marketplace multitenant con incorporación de vendedores mediante Stripe Connect, retención de comisiones y dashboards dedicados.',
+    descriptionEn:
+      'Multi-vendor marketplace featuring merchant onboarding via Stripe Connect, platform fee retention, and vendor dashboards.',
+    highlights: [
+      'Stripe Connect para división automática de fondos entre vendedores y plataforma',
+      'Next.js App Router con Server Actions para transacciones ACID en PostgreSQL',
+      'Auditoría y session replays con Sentry para resolución de disputas comerciales',
+    ],
+    highlightsEn: [
+      'Stripe Connect handling automatic escrow payout splits and merchant compliance',
+      'Next.js App Router with Server Actions executing strict ACID PostgreSQL mutations',
+      'Sentry APM and session replays for rapid resolution of commercial checkout disputes',
+    ],
+    slots: {
+      frontend: 'nextjs',
+      backend: null,
+      database: 'postgres',
+      auth: 'clerk',
+      storage: 'cloudflare-r2',
+      hosting: 'vercel',
+      payments: 'stripe',
+      email: 'postmark',
+      monitoring: 'sentry',
+      cicd: 'vercel-ci',
+      ai: null,
+      queues: 'bullmq',
+      mobile: null,
+    },
+  },
+  {
+    id: 'multiplayer_websocket_hub',
+    code: 'PATT-11',
+    name: 'High-Concurrency WebSocket Multiplayer Hub',
+    nameEn: 'High-Concurrency WebSocket Multiplayer Hub',
+    tag: 'local_first',
+    tagLabel: 'REALTIME & GAME',
+    tagLabelEn: 'REALTIME & GAME',
+    description:
+      'Servidor de partidas multijugador con WebSockets concurrentes en Go, canales pub/sub en Redis y despliegue global en Fly.io.',
+    descriptionEn:
+      'Low-latency multiplayer room server with concurrent Go WebSockets, Redis pub/sub streams, and edge placement on Fly.io.',
+    highlights: [
+      'Goroutines concurrentes gestionando miles de conexiones persistentes con memoria mínima',
+      'Redis Streams para pub/sub de estado de partidas y leaderboards ordenados',
+      'Despliegue multirregión en Fly.io acercando el cómputo a los jugadores',
+    ],
+    highlightsEn: [
+      'Concurrent Go routines managing thousands of persistent sockets with minimal RAM',
+      'Redis Streams for volatile match state broadcasts and sorted set leaderboards',
+      'Global multi-region placement on Fly.io bringing game loops closest to players',
+    ],
+    slots: {
+      frontend: 'react-vite',
+      backend: 'go-gin',
+      database: 'redis',
+      auth: 'better-auth',
+      storage: null,
+      hosting: 'fly-io',
+      payments: 'stripe',
+      email: null,
+      monitoring: 'betterstack',
+      cicd: 'github-actions',
+      ai: null,
+      queues: 'redis-streams',
+      mobile: null,
+    },
+  },
+  {
+    id: 'selfhosted_privacy_stack',
+    code: 'PATT-12',
+    name: 'Self-Hosted Privacy-First Enterprise Stack',
+    nameEn: 'Self-Hosted Privacy-First Enterprise Stack',
+    tag: 'real',
+    tagLabel: 'SELF-HOSTED',
+    tagLabelEn: 'SELF-HOSTED',
+    description:
+      'Arquitectura de soberanía de datos con Docker Compose, almacenamiento S3 privado en MinIO, analítica propia y LLM local con Ollama.',
+    descriptionEn:
+      'Data sovereignty architecture featuring Docker Compose, private MinIO object storage, self-hosted analytics, and local Ollama LLMs.',
+    highlights: [
+      '100% de los datos permanecen en tu propio VPS sin dependencias propietarias externas',
+      'Almacenamiento de objetos privado con MinIO compatible con la API de Amazon S3',
+      'Inferencia de IA sin enviar prompts a terceros utilizando Ollama en servidor dedicado',
+    ],
+    highlightsEn: [
+      '100% of telemetry and data stays on your own VPS with zero third-party lock-in',
+      'Private object storage via self-hosted MinIO fully compatible with Amazon S3 API',
+      'Zero external data egress for AI inference using local Ollama on dedicated server',
+    ],
+    slots: {
+      frontend: 'nextjs',
+      backend: 'fastapi',
+      database: 'postgres',
+      auth: 'better-auth',
+      storage: 'minio',
+      hosting: 'hetzner-vps',
+      payments: null,
+      email: 'postmark',
+      monitoring: 'grafana',
+      cicd: 'github-actions',
+      ai: 'ollama',
+      queues: 'bullmq',
+      mobile: null,
+    },
+  },
 ];
 
 interface StacksCatalogProps {
@@ -265,9 +569,11 @@ export const StacksCatalog: React.FC<StacksCatalogProps> = ({ onLoadBlueprint })
     { id: 'all', label: t.exploreFilterAll },
     { id: 'real', label: t.exploreFilterReal },
     { id: 'saas', label: t.exploreFilterSaas },
-    { id: 'local_first', label: t.exploreFilterLocalFirst },
     { id: 'ai', label: t.exploreFilterAi },
+    { id: 'local_first', label: t.exploreFilterLocalFirst },
     { id: 'edge', label: t.exploreFilterEdge },
+    { id: 'mobile', label: lang === 'es' ? 'MÓVIL' : 'MOBILE' },
+    { id: 'data', label: lang === 'es' ? 'DATA & STREAMING' : 'DATA & STREAMING' },
   ];
 
   const filteredBlueprints =
@@ -278,7 +584,10 @@ export const StacksCatalog: React.FC<StacksCatalogProps> = ({ onLoadBlueprint })
           if (selectedTag === 'saas') return bp.tag === 'saas';
           if (selectedTag === 'local_first') return bp.tag === 'local_first';
           if (selectedTag === 'ai') return bp.tag === 'ai';
-          if (selectedTag === 'edge') return bp.slots.hosting === 'cloudflare-pages' || bp.slots.frontend === 'astro';
+          if (selectedTag === 'edge')
+            return bp.tag === 'edge' || bp.slots.hosting === 'cloudflare-pages' || bp.slots.frontend === 'astro';
+          if (selectedTag === 'mobile') return bp.tag === 'mobile' || Boolean(bp.slots.mobile);
+          if (selectedTag === 'data') return bp.tag === 'data' || bp.slots.database === 'clickhouse';
           return true;
         });
 
@@ -288,7 +597,7 @@ export const StacksCatalog: React.FC<StacksCatalogProps> = ({ onLoadBlueprint })
       <div className="nutrition-panel" style={{ marginBottom: '1.5rem' }}>
         <div className="nutrition-headline-group">
           <div className="nutrition-stamp">
-            <span className="nutrition-stamp-num">6+</span>
+            <span className="nutrition-stamp-num">14+</span>
             <span className="nutrition-stamp-lbl">SPEC</span>
           </div>
           <div className="nutrition-headline">
