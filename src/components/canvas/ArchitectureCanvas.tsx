@@ -6,6 +6,8 @@ import { TechLogo } from '../common/TechLogo';
 import { useI18n } from '../../i18n/I18nContext';
 import { FlowSimulatorBar } from './FlowSimulatorBar';
 import { ProtocolModal } from './ProtocolModal';
+import { WhyThisStackModal } from './WhyThisStackModal';
+import { ScoreBreakdownModal } from './ScoreBreakdownModal';
 import {
   PROTOCOL_INSPECTIONS,
   type FlowScenario,
@@ -37,9 +39,20 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
   const [activeScenario, setActiveScenario] = useState<FlowScenario | null>(null);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [activeProtocol, setActiveProtocol] = useState<ProtocolInspection | null>(null);
+  const [isWhyModalOpen, setIsWhyModalOpen] = useState<boolean>(false);
+  const [isScoreModalOpen, setIsScoreModalOpen] = useState<boolean>(false);
 
-  const { slots, fitScore, overallCostEstimate, frictionWarnings, dimensionScores, whyReasons } =
-    recommendation;
+  const {
+    slots,
+    fitScore,
+    overallCostEstimate,
+    frictionWarnings,
+    dimensionScores,
+    scoreBreakdown,
+    causalRules,
+    whyReasons,
+    keyTradeoffs,
+  } = recommendation;
 
   const renderCard = (category: TechCategory, customLayerName?: string, isHero = false) => {
     const techId = slots[category];
@@ -164,10 +177,15 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
       {/* 0. Canvas Instrumentation & Actions Ribbon */}
       <div className="canvas-instrumentation-bar">
         <div className="canvas-bar-kpis">
-          <div className="canvas-kpi-pill" title={t.canvasBarFitTooltip}>
+          <div
+            className="canvas-kpi-pill interactive"
+            onClick={() => setIsScoreModalOpen(true)}
+            style={{ cursor: 'pointer' }}
+            title={lang === 'es' ? 'Click para inspeccionar desglose de puntuación' : 'Click to inspect score breakdown'}
+          >
             <span className="canvas-kpi-label">{t.kpiFitScore}</span>
             <span className={`canvas-kpi-value ${fitScore >= 80 ? 'healthy' : 'warning'}`}>
-              {fitScore}%
+              {fitScore}% ↗
             </span>
           </div>
 
@@ -191,6 +209,16 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         </div>
 
         <div className="canvas-bar-actions">
+          <button
+            type="button"
+            className="btn-canvas-action"
+            style={{ borderColor: 'var(--yellow-vivid)', color: 'var(--yellow-vivid)' }}
+            onClick={() => setIsWhyModalOpen(true)}
+            title={lang === 'es' ? 'Ver justificación causal de esta arquitectura' : 'View causal rationale for this architecture'}
+          >
+            {lang === 'es' ? '¿POR QUÉ ESTE STACK? ↗' : 'WHY THIS STACK? ↗'}
+          </button>
+
           {onOpenCostSim && (
             <button
               type="button"
@@ -240,14 +268,37 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
       {/* 1. SPECIFICATION MATRIX HEADER PANEL */}
       <div className="nutrition-panel">
         <div className="nutrition-headline-group">
-          <div className="nutrition-stamp">
+          <div
+            className="nutrition-stamp interactive"
+            onClick={() => setIsScoreModalOpen(true)}
+            style={{ cursor: 'pointer' }}
+            title={lang === 'es' ? 'Click para inspeccionar desglose de puntuación' : 'Click to inspect score breakdown'}
+          >
             <span className="nutrition-stamp-num">{fitScore}%</span>
-            <span className="nutrition-stamp-lbl">FIT</span>
+            <span className="nutrition-stamp-lbl">FIT ↗</span>
           </div>
 
           <div className="nutrition-headline">
             <h2>{t.matrixTitle}</h2>
             <p>{t.matrixDesc}</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.45rem' }}>
+              <button
+                type="button"
+                className="chip-btn"
+                style={{ fontSize: '0.72rem', padding: '0.2rem 0.6rem', color: 'var(--yellow-vivid)', borderColor: 'var(--yellow-vivid)' }}
+                onClick={() => setIsWhyModalOpen(true)}
+              >
+                {lang === 'es' ? '¿Por qué esta arquitectura? ↗' : 'Why this architecture? ↗'}
+              </button>
+              <button
+                type="button"
+                className="chip-btn"
+                style={{ fontSize: '0.72rem', padding: '0.2rem 0.6rem' }}
+                onClick={() => setIsScoreModalOpen(true)}
+              >
+                {lang === 'es' ? 'Desglose del Fit Score ↗' : 'Score breakdown ↗'}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -507,6 +558,25 @@ export const ArchitectureCanvas: React.FC<ArchitectureCanvasProps> = ({
         protocol={activeProtocol}
         onClose={() => setActiveProtocol(null)}
       />
+
+      {/* Modal de Explicabilidad Causal "Why this Stack?" */}
+      {isWhyModalOpen && (
+        <WhyThisStackModal
+          causalRules={causalRules || []}
+          whyReasons={whyReasons}
+          keyTradeoffs={keyTradeoffs}
+          onClose={() => setIsWhyModalOpen(false)}
+        />
+      )}
+
+      {/* Modal de Desglose Matemático del Fit Score */}
+      {isScoreModalOpen && scoreBreakdown && (
+        <ScoreBreakdownModal
+          scoreBreakdown={scoreBreakdown}
+          fitScore={fitScore}
+          onClose={() => setIsScoreModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
