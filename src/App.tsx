@@ -13,6 +13,7 @@ import {
 import { TECH_BY_ID } from './engine/catalog';
 import { getLocalizedFrictionMessage } from './engine/catalogI18n';
 import { Header, type AppView } from './components/layout/Header';
+import { Footer } from './components/layout/Footer';
 import { LandingHero } from './components/home/LandingHero';
 import { SpecWizard } from './components/wizard/SpecWizard';
 import { ArchitectureCanvas } from './components/canvas/ArchitectureCanvas';
@@ -280,6 +281,9 @@ export const App: React.FC = () => {
           )}
         </Suspense>
       </main>
+
+      {/* Footer del Workbench con Autoria de Luis Rodriguez */}
+      <Footer onViewChange={setCurrentView} />
 
       {/* Drawer de Trade-offs */}
       <TradeoffDrawer
