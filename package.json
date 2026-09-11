@@ -1,7 +1,23 @@
-{
   "name": "trussstack",
+  "version": "4.0.0",
+  "description": "Deterministic software architecture and trade-off engine with zero AI hallucinations",
+  "author": "Luis Rodríguez",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luisrodriguez-rgb/TrussStack.git"
+  },
+  "keywords": [
+    "software-architecture",
+    "tech-stack",
+    "trade-offs",
+    "deterministic",
+    "madr",
+    "benchmarks",
+    "cost-calculator",
+    "docker-compose"
+  ],
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

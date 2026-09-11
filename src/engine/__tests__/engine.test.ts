@@ -1,6 +1,5 @@
 import assert from 'node:assert';
 import { recommendStack, getReplacementAlternatives, detectStackFrictions } from '../recommender';
-import { TECH_BY_ID } from '../catalog';
 import type { UserProjectSpec } from '../types';
 
 console.log('[TEST] Ejecutando Suite de Pruebas Deterministas de TONIC...\n');
