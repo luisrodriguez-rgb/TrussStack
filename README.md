@@ -22,9 +22,9 @@
 
 ## Que es TrussStack
 
-**TrussStack** es un motor técnico determinista de arquitectura de software disenado para ingenieros que necesitan tomar decisiones de stack fundamentadas, reproducibles y explicables. 
+**TrussStack** es un motor técnico determinista de arquitectura de software diseñado para ingenieros que necesitan tomar decisiones de stack fundamentadas, reproducibles y explicables. 
 
-A diferencia de catálogos pasivos o asistentes basados en LLMs propensos a alucinaciones y sesgos comerciales, TrussStack evalúa matrices de compatibilidad matemática, calcula penalizaciones de fricción entre capas, proyecta costes reales de infraestructura (incluyendo trampas de transferencia saliente / egress), audita el drift de dependencias en `package.json` mediante CI/CD y genera documentación formal conforme al estándar **MADR 3.0**.
+A diferencia de catálogos pasivos o asistentes genéricos propensos a sesgos comerciales y recomendaciones opacas, TrussStack evalúa matrices de compatibilidad matemática, calcula penalizaciones de fricción entre capas, proyecta costes reales de infraestructura (incluyendo trampas de transferencia saliente / egress), audita el drift de dependencias en `package.json` mediante CI/CD y genera documentación formal conforme al estándar **MADR 3.0**.
 
 Construido con una estética **Modern-Retro** de alto contraste (amarillo técnico `#FFD000` y negro carbón `#090B10`), tipografía monoespaciada, soporte completo de **Modo Oscuro / Modo Claro**, **Modo Bilingüe (Español / Inglés)** en tiempo real y **cero emojis**.
 
@@ -34,7 +34,7 @@ Construido con una estética **Modern-Retro** de alto contraste (amarillo técni
 
 | [ + ] LO QUE HACE TRUSSSTACK | [ ! ] LO QUE NO HACE TRUSSSTACK |
 | :--- | :--- |
-| **Evaluacion Determinista Tipada**: Algoritmos en TypeScript con 0 ms de latencia y resultados reproducibles sin llamadas lentas a APIs externas. | **Cero Alucinaciones de IA**: No genera recomendaciones aleatorias ni se basa en cadenas de texto no estructuradas de LLMs. |
+| **Evaluacion Determinista y Explicable**: Algoritmos en TypeScript con justificación causal directa y resultados reproducibles sin dependencias externas. | **Cero Respuestas Opacas**: No genera recomendaciones aleatorias ni cajas negras; cada decisión proviene de reglas técnicas verificables. |
 | **Deteccion de Fricciones & Costes Ocultos**: Alerta inmediata de incompatibilidades reales (ej. Astro + Auth.js) y trampas de egress de ancho de banda. | **Cero Sesgo Comercial**: Ninguna tecnologia paga por posicionamiento ni existen enlaces patrocinados u ocultos de afiliados. |
 | **Telemetria de Benchmarks Empiricos**: Tiempos medidos de arranque en frio (cold starts), tamano de bundle transferido y memoria en reposo. | **No Infla el Boilerplate**: No te obliga a crear proyectos gigantescos ni genera codigo basura que nadie entiende. |
 | **Estandar MADR 3.0 & DevOps Scaffolding**: Exporta registros formales de decision (`ARCHITECTURE-ADR.md`), `docker-compose.yml` y `.env.example`. | **No Ignora la Realidad Operativa**: No oculta el coste a 3 anos de mantenimiento ni la complejidad de mantener clusters. |
