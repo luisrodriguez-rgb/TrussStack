@@ -8,6 +8,7 @@ import type {
   TeamSize,
   UserProjectSpec,
 } from '../../engine/types';
+import { getSystemProfile, getSystemsByGroup, type SystemGroup } from '../../engine/systems';
 import { useI18n } from '../../i18n/I18nContext';
 
 interface SpecWizardProps {
@@ -16,8 +17,10 @@ interface SpecWizardProps {
 }
 
 export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit }) => {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [projectType, setProjectType] = useState<ProjectType>(initialSpec.projectType);
+  const [selectedGroup, setSelectedGroup] = useState<SystemGroup>('all');
+  const [isCalibrated, setIsCalibrated] = useState<boolean>(false);
   const [scale, setScale] = useState<ProjectScale>(initialSpec.scale);
   const [teamSize, setTeamSize] = useState<TeamSize>(initialSpec.teamSize);
   const [seniority, setSeniority] = useState<SeniorityLevel>(initialSpec.seniority);
@@ -25,8 +28,21 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
   const [constraints, setConstraints] = useState<ProjectConstraints>(initialSpec.constraints);
   const [priorities, setPriorities] = useState(initialSpec.priorities);
 
+  const activeProfile = getSystemProfile(projectType);
+
   const toggleConstraint = (key: keyof ProjectConstraints) => {
     setConstraints((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleApplyRecommendedConstraints = () => {
+    if (activeProfile && activeProfile.defaultConstraints) {
+      setConstraints((prev) => ({
+        ...prev,
+        ...activeProfile.defaultConstraints,
+      }));
+      setIsCalibrated(true);
+      setTimeout(() => setIsCalibrated(false), 2200);
+    }
   };
 
   const handlePriorityChange = (key: keyof typeof priorities, value: number) => {
@@ -46,6 +62,8 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
     });
   };
 
+  const visibleSystems = getSystemsByGroup(selectedGroup);
+
   return (
     <div className="wizard-view">
       <div className="wizard-hero">
@@ -63,27 +81,99 @@ export const SpecWizard: React.FC<SpecWizardProps> = ({ initialSpec, onSubmit })
           </h2>
           <p className="wizard-section-desc">{t.section01Desc}</p>
 
-          <div className="options-grid">
+          {/* Group Filter Tabs */}
+          <div className="chips-bar" style={{ marginBottom: '1.25rem' }}>
             {[
-              { id: 'saas', code: 'SAAS-01', title: t.typeSaasTitle, desc: t.typeSaasDesc },
-              { id: 'ecommerce', code: 'ECOM-02', title: t.typeEcomTitle, desc: t.typeEcomDesc },
-              { id: 'dashboard', code: 'DASH-03', title: t.typeDashTitle, desc: t.typeDashDesc },
-              { id: 'api_backend', code: 'CORE-04', title: t.typeApiTitle, desc: t.typeApiDesc },
-              { id: 'content_blog', code: 'BLOG-05', title: t.typeBlogTitle, desc: t.typeBlogDesc },
-              { id: 'realtime_app', code: 'SYNC-06', title: t.typeRealtimeTitle, desc: t.typeRealtimeDesc },
-            ].map((item) => (
+              { id: 'all', label: t.wizardFilterAll },
+              { id: 'web_saas', label: t.wizardFilterWebSaas },
+              { id: 'backend_data', label: t.wizardFilterBackendData },
+              { id: 'ai_automation', label: t.wizardFilterAiAutomation },
+              { id: 'mobile_realtime', label: t.wizardFilterMobileRealtime },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                className={`chip-btn ${selectedGroup === tab.id ? 'selected' : ''}`}
+                onClick={() => setSelectedGroup(tab.id as SystemGroup)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="options-grid">
+            {visibleSystems.map((item) => (
               <div
                 key={item.id}
                 className={`option-tile ${projectType === item.id ? 'selected' : ''}`}
-                onClick={() => setProjectType(item.id as ProjectType)}
+                onClick={() => {
+                  setProjectType(item.id);
+                  setIsCalibrated(false);
+                }}
                 role="button"
                 tabIndex={0}
               >
                 <div className="option-badge-code">[{item.code}]</div>
-                <div className="option-title">{item.title}</div>
-                <div className="option-subtitle">{item.desc}</div>
+                <div className="option-title">{lang === 'es' ? item.titleEs : item.titleEn}</div>
+                <div className="option-subtitle">{lang === 'es' ? item.descEs : item.descEn}</div>
               </div>
             ))}
+          </div>
+
+          {/* Calibración sugerida del sistema */}
+          <div
+            className="system-profile-hint-banner"
+            style={{
+              marginTop: '1.25rem',
+              padding: '1rem 1.25rem',
+              background: 'var(--bg-elevated)',
+              border: '1px solid var(--border-rule)',
+              borderRadius: 'var(--radius-xs)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '0.85rem',
+            }}
+          >
+            <div style={{ maxWidth: '680px' }}>
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  color: 'var(--yellow-vivid)',
+                  letterSpacing: '0.06em',
+                  marginBottom: '0.25rem',
+                }}
+              >
+                [ {t.wizardActiveProfileTag}: {activeProfile.code} //{' '}
+                {lang === 'es' ? activeProfile.titleEs.toUpperCase() : activeProfile.titleEn.toUpperCase()} ]
+              </div>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
+                {lang === 'es' ? activeProfile.whyRationaleEs : activeProfile.whyRationaleEn}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleApplyRecommendedConstraints}
+              className="btn-apply-constraints"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.74rem',
+                fontWeight: 800,
+                padding: '0.55rem 0.95rem',
+                background: isCalibrated ? 'var(--yellow-vivid)' : 'transparent',
+                color: isCalibrated ? '#000000' : 'var(--yellow-vivid)',
+                border: '1px solid var(--yellow-vivid)',
+                borderRadius: 'var(--radius-xs)',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {isCalibrated ? t.wizardRecommendedApplied : t.wizardApplyRecommended}
+            </button>
           </div>
         </section>
 
