@@ -81,6 +81,13 @@ const neonAlt = alternatives.find((a) => a.tech.id === 'neon');
 assert.ok(neonAlt, 'Neon debe ser una alternativa disponible');
 assert.ok(neonAlt!.gains.length > 0, 'Debe calcular qué se gana al cambiar a Neon');
 assert.ok(neonAlt!.losses.length > 0, 'Debe calcular qué se pierde al cambiar a Neon');
-console.log('[OK] Test 4 Superado: [Replace] calcula deltas, ganancias y pérdidas para Neon');
+// Test Case 5: Modo bilingüe en inglés genera razones, costes y alternativas en inglés
+const enRecommendation = recommendStack(saasSpec, 'en');
+assert.strictEqual(enRecommendation.overallCostEstimate, '$0/mo (100% Free Tier)');
+assert.ok(enRecommendation.whyReasons.some((r) => r.includes('developer') || r.includes('Supabase')));
+const enAlts = getReplacementAlternatives('database', saasRecommendation.slots, saasSpec, 'en');
+assert.ok(enAlts[0].tech.description.length > 0);
+assert.ok(enAlts[0].gains.length > 0);
+console.log('[OK] Test 5 Superado: Modo bilingüe en inglés genera recomendaciones y alternativas 100% en inglés');
 
 console.log('\n[DONE] Todas las pruebas del motor determinista pasaron exitosamente.');

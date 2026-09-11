@@ -6,6 +6,8 @@ export const translations = {
     brandTagline: 'MOTOR DE ARQUITECTURA DETERMINISTA',
     navRequirements: '[ 01. REQUISITOS ]',
     navArchitecture: '[ 02. ARQUITECTURA ]',
+    navCompare: '[ 03. COMPARAR ]',
+    navExplore: '[ 04. EXPLORAR ]',
     themeDark: '[ TEMA: OSCURO ]',
     themeLight: '[ TEMA: CLARO ]',
     langToggle: '[ IDIOMA: ES ]',
@@ -102,6 +104,28 @@ export const translations = {
     badgeFreeTier: 'TIER GRATIS',
     badgeUsageBased: 'PAGO POR USO',
 
+    // Flow Simulator
+    flowSimulatorTitle: 'TRAZADO DE FLUJOS DE DATOS EN TIEMPO REAL',
+    flowSimulatorBadge: '[ SIMULADOR ]',
+    flowStepTarget: 'DESTINO',
+    flowStepSource: 'ORIGEN',
+    flowStepAction: 'ACCIÓN DEL PASO',
+    flowStepProtocol: 'PROTOCOLO // CONEXIÓN',
+    flowStepLatency: 'LATENCIA ESTIMADA',
+    flowStepPayload: 'PAYLOAD & CONTEXTO:',
+    flowBtnAutoPlay: '[ AUTO PLAY > ]',
+    flowBtnPause: '[ PAUSAR || ]',
+    flowBtnReset: '[ RESET X ]',
+
+    // Protocol Modal
+    protoContractBadge: '[ INTERFACE PROTOCOL CONTRACT ]',
+    protoTransport: 'TRANSPORTE DE RED',
+    protoPort: 'PUERTO ESTÁNDAR',
+    protoLatency: 'PRESUPUESTO DE LATENCIA (P95)',
+    protoSecurityTitle: 'REQUISITOS DE SEGURIDAD & HARDENING',
+    protoHeadersTitle: 'CABECERAS & PARÁMETROS CRÍTICOS',
+    protoArchNotesTitle: 'NOTAS DE INGENIERÍA ARQUITECTÓNICA',
+
     // Project Types
     typeSaasTitle: 'SaaS B2B/B2C',
     typeSaasDesc: 'Autenticación, cobros recurrentes y multi-tenancy',
@@ -158,11 +182,17 @@ export const translations = {
     exportTabMermaid: '[ MERMAID .MD ]',
     exportTabJson: '[ CANONICAL JSON ]',
     exportTabExcalidraw: '[ EXCALIDRAW / SKETION ]',
+    exportTabDocker: '[ DOCKER-COMPOSE.YML ]',
+    exportTabEnv: '[ .ENV.EXAMPLE ]',
+    exportTabAdr: '[ README.MD (ADR) ]',
     btnCopyCode: '[ COPIAR AL PORTAPAPELES ]',
     btnCopiedCode: '[ OK COPIADO ]',
     btnDownloadJson: '[ DESCARGAR TRUSSSTACK.JSON ]',
     btnDownloadExcalidraw: '[ DESCARGAR ARCHITECTURE.EXCALIDRAW ]',
     btnDownloadMmd: '[ DESCARGAR ARCHITECTURE.MMD ]',
+    btnDownloadDocker: '[ DESCARGAR DOCKER-COMPOSE.YML ]',
+    btnDownloadEnv: '[ DESCARGAR .ENV.EXAMPLE ]',
+    btnDownloadAdr: '[ DESCARGAR README.MD ]',
 
     // Cost Simulator Modal (Fase 2 Roadmap)
     costSimTag: 'SIMULADOR DINÁMICO DE ESCALA & EGRESS',
@@ -185,6 +215,30 @@ export const translations = {
     costVpsComparisonTitle: '[ ANÁLISIS: SERVERLESS GESTIONADO VS. VPS DEDICADO ]',
     costVpsAdvantageNote: 'Un cluster VPS o servidor dedicado (Hetzner / Coolify) ofrece costes fijos sin sorpresas por egress, pero requiere mantenimiento de parches y backups por parte del equipo.',
     btnOpenCostSim: 'SIMULAR ESCALA ↗',
+
+    // Compare View
+    compareTitle: 'COMPARADOR DE ARQUITECTURAS & TRADE-OFFS',
+    compareSubtitle: 'Evaluación cara a cara de 3 arquetipos de arquitectura técnica con radar de atributos, matriz de costes y sacrificios explícitos.',
+    compareRadarTitle: '[ RADAR DE ATRIBUTOS TÉCNICOS ]',
+    compareCostTitle: '[ MATRIZ DE COSTES DE INFRAESTRUCTURA ]',
+    compareSacrificesTitle: '[ LO QUE SACRIFICAS EN CADA STACK ]',
+    compareVerdictTitle: '[ VEREDICTO ARQUITECTÓNICO RECOMENDADO ]',
+    compareCostZero: 'COSTE A 0 USUARIOS (ARRANQUE):',
+    compareCostTenK: 'COSTE A 10.000 USUARIOS / MES:',
+    btnLoadStack: '[ CARGAR EN CANVAS -> ]',
+
+    // Explore View
+    exploreTitle: 'GALERÍA DE BLUEPRINTS & PROYECTOS REALES',
+    exploreSubtitle: 'Explora arquitecturas verificadas de proyectos reales y patrones de industria. Inspecciona sus capas o cárgalas en el Canvas para modificarlas.',
+    exploreFilterAll: '[ TODOS ]',
+    exploreFilterReal: '[ PROYECTOS REALES ]',
+    exploreFilterSaas: '[ SAAS PRO ]',
+    exploreFilterLocalFirst: '[ LOCAL-FIRST ]',
+    exploreFilterAi: '[ AI & DATA ]',
+    exploreFilterEdge: '[ EDGE & SEO ]',
+    exploreBtnLoad: '[ ABRIR EN CANVAS -> ]',
+    exploreLayersLabel: 'COMPOSICIÓN TOPOLÓGICA:',
+    exploreHighlightsLabel: 'PUNTOS DESTACADOS:',
   },
 
   en: {
@@ -192,6 +246,8 @@ export const translations = {
     brandTagline: 'DETERMINISTIC ARCHITECTURE ENGINE',
     navRequirements: '[ 01. REQUIREMENTS ]',
     navArchitecture: '[ 02. ARCHITECTURE ]',
+    navCompare: '[ 03. COMPARE ]',
+    navExplore: '[ 04. EXPLORE ]',
     themeDark: '[ THEME: DARK ]',
     themeLight: '[ THEME: LIGHT ]',
     langToggle: '[ LANG: EN ]',
@@ -288,6 +344,28 @@ export const translations = {
     badgeFreeTier: 'FREE TIER',
     badgeUsageBased: 'PAY AS YOU GO',
 
+    // Flow Simulator
+    flowSimulatorTitle: 'REAL-TIME DATA FLOW TRACER',
+    flowSimulatorBadge: '[ SIMULATOR ]',
+    flowStepTarget: 'DESTINATION',
+    flowStepSource: 'ORIGIN',
+    flowStepAction: 'STEP ACTION',
+    flowStepProtocol: 'PROTOCOL // WIRE',
+    flowStepLatency: 'EST. LATENCY',
+    flowStepPayload: 'PAYLOAD & CONTEXT:',
+    flowBtnAutoPlay: '[ AUTO PLAY > ]',
+    flowBtnPause: '[ PAUSE || ]',
+    flowBtnReset: '[ RESET X ]',
+
+    // Protocol Modal
+    protoContractBadge: '[ INTERFACE PROTOCOL CONTRACT ]',
+    protoTransport: 'NETWORK TRANSPORT',
+    protoPort: 'DEFAULT PORT',
+    protoLatency: 'P95 LATENCY BUDGET',
+    protoSecurityTitle: 'SECURITY HARDENING & CONTRACTS',
+    protoHeadersTitle: 'CRITICAL HEADERS & PARAMETERS',
+    protoArchNotesTitle: 'ARCHITECTURAL ENGINEERING NOTES',
+
     // Project Types
     typeSaasTitle: 'SaaS B2B/B2C',
     typeSaasDesc: 'Authentication, recurring subscriptions & multi-tenancy',
@@ -344,11 +422,17 @@ export const translations = {
     exportTabMermaid: '[ MERMAID .MD ]',
     exportTabJson: '[ CANONICAL JSON ]',
     exportTabExcalidraw: '[ EXCALIDRAW / SKETION ]',
+    exportTabDocker: '[ DOCKER-COMPOSE.YML ]',
+    exportTabEnv: '[ .ENV.EXAMPLE ]',
+    exportTabAdr: '[ README.MD (ADR) ]',
     btnCopyCode: '[ COPY TO CLIPBOARD ]',
     btnCopiedCode: '[ OK COPIED ]',
     btnDownloadJson: '[ DOWNLOAD TRUSSSTACK.JSON ]',
     btnDownloadExcalidraw: '[ DOWNLOAD ARCHITECTURE.EXCALIDRAW ]',
     btnDownloadMmd: '[ DOWNLOAD ARCHITECTURE.MMD ]',
+    btnDownloadDocker: '[ DOWNLOAD DOCKER-COMPOSE.YML ]',
+    btnDownloadEnv: '[ DOWNLOAD .ENV.EXAMPLE ]',
+    btnDownloadAdr: '[ DOWNLOAD README.MD ]',
 
     // Cost Simulator Modal (Fase 2 Roadmap)
     costSimTag: 'DYNAMIC SCALE & EGRESS SIMULATOR',
@@ -371,6 +455,30 @@ export const translations = {
     costVpsComparisonTitle: '[ ANALYSIS: MANAGED SERVERLESS VS. DEDICATED VPS ]',
     costVpsAdvantageNote: 'A dedicated VPS cluster (Hetzner / Coolify) offers predictable flat costs with zero egress fees, but requires ongoing patch maintenance and backups by your team.',
     btnOpenCostSim: 'SIMULATE COSTS ↗',
+
+    // Compare View
+    compareTitle: 'ARCHITECTURE COMPARATOR & TRADE-OFF MATRIX',
+    compareSubtitle: 'Side-by-side evaluation of 3 technical architecture archetypes with attribute radar, cost matrix, and explicit sacrifices.',
+    compareRadarTitle: '[ TECHNICAL ATTRIBUTE RADAR ]',
+    compareCostTitle: '[ INFRASTRUCTURE COST MATRIX ]',
+    compareSacrificesTitle: '[ WHAT YOU SACRIFICE IN EACH STACK ]',
+    compareVerdictTitle: '[ RECOMMENDED ARCHITECTURAL VERDICT ]',
+    compareCostZero: 'COST AT 0 USERS (LAUNCH):',
+    compareCostTenK: 'COST AT 10,000 USERS / MONTH:',
+    btnLoadStack: '[ LOAD INTO CANVAS -> ]',
+
+    // Explore View
+    exploreTitle: 'BLUEPRINT SHOWCASE & REAL-WORLD STACKS',
+    exploreSubtitle: 'Explore production-verified architectures from real-world projects and industry patterns. Inspect their topology or load them into Canvas to modify them.',
+    exploreFilterAll: '[ ALL ]',
+    exploreFilterReal: '[ REAL PROJECTS ]',
+    exploreFilterSaas: '[ SAAS PRO ]',
+    exploreFilterLocalFirst: '[ LOCAL-FIRST ]',
+    exploreFilterAi: '[ AI & DATA ]',
+    exploreFilterEdge: '[ EDGE & SEO ]',
+    exploreBtnLoad: '[ LOAD INTO CANVAS -> ]',
+    exploreLayersLabel: 'TOPOLOGY LAYERS:',
+    exploreHighlightsLabel: 'KEY HIGHLIGHTS:',
   },
 };
 

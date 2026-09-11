@@ -7,6 +7,8 @@ import type {
   UserProjectSpec,
 } from './types';
 import { TECH_BY_ID, TECHNOLOGIES } from './catalog';
+import { getLocalizedTech, getLocalizedFrictionMessage } from './catalogI18n';
+import type { Language } from '../i18n/translations';
 
 // Calcula la afinidad individual (0-100) de una tecnología contra las preferencias del usuario
 export function calculateTechFit(
@@ -165,7 +167,7 @@ export function detectStackFrictions(
 }
 
 // Genera la recomendación completa del stack técnico
-export function recommendStack(spec: UserProjectSpec): StackRecommendation {
+export function recommendStack(spec: UserProjectSpec, lang: Language = 'es'): StackRecommendation {
   const slots: Record<TechCategory, string | null> = {
     frontend: null,
     backend: null,
@@ -261,7 +263,12 @@ export function recommendStack(spec: UserProjectSpec): StackRecommendation {
     individualScores.reduce((acc, score) => acc + score, 0) / (individualScores.length || 1)
   );
 
-  const frictions = detectStackFrictions(activeIds);
+  const rawFrictions = detectStackFrictions(activeIds);
+  const frictions = rawFrictions.map((f) => ({
+    ...f,
+    message: getLocalizedFrictionMessage(f.sourceId, f.targetId, f.message, lang),
+  }));
+
   // Penalizar fit general por cada fricción arquitectónica detectada
   const frictionPenalty = frictions.length * 4;
   const finalFitScore = Math.max(20, Math.min(98, avgScore - frictionPenalty));
@@ -276,37 +283,48 @@ export function recommendStack(spec: UserProjectSpec): StackRecommendation {
   };
 
   // Estimación de coste general
-  let overallCostEstimate = '$0/mes (100% Free Tier)';
+  let overallCostEstimate = lang === 'es' ? '$0/mes (100% Free Tier)' : '$0/mo (100% Free Tier)';
   if (spec.budget === 'low_50') {
-    overallCostEstimate = '~$15 - $30/mes tras tráfico inicial';
+    overallCostEstimate = lang === 'es' ? '~$15 - $30/mes tras tráfico inicial' : '~$15 - $30/mo after initial traffic';
   } else if (spec.budget === 'growth_flexible') {
-    overallCostEstimate = '~$50 - $150/mes (Escala elástica)';
+    overallCostEstimate = lang === 'es' ? '~$50 - $150/mes (Escala elástica)' : '~$50 - $150/mo (Elastic scale)';
   }
 
   // Generación determinista de razones ("Why?")
   const whyReasons: string[] = [];
   if (spec.teamSize === 'solo') {
     whyReasons.push(
-      'Optimizado para 1 desarrollador: reduce la fricción de mantenimiento y elimina servidores dedicados manuales.'
+      lang === 'es'
+        ? 'Optimizado para 1 desarrollador: reduce la fricción de mantenimiento y elimina servidores dedicados manuales.'
+        : 'Optimized for 1 developer: minimizes operational maintenance overhead and eliminates manual dedicated servers.'
     );
   }
   if (spec.priorities.developmentSpeed >= 4) {
+    const feName = TECH_BY_ID[slots.frontend || '']?.name || 'Frontend';
     whyReasons.push(
-      `Selección de ${TECH_BY_ID[slots.frontend]?.name || 'Frontend'} prioritizada por su alta velocidad de entrega y amplio ecosistema de componentes.`
+      lang === 'es'
+        ? `Selección de ${feName} prioritizada por su alta velocidad de entrega y amplio ecosistema de componentes.`
+        : `${feName} chosen for high delivery speed, extensive UI ecosystem, and fast developer velocity.`
     );
   }
   if (slots.database === 'supabase-db') {
     whyReasons.push(
-      'Supabase unifica base de datos relacional PostgreSQL con Auth y Storage en un solo panel, minimizando integraciones externas.'
+      lang === 'es'
+        ? 'Supabase unifica base de datos relacional PostgreSQL con Auth y Storage en un solo panel, minimizando integraciones externas.'
+        : 'Supabase unifies relational PostgreSQL with Auth and Storage in one dashboard, minimizing external glue code.'
     );
   } else if (slots.database === 'neon') {
     whyReasons.push(
-      'Neon permite branching instantáneo de la base de datos para pruebas en Pull Requests y escala a cero cuando no hay tráfico.'
+      lang === 'es'
+        ? 'Neon permite branching instantáneo de la base de datos para pruebas en Pull Requests y escala a cero cuando no hay tráfico.'
+        : 'Neon enables instant DB branching for PR preview testing and scales compute to zero during idle periods.'
     );
   }
   if (spec.budget === 'zero_free') {
     whyReasons.push(
-      'Todas las herramientas seleccionadas cuentan con tiers gratuitos generosos sin costes fijos mensuales de entrada.'
+      lang === 'es'
+        ? 'Todas las herramientas seleccionadas cuentan con tiers gratuitos generosos sin costes fijos mensuales de entrada.'
+        : 'All selected tools provide viable free tiers with zero upfront monthly baseline costs.'
     );
   }
 
@@ -314,17 +332,23 @@ export function recommendStack(spec: UserProjectSpec): StackRecommendation {
   const keyTradeoffs: string[] = [];
   if (slots.hosting === 'vercel' || slots.database === 'supabase-db') {
     keyTradeoffs.push(
-      'Ganas velocidad y experiencia de desarrollo a cambio de cierto acoplamiento a servicios gestionados en la nube.'
+      lang === 'es'
+        ? 'Ganas velocidad y experiencia de desarrollo a cambio de cierto acoplamiento a servicios gestionados en la nube.'
+        : 'You gain development speed and turnkey DX in exchange for coupling with cloud-managed vendors.'
     );
   }
   if (slots.frontend === 'nextjs') {
     keyTradeoffs.push(
-      'Next.js ofrece SSR y Server Actions completos, pero exige mayor disciplina mental que una SPA estática pura.'
+      lang === 'es'
+        ? 'Next.js ofrece SSR y Server Actions completos, pero exige mayor disciplina mental que una SPA estática pura.'
+        : 'Next.js provides hybrid SSR and Server Actions, but requires more architectural discipline than a pure static SPA.'
     );
   }
   if (slots.payments === 'lemonsqueezy') {
     keyTradeoffs.push(
-      'Lemon Squeezy asume el pago de impuestos internacionales como Merchant of Record a cambio de una comisión ligeramente superior a Stripe puro.'
+      lang === 'es'
+        ? 'Lemon Squeezy asume el pago de impuestos internacionales como Merchant of Record a cambio de una comisión ligeramente superior a Stripe puro.'
+        : 'Lemon Squeezy handles international sales tax as Merchant of Record in exchange for slightly higher transaction fees.'
     );
   }
 
@@ -344,7 +368,8 @@ export function recommendStack(spec: UserProjectSpec): StackRecommendation {
 export function getReplacementAlternatives(
   category: TechCategory,
   currentStack: Record<TechCategory, string | null>,
-  spec: UserProjectSpec
+  spec: UserProjectSpec,
+  lang: Language = 'es'
 ): ReplacementAlternative[] {
   const currentTechId = currentStack[category];
   const currentTech = currentTechId ? TECH_BY_ID[currentTechId] : null;
@@ -367,45 +392,82 @@ export function getReplacementAlternatives(
     if (currentTech) {
       // Comparativa de DX
       if (tech.metrics.dx > currentTech.metrics.dx) {
-        gains.push(`Mayor ergonomía y Developer Experience (+${tech.metrics.dx - currentTech.metrics.dx} pts).`);
+        gains.push(
+          lang === 'es'
+            ? `Mayor ergonomía y Developer Experience (+${tech.metrics.dx - currentTech.metrics.dx} pts).`
+            : `Higher Developer Experience and ergonomics (+${tech.metrics.dx - currentTech.metrics.dx} pts).`
+        );
       } else if (tech.metrics.dx < currentTech.metrics.dx) {
-        losses.push(`Menor ergonomía o tooling más manual.`);
+        losses.push(
+          lang === 'es'
+            ? `Menor ergonomía o tooling más manual.`
+            : `Reduced ergonomics or more manual tooling required.`
+        );
       }
 
       // Comparativa de Vendor Lock-in
       if (tech.metrics.vendorLockin < currentTech.metrics.vendorLockin) {
-        gains.push(`Mayor portabilidad y menor acoplamiento propietario.`);
+        gains.push(
+          lang === 'es'
+            ? `Mayor portabilidad y menor acoplamiento propietario.`
+            : `Higher portability and reduced vendor lock-in.`
+        );
       } else if (tech.metrics.vendorLockin > currentTech.metrics.vendorLockin) {
-        losses.push(`Mayor dependencia del ecosistema de ${tech.name}.`);
+        losses.push(
+          lang === 'es'
+            ? `Mayor dependencia del ecosistema de ${tech.name}.`
+            : `Higher reliance on the ${tech.name} ecosystem.`
+        );
       }
 
       // Comparativa de Complejidad Operativa
       if (tech.metrics.operationalComplexity < currentTech.metrics.operationalComplexity) {
-        gains.push(`Menor esfuerzo de mantenimiento y configuración de servidores.`);
+        gains.push(
+          lang === 'es'
+            ? `Menor esfuerzo de mantenimiento y configuración de servidores.`
+            : `Reduced maintenance effort and zero server provisioning.`
+        );
       } else if (tech.metrics.operationalComplexity > currentTech.metrics.operationalComplexity) {
-        losses.push(`Mayor responsabilidad de operaciones, Docker o gestión de infra.`);
+        losses.push(
+          lang === 'es'
+            ? `Mayor responsabilidad de operaciones, Docker o gestión de infra.`
+            : `Increased operational responsibility for Docker, OS patches, or infra.`
+        );
       }
 
       // Comparativa Open Source
       if (tech.isOpenSource && !currentTech.isOpenSource) {
-        gains.push(`Código 100% abierto y auditable.`);
+        gains.push(
+          lang === 'es'
+            ? `Código 100% abierto y auditable.`
+            : `100% open-source and auditable codebase.`
+        );
       } else if (!tech.isOpenSource && currentTech.isOpenSource) {
-        losses.push(`Pasa de código abierto a servicio cloud gestionado propietario.`);
+        losses.push(
+          lang === 'es'
+            ? `Pasa de código abierto a servicio cloud gestionado propietario.`
+            : `Moves from open-source to proprietary managed cloud service.`
+        );
       }
     }
 
-    // Agregar pros nativos de la nueva herramienta
-    gains.push(...tech.tradeoffs.pros.slice(0, 2));
-    losses.push(...tech.tradeoffs.sacrifices.slice(0, 1));
+    // Agregar pros nativos de la nueva herramienta localizados
+    const locTech = getLocalizedTech(tech, lang);
+    gains.push(...locTech.tradeoffs.pros.slice(0, 2));
+    losses.push(...locTech.tradeoffs.sacrifices.slice(0, 1));
 
     // Fricciones que se generarían con este cambio
     const simulatedIds = Object.values(simulatedStack).filter((id): id is string => Boolean(id));
-    const frictionAlerts = detectStackFrictions(simulatedIds).filter(
+    const rawFrictionAlerts = detectStackFrictions(simulatedIds).filter(
       (f) => f.sourceId === tech.id || f.targetId === tech.id
     );
+    const frictionAlerts = rawFrictionAlerts.map((f) => ({
+      ...f,
+      message: getLocalizedFrictionMessage(f.sourceId, f.targetId, f.message, lang),
+    }));
 
     return {
-      tech,
+      tech: locTech,
       fitScoreDelta,
       resultingFitScore: resultingScore,
       gains: Array.from(new Set(gains)).slice(0, 3),
